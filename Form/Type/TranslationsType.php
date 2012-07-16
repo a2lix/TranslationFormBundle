@@ -4,12 +4,15 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormViewInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Annotations\FileCacheReader;
 use Gedmo\Translatable\TranslatableListener;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class TranslationsType extends AbstractType
 {
@@ -26,8 +29,6 @@ class TranslationsType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $data = $builder->getData();
-
         $dataClass = $builder->getParent()->getDataClass();
         $translatableConfig = $this->translatableListener->getConfiguration($this->em, $dataClass);
 
@@ -46,7 +47,7 @@ class TranslationsType extends AbstractType
             ));
         }
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($builder) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($builder) {
             $form = $event->getForm();
             $data = $event->getData();
 
@@ -58,7 +59,7 @@ class TranslationsType extends AbstractType
             $dataLocale = array();
             foreach ($data as $d) {
                 if (!isset($dataLocale[$d->getLocale()])) {
-                    $dataLocale[$d->getLocale()] = new \Doctrine\Common\Collections\ArrayCollection();
+                    $dataLocale[$d->getLocale()] = new ArrayCollection();
                 }
                 $dataLocale[$d->getLocale()][$d->getField()] = $d;
             }
@@ -76,18 +77,24 @@ class TranslationsType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::BIND, function (FormEvent $event) use ($builder, $translatableConfig) {
+        $builder->addEventListener(FormEvents::BIND, function(FormEvent $event) use ($builder, $translatableConfig) {
             $form = $event->getForm();
             $data = $event->getData();
 
-            // Get only previous data
-            foreach ($data as $key => $d) {
-                if (!is_numeric($key)) {
-                    $data->removeElement($d);
+            if (is_array($data)) {
+                $data = new ArrayCollection();
+
+            } else {
+                // Remove new elements with wrong format
+                foreach ($data as $key => $d) {
+                    if (!is_numeric($key)) {
+                        $data->removeElement($d);
+                    }
                 }
             }
 
-            $newData = new \Doctrine\Common\Collections\ArrayCollection();
+            // Add/Update new elements with right format
+            $newData = new ArrayCollection();
             foreach ($form->getChildren() as $translationsLocaleForm) {
                 $locale = $translationsLocaleForm->getName();
                 foreach ($translationsLocaleForm->getChildren() as $translation) {
@@ -116,6 +123,11 @@ class TranslationsType extends AbstractType
         });
     }
 
+    public function buildView(FormViewInterface $view, FormInterface $form, array $options)
+    {
+        $view->setVar('locales', $options['locales']);
+    }
+
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -128,3 +140,4 @@ class TranslationsType extends AbstractType
         return 'translations';
     }
 }
+
