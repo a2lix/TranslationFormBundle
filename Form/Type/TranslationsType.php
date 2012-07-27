@@ -125,7 +125,7 @@ class TranslationsType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->setVar('locales', $options['locales']);
+        $view->set('locales', $options['locales']);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
