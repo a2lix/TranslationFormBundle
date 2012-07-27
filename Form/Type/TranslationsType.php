@@ -38,7 +38,7 @@ class TranslationsType extends AbstractType
             $mappingColumn = array_filter($annotations, function($item) {
                 return $item instanceof \Doctrine\ORM\Mapping\Column;
             });
-            $fields[$field] = ($mappingColumn[0]->type === 'string') ? 'text' : 'textarea';
+            $fields[$field] = ($mappingColumn[1]->type === 'string') ? 'text' : 'textarea';
         }
 
         foreach ($options['locales'] as $locale) {
