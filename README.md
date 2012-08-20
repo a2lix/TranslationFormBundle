@@ -16,7 +16,7 @@ Adds a new type in your form named "translations" to facilitate the use of the T
 
 Add the repository in your composer.json
 
-    "a2lix/translation-form-bundle" : "1.0.0"
+    "a2lix/translation-form-bundle" : "dev-master"
 
 Enable the Bundle in the AppKernel.php
 
@@ -32,7 +32,7 @@ Configure the Bundle in the config.yml
     twig:
         form:
             resources:
-                - 'A2lixTranslationFormBundle::form.html.twig'
+                - A2lixTranslationFormBundle::form.html.twig
 
 You can find a common use case on [this repository](https://github.com/a2lix/DemoTranslationBundle).
 
@@ -41,7 +41,7 @@ There is also an article which is an example on how to manage translations with 
 
 ### Example
 
-## Form
+#### Form
 
 Minimal form example:
 
@@ -70,15 +70,15 @@ Advanced form example:
         ))
     ;
 
-## Template
+#### Template
 
-Separate the default locale from translations locales
+First way : Add a translations fields which will create a translation tabs distinct from the native fields
 
     {{ form_widget(form.title) }}
     {{ form_widget(form.description) }}
     {{ form_widget(form.translations) }}
 
-or group all locales in tabs with :
+Second way : Regroup the native field into the translation tabs
 
     {{ form_widget(form.translations, {'fields': [form.title, form.description]}) }}
 
