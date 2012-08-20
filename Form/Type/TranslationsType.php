@@ -10,137 +10,125 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Annotations\FileCacheReader;
 use Gedmo\Translatable\TranslatableListener;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
-use Doctrine\Common\Collections\ArrayCollection;
+use A2lix\TranslationFormBundle\EventListener\TranslationFormSubscriber;
 
+/**
+ * Regroup by locales, all translations fields
+ *
+ * @author David ALLIX
+ */
 class TranslationsType extends AbstractType
 {
     private $em;
     private $annotationReader;
     private $translatableListener;
+    private $locale;
+    private $locales;
 
-    public function __construct(EntityManager $em, FileCacheReader $annotationReader, TranslatableListener $translatableListener)
+    public function __construct(EntityManager $em, FileCacheReader $annotationReader, TranslatableListener $translatableListener, $locale = 'en', array $locales = array())
     {
         $this->em = $em;
         $this->annotationReader = $annotationReader;
         $this->translatableListener = $translatableListener;
+        $this->locale = $locale;
+        $this->locales = $locales;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // Translatable Annotations
         $dataClass = $builder->getParent()->getDataClass();
         $translatableConfig = $this->translatableListener->getConfiguration($this->em, $dataClass);
 
-        $fields = array();
-        foreach ($translatableConfig['fields'] as $field) {
-            $annotations = $this->annotationReader->getPropertyAnnotations(new \ReflectionProperty($translatableConfig['useObjectClass'], $field));
-            $mappingColumn = array_filter($annotations, function($item) {
-                return $item instanceof \Doctrine\ORM\Mapping\Column;
-            });
+        $fieldsConfig = array();
+        foreach ($translatableConfig['fields'] as $fieldName) {
+            $fieldConfig = array();
+            
+            // Custom field configuration
+            if (isset($options['fields'][$fieldName])) {
+                // Prevent display
+                if (isset($options['fields'][$fieldName]['display']) && ($options['fields'][$fieldName]['display'] === false)) {
+                    break;
+                }
+                
+                // Custom Type
+                if (isset($options['fields'][$fieldName]['type'])) {
+                    $fieldConfig['type'] = $options['fields'][$fieldName]['type'];
 
-            $mappingColumnCurrent = current($mappingColumn);
-
-            $fields[$field] = $mappingColumnCurrent->type === 'string' ? 'text' : 'textarea';
+                // Auto Type
+                } else {                    
+                    $fieldConfig['type'] = $this->detectFieldType($translatableConfig['useObjectClass'], $fieldName);
+                }
+                
+                // Auto Label
+                if (!isset($options['fields'][$fieldName]['label'])) {
+                    $fieldConfig['label'] = ucfirst($fieldName);
+                }
+                
+                // Other options from the field type (max_length, required, trim, read_only, ...)
+                $fieldConfig += $options['fields'][$fieldName];
+            
+            // Auto field configuration
+            } else {
+                $fieldConfig = array(
+                    'type' => $this->detectFieldType($translatableConfig['useObjectClass'], $fieldName),
+                    'label' => ucfirst($fieldName)
+                );
+            }
+            
+            $fieldsConfig[$fieldName] = $fieldConfig;
         }
 
+        
         foreach ($options['locales'] as $locale) {
             $builder->add($locale, 'translationsLocale', array(
-                'fields' => $fields
+                'fields' => $fieldsConfig
             ));
         }
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($builder) {
-            $form = $event->getForm();
-            $data = $event->getData();
-
-            if (null === $data) {
-                return;
-            }
-
-            // Sort by locales and fields
-            $dataLocale = array();
-            foreach ($data as $d) {
-                if (!isset($dataLocale[$d->getLocale()])) {
-                    $dataLocale[$d->getLocale()] = new ArrayCollection();
-                }
-                $dataLocale[$d->getLocale()][$d->getField()] = $d;
-            }
-
-            foreach ($form->getChildren() as $translationsLocaleForm) {
-                $locale = $translationsLocaleForm->getName();
-                if (isset($dataLocale[$locale])) {
-                    foreach ($translationsLocaleForm as $translationField) {
-                        $field = $translationField->getName();
-                        if (isset($dataLocale[$locale][$field])) {
-                            $translationField->setData($dataLocale[$locale][$field]->getContent());
-                        }
-                    }
-                }
-            }
-        });
-
-        $builder->addEventListener(FormEvents::BIND, function(FormEvent $event) use ($builder, $translatableConfig) {
-            $form = $event->getForm();
-            $data = $event->getData();
-
-            if (is_array($data)) {
-                $data = new ArrayCollection();
-
-            } else {
-                // Remove new elements with wrong format
-                foreach ($data as $key => $d) {
-                    if (!is_numeric($key)) {
-                        $data->removeElement($d);
-                    }
-                }
-            }
-
-            // Add/Update new elements with right format
-            $newData = new ArrayCollection();
-            foreach ($form->getChildren() as $translationsLocaleForm) {
-                $locale = $translationsLocaleForm->getName();
-                foreach ($translationsLocaleForm->getChildren() as $translation) {
-                    $field = $translation->getName();
-                    $content = $translation->getData();
-
-                    $existingTranslationEntity = $data->filter(function($entity) use ($locale, $field) {
-                        return ($entity->getLocale() === $locale && $entity->getField() === $field);
-                    })->first();
-
-                    if ($existingTranslationEntity) {
-                        $existingTranslationEntity->setContent($content);
-                        $newData->add($existingTranslationEntity);
-
-                    } else {
-                        $translationEntity = new $translatableConfig['translationClass'];
-                        $translationEntity->setLocale($locale);
-                        $translationEntity->setField($field);
-                        $translationEntity->setContent($content);
-                        $newData->add($translationEntity);
-                    }
-                }
-            }
-
-            $event->setData($newData);
-        });
+        $subscriber = new TranslationFormSubscriber($builder->getFormFactory(), $translatableConfig['translationClass']);
+        $builder->addEventSubscriber($subscriber);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        $view->set('locale', (array) $options['locale']);
         $view->set('locales', $options['locales']);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'locales' => array()
+            'by_reference' => false,
+            'locale' => $this->locale,
+            'locales' => $this->locales,
+            'fields' => array()
         ));
     }
 
     public function getName()
     {
         return 'translations';
+    }
+    
+    
+    /**
+     * Detect field type from Doctrine Annotations
+     * 
+     * @param string $class
+     * @param string $field
+     * 
+     * @return string text|textarea
+     */
+    private function detectFieldType($class, $field)
+    {
+        $annotations = $this->annotationReader->getPropertyAnnotations(new \ReflectionProperty($class, $field));
+        $mappingColumn = array_filter($annotations, function($item) {
+            return $item instanceof \Doctrine\ORM\Mapping\Column;
+        });
+        $mappingColumnCurrent = current($mappingColumn);
+
+        return ($mappingColumnCurrent->type === 'string') ? 'text' : 'textarea';
     }
 }
 

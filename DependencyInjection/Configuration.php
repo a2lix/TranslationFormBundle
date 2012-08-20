@@ -19,10 +19,22 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('a2lix_translation_form');
-
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        
+        $rootNode
+            ->children()
+                ->scalarNode('default_locale')
+                    ->defaultValue('en')
+                ->end()
+                ->arrayNode('locales')
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function($v) { return preg_split('/\s*,\s*/', $v); })
+                    ->end()
+                    ->requiresAtLeastOneElement()
+                    ->prototype('scalar')->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }
