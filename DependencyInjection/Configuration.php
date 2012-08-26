@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
                     ->requiresAtLeastOneElement()
                     ->prototype('scalar')->end()
                 ->end()
+                ->booleanNode('default_required')->defaultFalse()->end()
             ->end()
         ;
 

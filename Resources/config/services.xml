@@ -9,6 +9,7 @@
         <parameter key="a2lix_translation_form.translationsLocale.type.class">A2lix\TranslationFormBundle\Form\Type\TranslationsLocaleType</parameter>
         <parameter key="a2lix_translation_form.default_locale" />
         <parameter key="a2lix_translation_form.locales" />
+        <parameter key="a2lix_translation_form.default_required" />
     </parameters>
 
     <services>
@@ -18,7 +19,8 @@
             <argument type="service" id="stof_doctrine_extensions.listener.translatable" />            
             <argument>%a2lix_translation_form.default_locale%</argument>
             <argument>%a2lix_translation_form.locales%</argument>
-            <tag name="form.type" alias="translations" />
+            <argument>%a2lix_translation_form.default_required%</argument>
+            <tag name="form.type" alias="a2lix_translations" />
         </service>
         <service id="form.type.translationsLocale" class="%a2lix_translation_form.translationsLocale.type.class%">
             <tag name="form.type" alias="translationsLocale" />

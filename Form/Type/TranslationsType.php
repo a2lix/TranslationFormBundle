@@ -22,16 +22,18 @@ class TranslationsType extends AbstractType
     private $em;
     private $annotationReader;
     private $translatableListener;
-    private $locale;
+    private $defaultLocale;
     private $locales;
+    private $required;
 
-    public function __construct(EntityManager $em, FileCacheReader $annotationReader, TranslatableListener $translatableListener, $locale = 'en', array $locales = array())
+    public function __construct(EntityManager $em, FileCacheReader $annotationReader, TranslatableListener $translatableListener, $defaultLocale = 'en', array $locales = array(), $required = false)
     {
         $this->em = $em;
         $this->annotationReader = $annotationReader;
         $this->translatableListener = $translatableListener;
-        $this->locale = $locale;
+        $this->defaultLocale = $defaultLocale;
         $this->locales = $locales;
+        $this->required = $required;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -65,14 +67,20 @@ class TranslationsType extends AbstractType
                     $fieldConfig['label'] = ucfirst($fieldName);
                 }
                 
-                // Other options from the field type (max_length, required, trim, read_only, ...)
+                // Auto Required
+                if (!isset($options['fields'][$fieldName]['required'])) {
+                    $fieldConfig['required'] = $this->required;
+                }
+                
+                // Other options from the field type (label, max_length, required, trim, read_only, ...)
                 $fieldConfig += $options['fields'][$fieldName];
             
             // Auto field configuration
             } else {
                 $fieldConfig = array(
                     'type' => $this->detectFieldType($translatableConfig['useObjectClass'], $fieldName),
-                    'label' => ucfirst($fieldName)
+                    'label' => ucfirst($fieldName),
+                    'required' => $this->required
                 );
             }
             
@@ -92,7 +100,7 @@ class TranslationsType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('locale', (array) $options['locale']);
+        $view->set('default_locale', (array) $options['default_locale']);
         $view->set('locales', $options['locales']);
     }
 
@@ -100,7 +108,7 @@ class TranslationsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
-            'locale' => $this->locale,
+            'default_locale' => $this->defaultLocale,
             'locales' => $this->locales,
             'fields' => array()
         ));
@@ -108,7 +116,7 @@ class TranslationsType extends AbstractType
 
     public function getName()
     {
-        return 'translations';
+        return 'a2lix_translations';
     }
     
     

@@ -27,5 +27,6 @@ class A2lixTranslationFormExtension extends Extension
         
         $container->setParameter('a2lix_translation_form.default_locale', $config['default_locale']);
         $container->setParameter('a2lix_translation_form.locales', $config['locales']);
+        $container->setParameter('a2lix_translation_form.default_required', $config['default_required']);
     }
 }
