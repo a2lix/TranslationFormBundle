@@ -3,7 +3,8 @@
 
 ### What does this bundle ?
 
-Offer the possibility to manage your Translatable fields from your entity easily with a new form type: 'a2lix_translation'
+Offer the possibility to manage your Translatable fields from your entity easily with a new form type: 'a2lix_translations'.
+
 Screenshot and example with [this repository](https://github.com/a2lix/DemoTranslationBundle)
 
 
@@ -45,14 +46,14 @@ Minimal form example:
     $builder
         ->add('title')
         ->add('description')
-        ->add('translations', 'translations')
+        ->add('translations', 'a2lix_translations')
 
 Advanced form example:
 
     $builder
         ->add('title')
         ->add('description')
-        ->add('translations', 'translations', array(
+        ->add('translations', 'a2lix_translations', array(
             'default_locale' => 'en'                    // [Optionnal] Override default_locale if already specified in the config.yml
             'locales' => array('fr', 'es', 'de')        // [Optionnal|Required] Override locales if already specified in the config.yml
             'fields' => array(                          // [Optionnal] Fields configurations. If not, auto detection from translatable annotations
