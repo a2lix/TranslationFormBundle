@@ -7,8 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormRegistry;
 use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Annotations\FileCacheReader;
 use Gedmo\Translatable\TranslatableListener;
 use A2lix\TranslationFormBundle\EventListener\TranslationFormSubscriber;
 
@@ -19,17 +19,17 @@ use A2lix\TranslationFormBundle\EventListener\TranslationFormSubscriber;
  */
 class TranslationsType extends AbstractType
 {
+    private $formRegistry;
     private $em;
-    private $annotationReader;
     private $translatableListener;
     private $defaultLocale;
     private $locales;
     private $required;
 
-    public function __construct(EntityManager $em, FileCacheReader $annotationReader, TranslatableListener $translatableListener, $defaultLocale = 'en', array $locales = array(), $required = false)
+    public function __construct(FormRegistry $formRegistry, EntityManager $em, TranslatableListener $translatableListener, $defaultLocale = 'en', array $locales = array(), $required = false)
     {
+        $this->formRegistry = $formRegistry;
         $this->em = $em;
-        $this->annotationReader = $annotationReader;
         $this->translatableListener = $translatableListener;
         $this->defaultLocale = $defaultLocale;
         $this->locales = $locales;
@@ -38,60 +38,15 @@ class TranslationsType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // Translatable Annotations
-        $dataClass = $builder->getParent()->getDataClass();
-        $translatableConfig = $this->translatableListener->getConfiguration($this->em, $dataClass);
+        $translatableConfig = $this->translatableListener->getConfiguration($this->em, $builder->getParent()->getDataClass());
+        $childrenOptions = $this->getChildrenOptions($translatableConfig['useObjectClass'], $translatableConfig['fields'], $options);
 
-        $fieldsConfig = array();
-        foreach ($translatableConfig['fields'] as $fieldName) {
-            $fieldConfig = array();
-            
-            // Custom field configuration
-            if (isset($options['fields'][$fieldName])) {
-                // Prevent display
-                if (isset($options['fields'][$fieldName]['display']) && ($options['fields'][$fieldName]['display'] === false)) {
-                    break;
-                }
-                
-                // Custom Type
-                if (isset($options['fields'][$fieldName]['type'])) {
-                    $fieldConfig['type'] = $options['fields'][$fieldName]['type'];
-
-                // Auto Type
-                } else {                    
-                    $fieldConfig['type'] = $this->detectFieldType($translatableConfig['useObjectClass'], $fieldName);
-                }
-                
-                // Auto Label
-                if (!isset($options['fields'][$fieldName]['label'])) {
-                    $fieldConfig['label'] = ucfirst($fieldName);
-                }
-                
-                // Auto Required
-                if (!isset($options['fields'][$fieldName]['required'])) {
-                    $fieldConfig['required'] = $this->required;
-                }
-                
-                // Other options from the field type (label, max_length, required, trim, read_only, ...)
-                $fieldConfig += $options['fields'][$fieldName];
-            
-            // Auto field configuration
-            } else {
-                $fieldConfig = array(
-                    'type' => $this->detectFieldType($translatableConfig['useObjectClass'], $fieldName),
-                    'label' => ucfirst($fieldName),
-                    'required' => $this->required
-                );
-            }
-            
-            $fieldsConfig[$fieldName] = $fieldConfig;
-        }
-
-        
         foreach ($options['locales'] as $locale) {
-            $builder->add($locale, 'translationsLocale', array(
-                'fields' => $fieldsConfig
-            ));
+            if (isset($childrenOptions[$locale])) {
+                $builder->add($locale, 'translationsLocale', array(
+                    'fields' => $childrenOptions[$locale]
+                ));
+            }
         }
 
         $subscriber = new TranslationFormSubscriber($builder->getFormFactory(), $translatableConfig['translationClass']);
@@ -110,6 +65,7 @@ class TranslationsType extends AbstractType
             'by_reference' => false,
             'default_locale' => $this->defaultLocale,
             'locales' => $this->locales,
+            'required' => $this->required,
             'fields' => array()
         ));
     }
@@ -118,25 +74,79 @@ class TranslationsType extends AbstractType
     {
         return 'a2lix_translations';
     }
-    
-    
-    /**
-     * Detect field type from Doctrine Annotations
-     * 
-     * @param string $class
-     * @param string $field
-     * 
-     * @return string text|textarea
-     */
-    private function detectFieldType($class, $field)
-    {
-        $annotations = $this->annotationReader->getPropertyAnnotations(new \ReflectionProperty($class, $field));
-        $mappingColumn = array_filter($annotations, function($item) {
-            return $item instanceof \Doctrine\ORM\Mapping\Column;
-        });
-        $mappingColumnCurrent = current($mappingColumn);
 
-        return ($mappingColumnCurrent->type === 'string') ? 'text' : 'textarea';
+
+    /**
+     *
+     * @param type $entityClass
+     * @param type $translatableFields
+     * @param type $options
+     * @return type
+     */
+    private function getChildrenOptions($entityClass, $translatableFields, $options)
+    {
+        $childrenOptions = array();
+        $guesser = $this->formRegistry->getTypeGuesser();
+
+        foreach ($translatableFields as $child) {
+            $childOptions = isset($options['fields'][$child]) ? $options['fields'][$child] : array();
+
+            if (!isset($childOptions['display']) || $childOptions['display']) {
+                $childOptions = $this->guessMissingChildOptions($guesser, $entityClass, $child, $childOptions);
+
+                // Custom options by locale
+                if (isset($childOptions['locale_options'])) {
+                    $localesChildOptions = $childOptions['locale_options'];
+                    unset($childOptions['locale_options']);
+
+                    foreach ($options['locales'] as $locale) {
+                        $localeChildOptions = isset($localesChildOptions[$locale]) ? $localesChildOptions[$locale] : array();
+                        if (!isset($localeChildOptions['display']) || $localeChildOptions['display']) {
+                            $childrenOptions[$locale][$child] = $localeChildOptions + $childOptions;
+                        }
+                    }
+
+                } else {
+                    foreach ($options['locales'] as $locale) {
+                        $childrenOptions[$locale][$child] = $childOptions;
+                    }
+                }
+            }
+        }
+
+        return $childrenOptions;
+    }
+
+    /**
+     *
+     * @param type $guesser
+     * @param type $class
+     * @param type $property
+     * @param type $options
+     * @return type
+     */
+    private function guessMissingChildOptions($guesser, $class, $property, $options)
+    {
+        if (!isset($options['label'])) {
+            $options['label'] = ucfirst($property);
+        }
+
+        if (!isset($options['required'])) {
+            $options['required'] = $this->required;
+        }
+
+        if (!isset($options['type']) && ($typeGuess = $guesser->guessType($class, $property))) {
+            $options['type'] = $typeGuess->getType();
+        }
+
+        if (!isset($options['pattern']) && ($patternGuess = $guesser->guessPattern($class, $property))) {
+            $options['pattern'] = $patternGuess->getValue();
+        }
+
+        if (!isset($options['max_length']) && ($maxLengthGuess = $guesser->guessMaxLength($class, $property))) {
+            $options['max_length'] = $maxLengthGuess->getValue();
+        }
+
+        return $options;
     }
 }
-

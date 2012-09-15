@@ -31,11 +31,11 @@ Configure the bundle in config.yml
 
 ```yaml
 a2lix_translation_form:
-    default_locale: en          # [optional] Defaults to 'en'.
-    locales: [fr, es, de]       # [optional] Array of translation locales. Can be specified in the form. 
+    default_locale: en          # [optional] Defaults to 'en'. Must be the same as the 'default_locale' of the stof_doctrine_extensions
+    locales: [fr, es, de]       # [optional] Array of the translation locales (The default locale have to be excluded). Can also be specified in the form builder.
     default_required: false     # [optional] Defaults to false. In this case, translation fields are not mark as required with HTML5.
 
-# Template        
+# Template
 twig:
     form:
         resources:
@@ -63,15 +63,26 @@ $builder
     ->add('title')
     ->add('description')
     ->add('translations', 'a2lix_translations', array(
-        'default_locale' => 'en',               // [optional] Overrides default_locale if already specified in config.yml.
-        'locales' => array('fr', 'es', 'de'),   // [optional|required] Overrides locales if already specified in config.yml.
-        'fields' => array(                      // [optional] Manual configuration of fields. If not specified, will be determined from translatable annotations.
+        'default_locale' => 'en',               // [optional] See above
+        'locales' => array('fr', 'es', 'de'),   // [optional|required - depends on the presence in config.yml] See above
+        'required' => true,                     // [optional] Overrides default_required if need
+        'fields' => array(                      // [optional] Manual configuration of fields to display and options. If not specified, all translatable fields will be display, and options will be auto-detected
             'title' => array(
-                'label' => 'name',              // Custom label.
-                'type' => 'textarea',           // Custom type: text or textarea. If not specified, will be determined from doctrine annotations.
+                'label' => 'name',              // [optional] Custom label. Ucfirst, otherwise
+                'type' => 'textarea',           // [optional] Custom type
+                **OTHER_OPTIONS**               // [optional] max_length, required, trim, read_only, constraints, ...
             ),
             'description' => array(
-                'display' => false,
+                'label' => 'Desc.'              // [optional]
+                'locale_options' => array(              // [optional] Manual configuration of field for a dedicated locale -- Higher priority
+                    'fr' => array(
+                        'label' => 'descripción'        // [optional] Higher priority
+                        **OTHER_OPTIONS**               // [optional] Same possibilities as above
+                    ),
+                    'es' => array(
+                        'display' => false              // [optional] Prevent display of the field for this locale
+                    )
+                )
             ),
         );
     ))
