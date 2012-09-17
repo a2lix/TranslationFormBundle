@@ -22,7 +22,7 @@
                     
                 {# Translations fields #}
                 {% else %}
-                    {% for translationsLocale in form if (translationsLocale.name == locale) %}
+                    {% for translationsLocale in form if (translationsLocale.vars.name == locale) %}
                         {{ form_widget(translationsLocale) }}
                     {% endfor %}
                 {% endif %}
