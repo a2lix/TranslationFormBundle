@@ -44,6 +44,197 @@ twig:
 
 ## Example
 
+### Entity ([example](https://github.com/a2lix/DemoTranslationBundle/blob/master/src/A2lix/DemoTranslationBundle/Entity/Product.php))
+
+```php
+<?php
+
+namespace Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Entity\Product.php
+ *
+ * @ORM\Table()
+ * @Gedmo\TranslationEntity(class="Translation\ProductTranslation")
+ */
+class Product
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string $title
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     * @Gedmo\Translatable
+     */
+    private $title;
+
+    /**
+     * @var string $description
+     *
+     * @ORM\Column(name="description", type="text")
+     * @Gedmo\Translatable
+     */
+    private $description;
+
+    /**
+     * @ORM\OneToMany(
+     *     targetEntity="Translation\ProductTranslation",
+     * 	mappedBy="object",
+     * 	cascade={"persist", "remove"}
+     * )
+     * @Assert\Valid(deep = true)
+     */
+    private $translations;
+
+    public function __construct()
+    {
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Product
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Product
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set translations
+     *
+     * @param ArrayCollection $translations
+     * @return Product
+     */
+    public function setTranslations($translations)
+    {
+        $this->translations = $translations;
+        return $this;
+    }
+
+    /**
+     * Get translations
+     *
+     * @return ArrayCollection 
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * Add translation
+     *
+     * @param ProductTranslation
+     */
+    public function addTranslation($translation)
+    {
+        if ($translation->getContent()) {
+            $translation->setObject($this);
+            $this->translations->add($translation);
+        }
+    }
+
+    /**
+     * Remove translation
+     *
+     * @param ProductTranslation
+     */
+    public function removeTranslation($translation)
+    {
+        $this->translations->removeElement($translation);
+    }
+
+}
+```
+
+### Personal Translation Entity ([example](https://github.com/a2lix/DemoTranslationBundle/blob/master/src/A2lix/DemoTranslationBundle/Entity/Translation/ProductTranslation.php))
+
+```php
+<?php
+
+namespace Entity\Translation;
+
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
+
+/**
+ * Entity\Translation\ProductTranslation.php
+ 
+ * @ORM\Entity
+ * @ORM\Table(name="product_translations",
+ *   uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
+ *     "locale", "object_id", "field"
+ *   })}
+ * )
+ */
+class ProductTranslation extends AbstractPersonalTranslation
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="Entity\Product", inversedBy="translations")
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $object;
+}
+```
+
 ### Form
 
 Minimal form example:
