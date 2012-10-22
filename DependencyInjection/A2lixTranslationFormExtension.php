@@ -24,8 +24,8 @@ class A2lixTranslationFormExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-        
-        $container->setParameter('a2lix_translation_form.default_locale', $config['default_locale']);
+
+        $container->setParameter('a2lix_translation_form.default_locale', $container->getParameter('stof_doctrine_extensions.default_locale'));
         $container->setParameter('a2lix_translation_form.locales', $config['locales']);
         $container->setParameter('a2lix_translation_form.default_required', $config['default_required']);
     }

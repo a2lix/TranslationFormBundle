@@ -62,7 +62,7 @@ class TranslationFormSubscriber implements EventSubscriberInterface
             }
         }
     }
-    
+
     public function bind(DataEvent $event)
     {
         $form = $event->getForm();
@@ -72,12 +72,10 @@ class TranslationFormSubscriber implements EventSubscriberInterface
             $data = new ArrayCollection();
 
         } else {
-            // Remove new elements with wrong format
-            foreach ($data as $key => $d) {
-                if (!is_numeric($key)) {
-                    $data->removeElement($d);
-                }
-            }
+            // Keep only objects
+            $data = $data->filter(function($entry) {
+                return is_object($entry);
+            });
         }
 
         // Add/Update new elements with right format
@@ -107,5 +105,5 @@ class TranslationFormSubscriber implements EventSubscriberInterface
         }
 
         $event->setData($newData);
-    }    
+    }
 }

@@ -19,7 +19,7 @@
                     {% for field in fields %}
                         {{ form_row(field) }}
                     {% endfor %}
-                    
+
                 {# Translations fields #}
                 {% else %}
                     {% for translationsLocale in form if (translationsLocale.vars.name == locale) %}
@@ -31,3 +31,12 @@
         </div>
     </div>
 {% endblock %}
+
+{# personalization example :
+{% block a2lix_translationsLocale_widget %}
+    {% for input in form %}
+        {{ form_label(input) }}
+        {{ form_widget(input) }}
+    {% endfor %}
+{% endblock %}
+#}

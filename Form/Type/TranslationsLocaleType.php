@@ -18,7 +18,7 @@ class TranslationsLocaleType extends AbstractType
         foreach($options['fields'] as $fieldName => $fieldConfig) {
             $fieldType = $fieldConfig['type'];
             unset($fieldConfig['type']);
-            
+
             $builder->add($fieldName, $fieldType, $fieldConfig);
         }
     }
@@ -33,6 +33,6 @@ class TranslationsLocaleType extends AbstractType
 
     public function getName()
     {
-        return 'translationsLocale';
+        return 'a2lix_translationsLocale';
     }
 }

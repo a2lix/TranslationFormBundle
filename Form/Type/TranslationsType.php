@@ -26,7 +26,7 @@ class TranslationsType extends AbstractType
     private $locales;
     private $required;
 
-    public function __construct(FormRegistry $formRegistry, EntityManager $em, TranslatableListener $translatableListener, $defaultLocale = 'en', array $locales = array(), $required = false)
+    public function __construct(FormRegistry $formRegistry, EntityManager $em, TranslatableListener $translatableListener, $defaultLocale, $locales, $required)
     {
         $this->formRegistry = $formRegistry;
         $this->em = $em;
@@ -43,7 +43,7 @@ class TranslationsType extends AbstractType
 
         foreach ($options['locales'] as $locale) {
             if (isset($childrenOptions[$locale])) {
-                $builder->add($locale, 'translationsLocale', array(
+                $builder->add($locale, 'a2lix_translationsLocale', array(
                     'fields' => $childrenOptions[$locale]
                 ));
             }
@@ -55,7 +55,7 @@ class TranslationsType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('default_locale', (array) $options['default_locale']);
+        $view->set('default_locale', (array) $this->defaultLocale);
         $view->set('locales', $options['locales']);
     }
 
@@ -63,7 +63,6 @@ class TranslationsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
-            'default_locale' => $this->defaultLocale,
             'locales' => $this->locales,
             'required' => $this->required,
             'fields' => array()

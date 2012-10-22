@@ -19,12 +19,9 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('a2lix_translation_form');
-        
+
         $rootNode
             ->children()
-                ->scalarNode('default_locale')
-                    ->defaultValue('en')
-                ->end()
                 ->arrayNode('locales')
                     ->beforeNormalization()
                         ->ifString()

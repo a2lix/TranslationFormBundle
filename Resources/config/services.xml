@@ -23,7 +23,7 @@
             <tag name="form.type" alias="a2lix_translations" />
         </service>
         <service id="form.type.translationsLocale" class="%a2lix_translation_form.translationsLocale.type.class%">
-            <tag name="form.type" alias="translationsLocale" />
+            <tag name="form.type" alias="a2lix_translationsLocale" />
         </service>
     </services>
 </container>
