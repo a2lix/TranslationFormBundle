@@ -9,9 +9,8 @@ Offers the possibility to easily manage the translatable fields of your entity w
 
 ## Requirements
 
-- Symfony2.1
-- [StofDoctrineExtensionsBundle][] with the translatable feature enabled
-- Doctrine entities configured with the [personal translations][] feature
+- Symfony 2.1
+- [StofDoctrineExtensionsBundle][] (auto installed from composer)
 
 ## Installation & Configuration
 
@@ -31,7 +30,6 @@ Configure the bundle in config.yml
 
 ```yaml
 a2lix_translation_form:
-    default_locale: en          # [optional] Defaults to 'en'. Must be the same as the 'default_locale' of the stof_doctrine_extensions
     locales: [fr, es, de]       # [optional] Array of the translation locales (The default locale have to be excluded). Can also be specified in the form builder.
     default_required: false     # [optional] Defaults to false. In this case, translation fields are not mark as required with HTML5.
 
@@ -106,7 +104,7 @@ class Product
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -128,7 +126,7 @@ class Product
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -150,7 +148,7 @@ class Product
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -172,7 +170,7 @@ class Product
     /**
      * Get translations
      *
-     * @return ArrayCollection 
+     * @return ArrayCollection
      */
     public function getTranslations()
     {
@@ -217,7 +215,7 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
  * Entity\Translation\ProductTranslation.php
- 
+
  * @ORM\Entity
  * @ORM\Table(name="product_translations",
  *   uniqueConstraints={@ORM\UniqueConstraint(name="lookup_unique_idx", columns={
@@ -251,10 +249,7 @@ Advanced form example:
 
 ```php
 $builder
-    ->add('title')
-    ->add('description')
     ->add('translations', 'a2lix_translations', array(
-        'default_locale' => 'en',               // [optional] See above
         'locales' => array('fr', 'es', 'de'),   // [optional|required - depends on the presence in config.yml] See above
         'required' => true,                     // [optional] Overrides default_required if need
         'fields' => array(                      // [optional] Manual configuration of fields to display and options. If not specified, all translatable fields will be display, and options will be auto-detected
