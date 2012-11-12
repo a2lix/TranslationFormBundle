@@ -24,13 +24,13 @@ Run Composer to install the bundle
 
 Enable the bundle in AppKernel.php
 
-    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),    // Check or add its existing
+    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),    // Check its existing or add 
     new A2lix\TranslationFormBundle\A2lixTranslationFormBundle(),
 
 Configure the bundle in config.yml
 
 ```yaml
-# Check or add its existing
+# Check its existing or add 
 stof_doctrine_extensions:
     orm:
         default:
