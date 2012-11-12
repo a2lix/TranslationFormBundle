@@ -24,11 +24,18 @@ Run Composer to install the bundle
 
 Enable the bundle in AppKernel.php
 
+    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),    // Check or add its existing
     new A2lix\TranslationFormBundle\A2lixTranslationFormBundle(),
 
 Configure the bundle in config.yml
 
 ```yaml
+# Check or add its existing
+stof_doctrine_extensions:
+    orm:
+        default:
+            translatable: true
+
 a2lix_translation_form:
     locales: [fr, es, de]       # [optional] Array of the translation locales (The default locale have to be excluded). Can also be specified in the form builder.
     default_required: false     # [optional] Defaults to false. In this case, translation fields are not mark as required with HTML5.
@@ -261,11 +268,11 @@ $builder
             'description' => array(
                 'label' => 'Desc.'              // [optional]
                 'locale_options' => array(              // [optional] Manual configuration of field for a dedicated locale -- Higher priority
-                    'fr' => array(
+                    'es' => array(
                         'label' => 'descripción'        // [optional] Higher priority
                         **OTHER_OPTIONS**               // [optional] Same possibilities as above
                     ),
-                    'es' => array(
+                    'fr' => array(
                         'display' => false              // [optional] Prevent display of the field for this locale
                     )
                 )
@@ -277,15 +284,16 @@ $builder
 
 ### Template
 
-Separate the default locale from translation locales
+Separate the render of the default locale away from tabs of locales translation.
 
 ```html+jinja
 {{ form_widget(form.title) }}
 {{ form_widget(form.description) }}
+
 {{ form_widget(form.translations) }}
 ```
 
-or group all locales in tabs with
+or group all locales (default and translations) in a tabs way:
 
 ```html+jinja
 {{ form_widget(form.translations, {'fields': [form.title, form.description]}) }}
