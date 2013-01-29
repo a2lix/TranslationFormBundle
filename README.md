@@ -32,6 +32,7 @@ Configure the bundle in config.yml
 ```yaml
 # Check its existing or add 
 stof_doctrine_extensions:
+    default_locale: %locale%
     orm:
         default:
             translatable: true
