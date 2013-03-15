@@ -50,7 +50,7 @@ class TranslationFormSubscriber implements EventSubscriberInterface
             $dataLocale[$d->getLocale()][$d->getField()] = $d;
         }
 
-        foreach ($form->getChildren() as $translationsLocaleForm) {
+        foreach ($form->all() as $translationsLocaleForm) {
             $locale = $translationsLocaleForm->getName();
             if (isset($dataLocale[$locale])) {
                 foreach ($translationsLocaleForm as $translationField) {
