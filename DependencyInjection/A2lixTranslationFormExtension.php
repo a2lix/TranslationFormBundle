@@ -2,15 +2,13 @@
 
 namespace A2lix\TranslationFormBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\Config\FileLocator,
+    Symfony\Component\HttpKernel\DependencyInjection\Extension,
+    Symfony\Component\DependencyInjection\Loader;
 
 /**
- * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
+ * @author David ALLIX
  */
 class A2lixTranslationFormExtension extends Extension
 {
@@ -25,7 +23,10 @@ class A2lixTranslationFormExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $container->setParameter('a2lix_translation_form.default_locale', $container->getParameter('stof_doctrine_extensions.default_locale'));
+        if ($config['use_aop']) {
+            $loader->load('aop.xml');
+        }
+
         $container->setParameter('a2lix_translation_form.locales', $config['locales']);
         $container->setParameter('a2lix_translation_form.default_required', $config['default_required']);
     }

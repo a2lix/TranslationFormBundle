@@ -24,13 +24,13 @@ Run Composer to install the bundle
 
 Enable the bundle in AppKernel.php
 
-    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),    // Check its existing or add 
+    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),    // Check its existing or add
     new A2lix\TranslationFormBundle\A2lixTranslationFormBundle(),
 
 Configure the bundle in config.yml
 
 ```yaml
-# Check its existing or add 
+# Check its existing or add
 stof_doctrine_extensions:
     default_locale: %locale%
     orm:
@@ -40,6 +40,7 @@ stof_doctrine_extensions:
 a2lix_translation_form:
     locales: [fr, es, de]       # [optional] Array of the translation locales (The default locale have to be excluded). Can also be specified in the form builder.
     default_required: false     # [optional] Defaults to false. In this case, translation fields are not mark as required with HTML5.
+    use_aop: true               # [optional] Defaults to false.
 
 # Template
 twig:
@@ -171,6 +172,10 @@ class Product
      */
     public function setTranslations($translations)
     {
+        foreach ($translations as $translation) {
+            $translation->setObject($this);
+        }
+
         $this->translations = $translations;
         return $this;
     }
@@ -185,28 +190,6 @@ class Product
         return $this->translations;
     }
 
-    /**
-     * Add translation
-     *
-     * @param ProductTranslation
-     */
-    public function addTranslation($translation)
-    {
-        if ($translation->getContent()) {
-            $translation->setObject($this);
-            $this->translations->add($translation);
-        }
-    }
-
-    /**
-     * Remove translation
-     *
-     * @param ProductTranslation
-     */
-    public function removeTranslation($translation)
-    {
-        $this->translations->removeElement($translation);
-    }
 
 }
 ```

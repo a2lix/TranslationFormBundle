@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="a2lix_translation_form.aop.translation_pointcut.class">A2lix\TranslationFormBundle\Aop\TranslationPointcut</parameter>
+        <parameter key="a2lix_translation_form.aop.translation_interceptor.class">A2lix\TranslationFormBundle\Aop\TranslationInterceptor</parameter>
+    </parameters>
+
+    <services>
+        <service id="a2lix_translation_form.aop.translation_pointcut" class="%a2lix_translation_form.aop.translation_pointcut.class%">
+            <argument type="service" id="annotation_reader" />
+            <tag name="jms_aop.pointcut" interceptor="a2lix_translation_form.aop.translation_interceptor" />
+        </service>
+        <service id="a2lix_translation_form.aop.translation_interceptor" class="%a2lix_translation_form.aop.translation_interceptor.class%">
+            <argument type="service" id="stof_doctrine_extensions.listener.translatable" />
+        </service>
+    </services>
+</container>
