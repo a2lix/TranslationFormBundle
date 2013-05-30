@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->booleanNode('default_required')->defaultFalse()->end()
                 ->booleanNode('use_aop')->defaultFalse()->end()
+                ->scalarNode('object_manager')->isRequired()->cannotBeEmpty()->end()
             ->end()
         ;
 

@@ -15,7 +15,7 @@
     <services>
         <service id="a2lix_translation_form.translation" class="%a2lix_translation_form.translations.service.class%">
             <argument type="service" id="form.registry" />
-            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="a2lix_translation_form.object_manager" />
             <argument type="service" id="stof_doctrine_extensions.listener.translatable" />
         </service>
         <service id="form.type.translations" class="%a2lix_translation_form.translations.type.class%">
