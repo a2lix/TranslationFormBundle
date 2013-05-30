@@ -3,7 +3,7 @@
 namespace A2lix\TranslationFormBundle\TranslationForm;
 
 use Symfony\Component\Form\FormRegistry,
-    Doctrine\ORM\EntityManager,
+    Doctrine\Common\Persistence\ObjectManager,
     Gedmo\Translatable\TranslatableListener;
 
 /**
@@ -12,20 +12,20 @@ use Symfony\Component\Form\FormRegistry,
 class TranslationForm
 {
     private $guesser;
-    private $em;
+    private $om;
     private $translatableListener;
     private $translatableConfig = array();
 
-    public function __construct(FormRegistry $formRegistry, EntityManager $em, TranslatableListener $translatableListener)
+    public function __construct(FormRegistry $formRegistry, ObjectManager $om, TranslatableListener $translatableListener)
     {
         $this->guesser = $formRegistry->getTypeGuesser();
-        $this->em = $em;
+        $this->om = $om;
         $this->translatableListener = $translatableListener;
     }
 
     public function initTranslatableConfiguration($class)
     {
-        return $this->translatableConfig = $this->translatableListener->getConfiguration($this->em, $class);
+        return $this->translatableConfig = $this->translatableListener->getConfiguration($this->om, $class);
     }
 
     public function getDistinctLocales($locales)
