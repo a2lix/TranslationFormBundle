@@ -10,3 +10,7 @@ web/bundles/*
 
 # Configuration files
 app/config/parameters.ini
+
+# IDE files
+# PhpStorm
+.idea
