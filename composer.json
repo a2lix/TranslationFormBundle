@@ -1,5 +1,5 @@
 {
-    "name": "a2lix/translation-form-bundle",
+    "name": "lxark/translation-form-bundle",
     "type": "symfony-bundle",
     "description": "Translation field to use with Translatable Doctrine extension",
     "keywords": ["translation", "form", "doctrine2", "gedmo", "translatable"],
