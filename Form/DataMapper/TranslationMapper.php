@@ -69,20 +69,20 @@ class TranslationMapper implements DataMapperInterface
             $locale = $form->getConfig()->getName();
 
             foreach ($form->getData() as $field => $content) {
-                $existingTranslationEntity = $data ? $data->filter(function($entity) use ($locale, $field) {
-                    return ($entity && ($entity->getLocale() === $locale) && ($entity->getField() === $field));
+                $existingTranslationObject = $data ? $data->filter(function($object) use ($locale, $field) {
+                    return ($object && ($object->getLocale() === $locale) && ($object->getField() === $field));
                 })->first() : null;
 
-                if ($existingTranslationEntity) {
-                    $existingTranslationEntity->setContent($content);
-                    $newData->add($existingTranslationEntity);
+                if ($existingTranslationObject) {
+                    $existingTranslationObject->setContent($content);
+                    $newData->add($existingTranslationObject);
 
                 } else {
-                    $translationEntity = new $this->translationClass();
-                    $translationEntity->setLocale($locale);
-                    $translationEntity->setField($field);
-                    $translationEntity->setContent($content);
-                    $newData->add($translationEntity);
+                    $translationObject = new $this->translationClass();
+                    $translationObject->setLocale($locale);
+                    $translationObject->setField($field);
+                    $translationObject->setContent($content);
+                    $newData->add($translationObject);
                 }
             }
         }

@@ -38,6 +38,7 @@ stof_doctrine_extensions:
             translatable: true
 
 a2lix_translation_form:
+    object_manager:             # [optional] Defaults to doctrine.orm.entity_manager. Name of the object manager. For instance, 'doctrine.orm.default_entity_manager' or 'doctrine_mongodb.odm.default_document_manager'
     locales: [fr, es, de]       # [optional] Array of the translation locales (The default locale have to be excluded). Can also be specified in the form builder.
     default_required: false     # [optional] Defaults to false. In this case, translation fields are not mark as required with HTML5.
     use_aop: true               # [optional] Defaults to false.
