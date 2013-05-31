@@ -27,6 +27,9 @@ class A2lixTranslationFormExtension extends Extension
             $loader->load('aop.xml');
         }
 
+        // Use object manager named in config.yml
+        $container->setAlias('a2lix_translation_form.object_manager', $config['object_manager']);
+
         $container->setParameter('a2lix_translation_form.locales', $config['locales']);
         $container->setParameter('a2lix_translation_form.default_required', $config['default_required']);
     }
