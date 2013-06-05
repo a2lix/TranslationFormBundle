@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "symfony/symfony": "2.3.*",
+        "symfony/symfony": "2.3.*"
     },
     "suggest": {
         "stof/doctrine-extensions-bundle": "dev-master"
