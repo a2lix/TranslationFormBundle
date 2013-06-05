@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="a2lix_translation_form.gedmo_class.translations">A2lix\TranslationFormBundle\TranslationForm\GedmoTranslationForm</parameter>
+        <parameter key="a2lix_translation_form.gedmo_class.types.translations">A2lix\TranslationFormBundle\Form\Type\GedmoTranslationsType</parameter>
+        <parameter key="a2lix_translation_form.gedmo_class.types.translationsLocales">A2lix\TranslationFormBundle\Form\Type\GedmoTranslationsLocalesType</parameter>
+    </parameters>
+
+    <services>
+        <service id="a2lix_translation_form.gedmo.translation" class="%a2lix_translation_form.gedmo_class.translations%">
+            <argument type="service" id="form.registry" />
+            <argument type="service" id="a2lix_translation_form.object_manager" />
+            <call method="setGedmoTranslatableListener">
+                <argument type="service" id="stof_doctrine_extensions.listener.translatable" />
+            </call>
+        </service>
+        <service id="a2lix_translation_form.gedmo.types.translations" class="%a2lix_translation_form.gedmo_class.types.translations%">
+            <argument type="service" id="a2lix_translation_form.gedmo.translation" />
+            <argument>%a2lix_translation_form.locales%</argument>
+            <argument>%a2lix_translation_form.default_required%</argument>
+            <tag name="form.type" alias="a2lix_translations_gedmo" />
+        </service>
+        <service id="a2lix_translation_form.gedmo.types.translationsLocales" class="%a2lix_translation_form.gedmo_class.types.translationsLocales%">
+            <tag name="form.type" alias="a2lix_translationsLocales_gedmo" />
+        </service>
+    </services>
+</container>

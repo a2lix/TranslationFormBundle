@@ -1,8 +1,8 @@
 {
     "name": "a2lix/translation-form-bundle",
     "type": "symfony-bundle",
-    "description": "Translation field to use with Translatable Doctrine extension",
-    "keywords": ["translation", "form", "doctrine2", "gedmo", "translatable"],
+    "description": "Translation field to use with Translatable Doctrine extension from Gedmo, KnpLabs or custom",
+    "keywords": ["translation", "form", "doctrine2", "gedmo", "knplabs", "translatable"],
     "homepage": "https://github.com/a2lix/TranslationFormBundle",
     "license": "MIT",
     "authors": [
@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "stof/doctrine-extensions-bundle": "dev-master"
+        "symfony/symfony": ">2.3-dev",
     },
     "autoload": {
         "psr-0": { "A2lix\\TranslationFormBundle": "" }

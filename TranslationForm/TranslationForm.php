@@ -3,74 +3,101 @@
 namespace A2lix\TranslationFormBundle\TranslationForm;
 
 use Symfony\Component\Form\FormRegistry,
-    Doctrine\Common\Persistence\ObjectManager,
-    Gedmo\Translatable\TranslatableListener;
+    Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * @author David ALLIX
  */
-class TranslationForm
+abstract class TranslationForm implements TranslationFormInterface
 {
-    private $guesser;
+    private $translatableClass;
+    private $translationClass;
+    private $translatableFields;
+
+    private $typeGuesser;
     private $om;
-    private $translatableListener;
-    private $translatableConfig = array();
 
-    public function __construct(FormRegistry $formRegistry, ObjectManager $om, TranslatableListener $translatableListener)
+    public function __construct(FormRegistry $formRegistry, ObjectManager $om)
     {
-        $this->guesser = $formRegistry->getTypeGuesser();
+        $this->typeGuesser = $formRegistry->getTypeGuesser();
         $this->om = $om;
-        $this->translatableListener = $translatableListener;
     }
 
-    public function initTranslatableConfiguration($class)
+    public function getObjectManager()
     {
-        return $this->translatableConfig = $this->translatableListener->getConfiguration($this->om, $class);
+        return $this->om;
     }
-
-    public function getDistinctLocales($locales)
-    {
-        $defaultLocale = $this->translatableListener->getDefaultLocale();
-
-        $distinctLocales = array();
-        foreach ($locales as $locale) {
-            if ($defaultLocale !== $locale) {
-                $distinctLocales['translations'][] = $locale;
-            } else {
-                $distinctLocales['default'] = $locale;
-            }
-        }
-
-        return $distinctLocales;
-    }
-
-    public function getListenerLocale()
-    {
-        return $this->translatableListener->getListenerLocale();
-    }
-
-    public function getDefaultLocale()
-    {
-        return $this->translatableListener->getDefaultLocale();
-    }
-
 
     /**
-     *
-     * @param array $options Initial options
-     *
-     * @return options Options of all fields
+     * {@inheritdoc}
+     */
+    public function getTranslatableClass()
+    {
+        return $this->translatableClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTranslatableClass($translatableClass)
+    {
+        $this->translatableClass = $translatableClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslationClass()
+    {
+        return $this->translationClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTranslationClass($translationClass)
+    {
+        $this->translationClass = $translationClass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslatableFields()
+    {
+        return $this->translatableFields;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTranslatableFields($translatableFields)
+    {
+        $this->translatableFields = $translatableFields;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultLocale()
+    {
+        return "en";
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getChildrenOptions($options)
     {
         $childrenOptions = array();
+        $translatableClass = $this->getTranslatableClass();
 
         // Custom options by field
-        foreach ($this->translatableConfig['fields'] as $child) {
+        foreach ($this->getTranslatableFields() as $child) {
             $childOptions = (isset($options['fields'][$child]) ? $options['fields'][$child] : array()) + array('required' => $options['required']);
 
             if (!isset($childOptions['display']) || $childOptions['display']) {
-                $childOptions = $this->guessMissingChildOptions($this->guesser, $this->translatableConfig['useObjectClass'], $child, $childOptions);
+                $childOptions = $this->guessMissingChildOptions($this->typeGuesser, $translatableClass, $child, $childOptions);
 
                 // Custom options by locale
                 if (isset($childOptions['locale_options'])) {
@@ -97,21 +124,10 @@ class TranslationForm
     }
 
     /**
-     * Use guesser for fill missing options of a field
-     *
-     * @param object $guesser
-     * @param object $class
-     * @param string $property
-     * @param array $options
-     *
-     * @return array $options Options of field
+     * {@inheritdoc}
      */
-    private function guessMissingChildOptions($guesser, $class, $property, $options)
+    public function guessMissingChildOptions($guesser, $class, $property, $options)
     {
-        if (!isset($options['label'])) {
-            $options['label'] = ucfirst($property);
-        }
-
         if (!isset($options['type']) && ($typeGuess = $guesser->guessType($class, $property))) {
             $options['type'] = $typeGuess->getType();
         }

@@ -19,6 +19,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('a2lix_translation_form');
 
         $rootNode
+            ->append($this->getDefaultClassNode())
             ->children()
                 ->arrayNode('locales')
                     ->beforeNormalization()
@@ -31,9 +32,70 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('default_required')->defaultFalse()->end()
                 ->booleanNode('use_aop')->defaultFalse()->end()
                 ->scalarNode('object_manager')->defaultValue('doctrine.orm.entity_manager')->end()
+                ->scalarNode('templating')->defaultValue("A2lixTranslationFormBundle::default.html.twig")->end()
             ->end()
         ;
 
         return $treeBuilder;
+    }
+
+    private function getDefaultClassNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('default_class');
+
+        $node
+            ->append($this->getDefaultListenersClassNode())
+            ->append($this->getDefaultTypesClassNode())
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('service')
+                    ->cannotBeEmpty()
+                    ->defaultValue('A2lix\TranslationFormBundle\TranslationForm\DefaultTranslationForm')
+                ->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    private function getDefaultListenersClassNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('listeners');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('translations')
+                    ->cannotBeEmpty()
+                    ->defaultValue('A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsSubscriber')
+                ->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    private function getDefaultTypesClassNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('types');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('translations')
+                    ->cannotBeEmpty()
+                    ->defaultValue('A2lix\TranslationFormBundle\Form\Type\TranslationsType')
+                ->end()
+                ->scalarNode('translationsFields')
+                    ->cannotBeEmpty()
+                    ->defaultValue('A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType')
+                ->end()
+            ->end()
+        ;
+
+        return $node;
     }
 }

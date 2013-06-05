@@ -1,0 +1,52 @@
+{% block a2lix_translations_widget %}
+    <div class="a2lix_translationsTabs">
+        <ul class="a2lix_translationsTabsLocales">
+        {% for translationsFields in form %}
+            {% set locale = translationsFields.vars.name %}
+
+            <li>
+                <a href="#" data-translation-locale="{{ locale }}">
+                   {{ locale|capitalize }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+
+        <div class="a2lix_translationsTabsContents">
+        {% for translationsFields in form %}
+            <div class="a2lix_translationLocale-{{ translationsFields.vars.name }}">
+                {{ form_widget(translationsFields) }}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block a2lix_translations_gedmo_widget %}
+    <div class="a2lix_translationsTabs">
+        <ul class="a2lix_translationsTabsLocales">
+        {% for translationsLocales in form %}
+            {% set isDefaultLocale = ('defaultLocale' == translationsLocales.vars.name) %}
+
+            {% for translationsFields in translationsLocales %}
+                {% set locale = translationsFields.vars.name %}
+                <li>
+                    <a href="#" data-translation-locale="{{ locale }}">
+                        {{ locale|capitalize }} {% if isDefaultLocale %}[Default]{% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+
+        <div class="a2lix_translationsTabsContents">
+        {% for translationsLocales in form %}
+            {% for translationsFields in translationsLocales %}
+                <div class="a2lix_translationLocale-{{ translationsFields.vars.name }}">
+                    {{ form_widget(translationsFields) }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
