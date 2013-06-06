@@ -4,11 +4,9 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\Form\FormView,
-    Symfony\Component\Form\FormInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use A2lix\TranslationFormBundle\TranslationForm\TranslationForm,
-    A2lix\TranslationFormBundle\Form\DataMapper\TranslationMapper;
+    Symfony\Component\OptionsResolver\OptionsResolverInterface,
+    A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsSubscriber,
+    A2lix\TranslationFormBundle\Form\DataMapper\IndexByTranslationMapper;
 
 /**
  * Regroup by locales, all translations fields
@@ -17,45 +15,49 @@ use A2lix\TranslationFormBundle\TranslationForm\TranslationForm,
  */
 class TranslationsType extends AbstractType
 {
-    private $translationForm;
+    private $translationsSubscriber;
     private $locales;
     private $required;
 
-    public function __construct(TranslationForm $translationForm, $locales, $required)
+    /**
+     *
+     * @param \A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsSubscriber $translationsSubscriber
+     * @param type $locales
+     * @param type $required
+     */
+    public function __construct(DefaultTranslationsSubscriber $translationsSubscriber, $locales, $required)
     {
-        $this->translationForm = $translationForm;
+        $this->translationsSubscriber = $translationsSubscriber;
         $this->locales = $locales;
         $this->required = $required;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $translatableConfig = $this->translationForm->initTranslatableConfiguration($builder->getParent()->getDataClass());
-        $childrenOptions = $this->translationForm->getChildrenOptions($options);
+        $builder->setDataMapper(new IndexByTranslationMapper());
 
-        $builder->setDataMapper(new TranslationMapper($translatableConfig['translationClass']));
-
-        foreach ($options['locales'] as $locale) {
-            if (isset($childrenOptions[$locale])) {
-                $builder->add($locale, 'a2lix_translationsLocale', array(
-                    'fields' => $childrenOptions[$locale]
-                ));
+        // Form translation
+        if ($options['form'] && isset($options['form']['type'])) {
+            $formType = $options['form']['type'];
+            $formOptions = isset($options['form']['options']) ? $options['form']['options'] : array();
+            foreach ($options['locales'] as $locale) {
+                $builder->add($locale, $formType, $formOptions);
             }
-        }
-    }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['default_locale'] = (array) $this->translationForm->getDefaultLocale();
-        $view->vars['locales'] = $options['locales'];
+        // Fields translation
+        } else {
+            $builder->addEventSubscriber($this->translationsSubscriber);
+        }
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'locales' => $this->locales,
             'required' => $this->required,
-            'fields' => array()
+            'locales' => $this->locales,
+            'fields' => array(),
+            'form' => array(),
+            'by_reference' => false,
         ));
     }
 
