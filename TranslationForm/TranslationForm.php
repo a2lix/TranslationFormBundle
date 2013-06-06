@@ -5,6 +5,7 @@ namespace A2lix\TranslationFormBundle\TranslationForm;
 use Symfony\Component\Form\FormRegistry,
     Doctrine\Common\Persistence\ObjectManager,
     Gedmo\Translatable\TranslatableListener;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 /**
  * @author David ALLIX
@@ -15,17 +16,23 @@ class TranslationForm
     private $om;
     private $translatableListener;
     private $translatableConfig = array();
+    private $doctrine;
 
-    public function __construct(FormRegistry $formRegistry, ObjectManager $om, TranslatableListener $translatableListener)
+    public function __construct(FormRegistry $formRegistry, ObjectManager $om, TranslatableListener $translatableListener, Registry $doctrine)
     {
         $this->guesser = $formRegistry->getTypeGuesser();
         $this->om = $om;
         $this->translatableListener = $translatableListener;
+        $this->doctrine = $doctrine;
     }
 
-    public function initTranslatableConfiguration($class)
+    public function initTranslatableConfiguration($class, $entity_manager)
     {
+      if($entity_manager == null){
         return $this->translatableConfig = $this->translatableListener->getConfiguration($this->om, $class);
+      }else{
+        return $this->translatableConfig = $this->translatableListener->getConfiguration($this->doctrine->getManager($entity_manager), $class);
+      }
     }
 
     public function getDistinctLocales($locales)

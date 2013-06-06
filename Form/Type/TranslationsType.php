@@ -30,7 +30,7 @@ class TranslationsType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $translatableConfig = $this->translationForm->initTranslatableConfiguration($builder->getParent()->getDataClass());
+        $translatableConfig = $this->translationForm->initTranslatableConfiguration($builder->getParent()->getDataClass(), $options['entity_manager']);
         $childrenOptions = $this->translationForm->getChildrenOptions($options);
 
         $builder->setDataMapper(new TranslationMapper($translatableConfig['translationClass']));
@@ -55,7 +55,8 @@ class TranslationsType extends AbstractType
         $resolver->setDefaults(array(
             'locales' => $this->locales,
             'required' => $this->required,
-            'fields' => array()
+            'fields' => array(), 
+            'entity_manager' => null,
         ));
     }
 
