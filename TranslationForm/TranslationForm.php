@@ -25,6 +25,7 @@ class TranslationForm
 
     public function initTranslatableConfiguration($class)
     {
+        $class = \Doctrine\Common\Util\ClassUtils::getRealClass($class);
         return $this->translatableConfig = $this->translatableListener->getConfiguration($this->om, $class);
     }
 
