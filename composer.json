@@ -18,8 +18,8 @@
         "symfony/symfony": "2.3.*"
     },
     "suggest": {
-        "stof/doctrine-extensions-bundle": "dev-master",
-        "knplabs/doctrine-behaviors": "1.0.*@dev"
+        "stof/doctrine-extensions-bundle": "For Gedmo strategy",
+        "knplabs/doctrine-behaviors": "For Knp strategy"
     },
     "autoload": {
         "psr-0": { "A2lix\\TranslationFormBundle": "" }
