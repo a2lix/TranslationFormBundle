@@ -4,10 +4,8 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\Form\FormView,
-    Symfony\Component\Form\FormInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use A2lix\TranslationFormBundle\TranslationForm\GedmoTranslationForm;
+    Symfony\Component\OptionsResolver\OptionsResolverInterface,
+    A2lix\TranslationFormBundle\TranslationForm\GedmoTranslationForm;
 
 /**
  * Regroup by locales, all translations fields
@@ -20,6 +18,12 @@ class GedmoTranslationsType extends AbstractType
     private $locales;
     private $required;
 
+    /**
+     *
+     * @param \A2lix\TranslationFormBundle\TranslationForm\GedmoTranslationForm $translationForm
+     * @param type $locales
+     * @param type $required
+     */
     public function __construct(GedmoTranslationForm $translationForm, $locales, $required)
     {
         $this->translationForm = $translationForm;
@@ -48,14 +52,10 @@ class GedmoTranslationsType extends AbstractType
         ));
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['locales'] = $options['locales'];
-    }
-
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
+            'required' => $this->required,
             'locales' => $this->locales,
             'fields' => array(),
             'form' => array(),

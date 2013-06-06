@@ -3,7 +3,7 @@
 namespace A2lix\TranslationFormBundle\TranslationForm;
 
 use Symfony\Component\Form\FormRegistry,
-    Doctrine\Common\Persistence\ObjectManager;
+    Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * @author David ALLIX
@@ -15,17 +15,26 @@ abstract class TranslationForm implements TranslationFormInterface
     private $translatableFields;
 
     private $typeGuesser;
-    private $om;
+    private $managerRegistry;
 
-    public function __construct(FormRegistry $formRegistry, ObjectManager $om)
+    /**
+     *
+     * @param \Symfony\Component\Form\FormRegistry $formRegistry
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $managerRegistry
+     */
+    public function __construct(FormRegistry $formRegistry, ManagerRegistry $managerRegistry)
     {
         $this->typeGuesser = $formRegistry->getTypeGuesser();
-        $this->om = $om;
+        $this->managerRegistry = $managerRegistry;
     }
 
-    public function getObjectManager()
+    /**
+     *
+     * @return type
+     */
+    public function getManagerRegistry()
     {
-        return $this->om;
+        return $this->managerRegistry;
     }
 
     /**

@@ -6,7 +6,6 @@ use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use A2lix\TranslationFormBundle\Form\DataMapper\GedmoTranslationMapper;
-use A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
 
 /**
 * Translations locales

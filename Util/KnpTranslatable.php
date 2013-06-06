@@ -1,7 +1,6 @@
 <?php
 
-namespace A2lix\TranslationFormBundle\Tools;
-use Symfony\Component\Validator\Constraints as Assert;
+namespace A2lix\TranslationFormBundle\Util;
 
 /**
  * Translatable trait.
@@ -11,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 trait KnpTranslatable
 {
     /**
-     * @Assert\Valid(deep=true)
+     * @Symfony\Component\Validator\Constraints\Valid(deep=true)
      */
     private $translations;
     private $newTranslations;

@@ -4,11 +4,9 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\Form\FormView,
-    Symfony\Component\Form\FormInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsSubscriber;
-use A2lix\TranslationFormBundle\Form\DataMapper\IndexByTranslationMapper;
+    Symfony\Component\OptionsResolver\OptionsResolverInterface,
+    A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsSubscriber,
+    A2lix\TranslationFormBundle\Form\DataMapper\IndexByTranslationMapper;
 
 /**
  * Regroup by locales, all translations fields
@@ -21,6 +19,12 @@ class TranslationsType extends AbstractType
     private $locales;
     private $required;
 
+    /**
+     *
+     * @param \A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsSubscriber $translationsSubscriber
+     * @param type $locales
+     * @param type $required
+     */
     public function __construct(DefaultTranslationsSubscriber $translationsSubscriber, $locales, $required)
     {
         $this->translationsSubscriber = $translationsSubscriber;
@@ -33,9 +37,11 @@ class TranslationsType extends AbstractType
         $builder->setDataMapper(new IndexByTranslationMapper());
 
         // Form translation
-        if ($options['form']) {
+        if ($options['form'] && isset($options['form']['type'])) {
+            $formType = $options['form']['type'];
+            $formOptions = isset($options['form']['options']) ? $options['form']['options'] : array();
             foreach ($options['locales'] as $locale) {
-                $builder->add($locale, $options['form']['type'], $options['form']['options']);
+                $builder->add($locale, $formType, $formOptions);
             }
 
         // Fields translation
@@ -44,14 +50,10 @@ class TranslationsType extends AbstractType
         }
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['locales'] = $options['locales'];
-    }
-
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
+            'required' => $this->required,
             'locales' => $this->locales,
             'fields' => array(),
             'form' => array(),

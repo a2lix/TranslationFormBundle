@@ -5,8 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="a2lix_translation_form.default_class.translations" />
-        <parameter key="a2lix_translation_form.default_class.listeners.translations" />
+        <parameter key="a2lix_translation_form.default_class.service" />
+        <parameter key="a2lix_translation_form.default_class.listener" />
         <parameter key="a2lix_translation_form.default_class.types.translations" />
         <parameter key="a2lix_translation_form.default_class.types.translationsFields" />
         <parameter key="a2lix_translation_form.locales" />
@@ -14,15 +14,15 @@
     </parameters>
 
     <services>
-        <service id="a2lix_translation_form.default.translation" class="%a2lix_translation_form.default_class.translations%">
+        <service id="a2lix_translation_form.default.translation" class="%a2lix_translation_form.default_class.service%">
             <argument type="service" id="form.registry" />
-            <argument type="service" id="a2lix_translation_form.object_manager" />
+            <argument type="service" id="doctrine" />
         </service>
-        <service id="a2lix_translation_form.default.listeners.translations" class="%a2lix_translation_form.default_class.listeners.translations%">
+        <service id="a2lix_translation_form.default.listener.translation" class="%a2lix_translation_form.default_class.listener%">
             <argument type="service" id="a2lix_translation_form.default.translation" />
         </service>
         <service id="a2lix_translation_form.default.types.translations" class="%a2lix_translation_form.default_class.types.translations%">
-            <argument type="service" id="a2lix_translation_form.default.listeners.translations" />
+            <argument type="service" id="a2lix_translation_form.default.listener.translation" />
             <argument>%a2lix_translation_form.locales%</argument>
             <argument>%a2lix_translation_form.default_required%</argument>
             <tag name="form.type" alias="a2lix_translations" />

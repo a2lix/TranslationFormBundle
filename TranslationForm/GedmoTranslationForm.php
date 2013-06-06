@@ -34,7 +34,9 @@ class GedmoTranslationForm extends TranslationForm
      */
     public function init($translatableClass)
     {
-        $gedmoTranslatableListenerConfig = $this->gedmoTranslatableListener->getConfiguration($this->getObjectManager(), $translatableClass);
+        $translatableClass = \Doctrine\Common\Util\ClassUtils::getRealClass($translatableClass);
+        $manager = $this->getManagerRegistry()->getManagerForClass($translatableClass);
+        $gedmoTranslatableListenerConfig = $this->gedmoTranslatableListener->getConfiguration($manager, $translatableClass);
 
         $this->setTranslatableClass($gedmoTranslatableListenerConfig['useObjectClass']);
         $this->setTranslationClass($gedmoTranslatableListenerConfig['translationClass']);

@@ -29,13 +29,10 @@ class A2lixTranslationFormExtension extends Extension
         $container->setParameter('a2lix_translation_form.locales', $config['locales']);
         $container->setParameter('a2lix_translation_form.default_required', $config['default_required']);
         $container->setParameter('a2lix_translation_form.templating', $config['templating']);
-        $container->setParameter('a2lix_translation_form.default_class.translations', $config['default_class']['service']);
-        $container->setParameter('a2lix_translation_form.default_class.listeners.translations', $config['default_class']['listeners']['translations']);
+        $container->setParameter('a2lix_translation_form.default_class.service', $config['default_class']['service']);
+        $container->setParameter('a2lix_translation_form.default_class.listener', $config['default_class']['listener']);
         $container->setParameter('a2lix_translation_form.default_class.types.translations', $config['default_class']['types']['translations']);
         $container->setParameter('a2lix_translation_form.default_class.types.translationsFields', $config['default_class']['types']['translationsFields']);
-
-        // Use object manager named in config.yml
-        $container->setAlias('a2lix_translation_form.object_manager', $config['object_manager']);
 
         // Enable gedmo?
         if ($container->hasParameter('stof_doctrine_extensions.default_locale')) {

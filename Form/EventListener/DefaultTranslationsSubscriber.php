@@ -2,15 +2,23 @@
 
 namespace A2lix\TranslationFormBundle\Form\EventListener;
 
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
+use Symfony\Component\Form\FormEvent,
+    Symfony\Component\Form\FormEvents,
+    Symfony\Component\EventDispatcher\EventSubscriberInterface,
+    A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
 
+/**
+ *
+ * @author David ALLIX
+ */
 class DefaultTranslationsSubscriber implements EventSubscriberInterface
 {
     private $translationForm;
 
+    /**
+     *
+     * @param \A2lix\TranslationFormBundle\TranslationForm\TranslationForm $translationForm
+     */
     public function __construct(TranslationForm $translationForm)
     {
         $this->translationForm = $translationForm;
@@ -23,20 +31,16 @@ class DefaultTranslationsSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function preSetData(FormEvent $event)
-    {
-        $this->createChildren($event->getForm());
-    }
-
     /**
      *
-     * @param type $form
+     * @param \Symfony\Component\Form\FormEvent $event
      */
-    private function createChildren($form)
+    public function preSetData(FormEvent $event)
     {
+        $form = $event->getForm();
+
         $this->translationForm->init($form->getParent()->getConfig()->getDataClass());
         $translationClass = $this->translationForm->getTranslationClass();
-
         $formOptions = $form->getConfig()->getOptions();
         $childrenOptions = $this->translationForm->getChildrenOptions($formOptions);
 

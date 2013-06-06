@@ -1,6 +1,6 @@
 <?php
 
-namespace A2lix\TranslationFormBundle\Tools;
+namespace A2lix\TranslationFormBundle\Util;
 
 /**
  * Translatable trait.

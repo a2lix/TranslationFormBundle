@@ -1,3 +1,6 @@
-v1.x with min compatibility symfony v2.3
+A2lixTranslationFormBundle
 
-NOT fully ready.
+v0.x for  <  symfony 2.3
+v1.x for  >= symfony 2.3
+
+Documentation : http://a2lix.fr/bundles/translation-form/

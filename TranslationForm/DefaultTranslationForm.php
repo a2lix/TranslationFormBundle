@@ -34,7 +34,8 @@ class DefaultTranslationForm extends TranslationForm
      */
     private function getTranslatableFieldsFromMetadata($translationClass)
     {
-        $metadataClass = $this->getObjectManager()->getMetadataFactory()->getMetadataFor($translationClass);
+        $manager = $this->getManagerRegistry()->getManagerForClass($translationClass);
+        $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
 
         $fields = array();
         foreach ($metadataClass->fieldMappings as $fieldMapping) {

@@ -29,9 +29,8 @@ class Configuration implements ConfigurationInterface
                     ->requiresAtLeastOneElement()
                     ->prototype('scalar')->end()
                 ->end()
-                ->booleanNode('default_required')->defaultFalse()->end()
+                ->booleanNode('default_required')->defaultTrue()->end()
                 ->booleanNode('use_aop')->defaultFalse()->end()
-                ->scalarNode('object_manager')->defaultValue('doctrine.orm.entity_manager')->end()
                 ->scalarNode('templating')->defaultValue("A2lixTranslationFormBundle::default.html.twig")->end()
             ->end()
         ;
@@ -45,7 +44,6 @@ class Configuration implements ConfigurationInterface
         $node = $treeBuilder->root('default_class');
 
         $node
-            ->append($this->getDefaultListenersClassNode())
             ->append($this->getDefaultTypesClassNode())
             ->addDefaultsIfNotSet()
             ->children()
@@ -54,20 +52,8 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('A2lix\TranslationFormBundle\TranslationForm\DefaultTranslationForm')
                 ->end()
             ->end()
-        ;
-
-        return $node;
-    }
-
-    private function getDefaultListenersClassNode()
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('listeners');
-
-        $node
-            ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('translations')
+                ->scalarNode('listener')
                     ->cannotBeEmpty()
                     ->defaultValue('A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsSubscriber')
                 ->end()
