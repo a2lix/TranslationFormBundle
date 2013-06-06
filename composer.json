@@ -15,10 +15,16 @@
         }
     ],
     "require": {
-        "stof/doctrine-extensions-bundle": "dev-master"
+        "stof/doctrine-extensions-bundle": "dev-master",
+        "symfony/symfony": "<2.3"
     },
     "autoload": {
         "psr-0": { "A2lix\\TranslationFormBundle": "" }
     },
-    "target-dir": "A2lix/TranslationFormBundle"
+    "target-dir": "A2lix/TranslationFormBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
+    }
 }
