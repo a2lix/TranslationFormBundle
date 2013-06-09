@@ -64,20 +64,22 @@ class GedmoTranslationMapper implements DataMapperInterface
             $locale = $translationsFieldsForm->getConfig()->getName();
 
             foreach ($translationsFieldsForm->getData() as $field => $content) {
-                $existingTranslation = $data->filter(function($object) use ($locale, $field) {
-                    return ($object && ($object->getLocale() === $locale) && ($object->getField() === $field));
-                })->first();
+                if($locale !== null && $field !== null && $content !== null) {
+                    $existingTranslation = $data->filter(function($object) use ($locale, $field) {
+                        return ($object && ($object->getLocale() === $locale) && ($object->getField() === $field));
+                    })->first();
 
-                if ($existingTranslation) {
-                    $existingTranslation->setContent($content);
-                    $newData->add($existingTranslation);
+                    if ($existingTranslation) {
+                        $existingTranslation->setContent($content);
+                        $newData->add($existingTranslation);
 
-                } else {
-                    $translation = new $this->translationClass();
-                    $translation->setLocale($locale);
-                    $translation->setField($field);
-                    $translation->setContent($content);
-                    $newData->add($translation);
+                    } else {
+                        $translation = new $this->translationClass();
+                        $translation->setLocale($locale);
+                        $translation->setField($field);
+                        $translation->setContent($content);
+                        $newData->add($translation);
+                    }
                 }
             }
         }
