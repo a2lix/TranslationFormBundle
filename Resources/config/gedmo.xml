@@ -13,7 +13,7 @@
     <services>
         <service id="a2lix_translation_form.gedmo.translation" class="%a2lix_translation_form.gedmo_class.service%">
             <argument type="service" id="form.registry" />
-            <argument type="service" id="doctrine" />
+            <argument type="service" id="a2lix_translation_form.manager_registry" />
             <call method="setGedmoTranslatableListener">
                 <argument type="service" id="stof_doctrine_extensions.listener.translatable" />
             </call>

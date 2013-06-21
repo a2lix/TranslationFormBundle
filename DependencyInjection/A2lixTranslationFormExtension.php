@@ -34,6 +34,9 @@ class A2lixTranslationFormExtension extends Extension
         $container->setParameter('a2lix_translation_form.default_class.types.translations', $config['default_class']['types']['translations']);
         $container->setParameter('a2lix_translation_form.default_class.types.translationsFields', $config['default_class']['types']['translationsFields']);
 
+        // Alias to wanted doctrine manager registry
+        $container->setAlias('a2lix_translation_form.manager_registry', $config['manager_registry']);
+
         // Enable gedmo?
         if ($container->hasParameter('stof_doctrine_extensions.default_locale')) {
             $loader->load('gedmo.xml');
