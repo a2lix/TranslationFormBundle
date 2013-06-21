@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->booleanNode('default_required')->defaultTrue()->end()
                 ->booleanNode('use_aop')->defaultFalse()->end()
+                ->scalarNode('manager_registry')->defaultValue('doctrine')->end()
                 ->scalarNode('templating')->defaultValue("A2lixTranslationFormBundle::default.html.twig")->end()
             ->end()
         ;
