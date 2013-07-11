@@ -251,7 +251,7 @@ $builder
                 **OTHER_OPTIONS**               // [optional] max_length, required, trim, read_only, constraints, ...
             ),
             'description' => array(
-                'label' => 'Desc.'              // [optional]
+                'label' => 'Desc.',              // [optional]
                 'locale_options' => array(              // [optional] Manual configuration of field for a dedicated locale -- Higher priority
                     'es' => array(
                         'label' => 'descripción'        // [optional] Higher priority
