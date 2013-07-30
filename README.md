@@ -4,8 +4,6 @@
 
 Offers the possibility to easily manage the translatable fields of your entity with a new form type: 'a2lix_translations'.
 
-[This repository](https://github.com/a2lix/DemoTranslationBundle) contains a screenshot and example code.
-
 
 ## Requirements
 
@@ -52,7 +50,7 @@ twig:
 
 ## Example
 
-### Entity ([example](https://github.com/a2lix/DemoTranslationBundle/blob/master/src/A2lix/DemoTranslationBundle/Entity/Product.php))
+### Entity
 
 ```php
 <?php
@@ -195,7 +193,8 @@ class Product
 }
 ```
 
-### Personal Translation Entity ([example](https://github.com/a2lix/DemoTranslationBundle/blob/master/src/A2lix/DemoTranslationBundle/Entity/Translation/ProductTranslation.php))
+### Personal Translation Entity
+
 
 ```php
 <?php
@@ -286,9 +285,8 @@ or group all locales (default and translations) in a tabs way:
 
 ## More help
 
-You can find a common use case in [this repository](https://github.com/a2lix/DemoTranslationBundle). With translations for your collections as bonus.
 
-There is also an article with an example on how to manage translations with [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle) available on [Elao's blog](http://www.elao.com/blog/symfony-2/doctrine-2/how-to-manage-translations-for-your-object-using-sonataadminbundle.html).
+There is an article with an example on how to manage translations with [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle) available on [Elao's blog](http://www.elao.com/blog/symfony-2/doctrine-2/how-to-manage-translations-for-your-object-using-sonataadminbundle.html).
 
 ## Thanks to
 
