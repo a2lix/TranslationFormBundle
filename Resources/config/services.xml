@@ -5,30 +5,43 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="a2lix_translation_form.default_class.service" />
-        <parameter key="a2lix_translation_form.default_class.listener" />
-        <parameter key="a2lix_translation_form.default_class.types.translations" />
-        <parameter key="a2lix_translation_form.default_class.types.translationsFields" />
         <parameter key="a2lix_translation_form.locales" />
         <parameter key="a2lix_translation_form.default_required" />
+
+        <parameter key="a2lix_translation_form.default.service.translation.class">A2lix\TranslationFormBundle\TranslationForm\DefaultTranslationForm</parameter>
+        <parameter key="a2lix_translation_form.default.listener.translations.class">A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsListener</parameter>
+        <parameter key="a2lix_translation_form.default.type.translations.class">A2lix\TranslationFormBundle\Form\Type\TranslationsType</parameter>
+        <parameter key="a2lix_translation_form.default.type.translationsFields.class">A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType</parameter>
+        <parameter key="a2lix_translation_form.default.type.translationsForms.class">A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType</parameter>
+        <parameter key="a2lix_translation_form.default.type.translationsLocalesSelector.class">A2lix\TranslationFormBundle\Form\Type\TranslationsLocalesSelectorType</parameter>
+
     </parameters>
 
     <services>
-        <service id="a2lix_translation_form.default.translation" class="%a2lix_translation_form.default_class.service%">
+        <service id="a2lix_translation_form.default.service.translation" class="%a2lix_translation_form.default.service.translation.class%">
             <argument type="service" id="form.registry" />
             <argument type="service" id="a2lix_translation_form.manager_registry" />
         </service>
-        <service id="a2lix_translation_form.default.listener.translation" class="%a2lix_translation_form.default_class.listener%">
-            <argument type="service" id="a2lix_translation_form.default.translation" />
+        <service id="a2lix_translation_form.default.listener.translations" class="%a2lix_translation_form.default.listener.translations.class%">
+            <argument type="service" id="a2lix_translation_form.default.service.translation" />
         </service>
-        <service id="a2lix_translation_form.default.types.translations" class="%a2lix_translation_form.default_class.types.translations%">
-            <argument type="service" id="a2lix_translation_form.default.listener.translation" />
+        <service id="a2lix_translation_form.default.type.translations" class="%a2lix_translation_form.default.type.translations.class%">
+            <argument type="service" id="a2lix_translation_form.default.listener.translations" />
             <argument>%a2lix_translation_form.locales%</argument>
             <argument>%a2lix_translation_form.default_required%</argument>
             <tag name="form.type" alias="a2lix_translations" />
         </service>
-        <service id="a2lix_translation_form.default.types.translationsFields" class="%a2lix_translation_form.default_class.types.translationsFields%">
+        <service id="a2lix_translation_form.default.type.translationsFields" class="%a2lix_translation_form.default.type.translationsFields.class%">
             <tag name="form.type" alias="a2lix_translationsFields" />
+        </service>
+        <service id="a2lix_translation_form.default.type.translationsForms" class="%a2lix_translation_form.default.type.translationsForms.class%">
+            <argument>%a2lix_translation_form.locales%</argument>
+            <argument>%a2lix_translation_form.default_required%</argument>
+            <tag name="form.type" alias="a2lix_translationsForms" />
+        </service>
+        <service id="a2lix_translation_form.default.type.translationsLocalesSelector" class="%a2lix_translation_form.default.type.translationsLocalesSelector.class%">
+            <argument>%a2lix_translation_form.locales%</argument>
+            <tag name="form.type" alias="a2lix_translationsLocalesSelector" />
         </service>
     </services>
 </container>

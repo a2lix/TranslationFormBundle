@@ -10,10 +10,6 @@ use Symfony\Component\Form\FormRegistry,
  */
 abstract class TranslationForm implements TranslationFormInterface
 {
-    private $translatableClass;
-    private $translationClass;
-    private $translatableFields;
-
     private $typeGuesser;
     private $managerRegistry;
 
@@ -40,73 +36,20 @@ abstract class TranslationForm implements TranslationFormInterface
     /**
      * {@inheritdoc}
      */
-    public function getTranslatableClass()
-    {
-        return $this->translatableClass;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTranslatableClass($translatableClass)
-    {
-        $this->translatableClass = $translatableClass;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTranslationClass()
-    {
-        return $this->translationClass;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTranslationClass($translationClass)
-    {
-        $this->translationClass = $translationClass;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTranslatableFields()
-    {
-        return $this->translatableFields;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTranslatableFields($translatableFields)
-    {
-        $this->translatableFields = $translatableFields;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultLocale()
-    {
-        return "en";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getChildrenOptions($options)
+    public function getChildrenOptions($class, $options)
     {
         $childrenOptions = array();
-        $translatableClass = $this->getTranslatableClass();
+
+        // Clean some options
+        unset($options['inherit_data']);
+        unset($options['translatable_class']);
 
         // Custom options by field
-        foreach ($this->getTranslatableFields() as $child) {
+        foreach ($this->getTranslatableFields($class) as $child) {
             $childOptions = (isset($options['fields'][$child]) ? $options['fields'][$child] : array()) + array('required' => $options['required']);
 
             if (!isset($childOptions['display']) || $childOptions['display']) {
-                $childOptions = $this->guessMissingChildOptions($this->typeGuesser, $translatableClass, $child, $childOptions);
+                $childOptions = $this->guessMissingChildOptions($this->typeGuesser, $class, $child, $childOptions);
 
                 // Custom options by locale
                 if (isset($childOptions['locale_options'])) {

@@ -3,7 +3,6 @@
 namespace A2lix\TranslationFormBundle\Form\DataMapper;
 
 use Symfony\Component\Form\DataMapperInterface,
-    Symfony\Component\Form\Util\VirtualFormAwareIterator,
     Symfony\Component\Form\Exception\UnexpectedTypeException,
     Doctrine\Common\Collections\ArrayCollection;
 
@@ -12,13 +11,6 @@ use Symfony\Component\Form\DataMapperInterface,
  */
 class GedmoTranslationMapper implements DataMapperInterface
 {
-    private $translationClass;
-
-    public function __construct($translationClass)
-    {
-        $this->translationClass = $translationClass;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -61,7 +53,9 @@ class GedmoTranslationMapper implements DataMapperInterface
         $newData = new ArrayCollection();
 
         foreach ($forms as $translationsFieldsForm) {
-            $locale = $translationsFieldsForm->getConfig()->getName();
+            $translationsFieldsConfig = $translationsFieldsForm->getConfig();
+            $locale = $translationsFieldsConfig->getName();
+            $translationClass = $translationsFieldsConfig->getOption('translation_class');
 
             foreach ($translationsFieldsForm->getData() as $field => $content) {
                 $existingTranslation = $data ? $data->filter(function($object) use ($locale, $field) {
@@ -73,7 +67,7 @@ class GedmoTranslationMapper implements DataMapperInterface
                     $newData->add($existingTranslation);
 
                 } else {
-                    $translation = new $this->translationClass();
+                    $translation = new $translationClass();
                     $translation->setLocale($locale);
                     $translation->setField($field);
                     $translation->setContent($content);

@@ -10,6 +10,7 @@ use Gedmo\Translatable\TranslatableListener;
 class GedmoTranslationForm extends TranslationForm
 {
     private $gedmoTranslatableListener;
+    private $gedmoConfig;
 
     /**
      *
@@ -30,63 +31,40 @@ class GedmoTranslationForm extends TranslationForm
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function init($translatableClass)
-    {
-        $translatableClass = \Doctrine\Common\Util\ClassUtils::getRealClass($translatableClass);
-        $manager = $this->getManagerRegistry()->getManagerForClass($translatableClass);
-        $gedmoTranslatableListenerConfig = $this->gedmoTranslatableListener->getConfiguration($manager, $translatableClass);
-
-        $this->setTranslatableClass($gedmoTranslatableListenerConfig['useObjectClass']);
-        $this->setTranslationClass($gedmoTranslatableListenerConfig['translationClass']);
-        $this->setTranslatableFields(isset($gedmoTranslatableListenerConfig['fields']) ? $gedmoTranslatableListenerConfig['fields'] : array());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultLocale()
-    {
-        return $this->gedmoTranslatableListener->getDefaultLocale();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCurrentLocale()
-    {
-        return $this->gedmoTranslatableListener->getListenerLocale();
-    }
-
-    /**
      *
-     * @return booldean
+     * @param type $translatableClass
+     * @return type
      */
-    public function getPersistDefaultLocaleTranslation()
+    private function getGedmoConfig($translatableClass)
     {
-        return $this->gedmoTranslatableListener->getPersistDefaultLocaleTranslation();
-    }
-
-    /**
-     *
-     * @param array $locales
-     * @return array
-     */
-    public function getSortedLocales($locales)
-    {
-        $defaultLocale = $this->getDefaultLocale();
-        $isPersistDefaultLocaleTranslation = $this->getPersistDefaultLocaleTranslation();
-
-        $distinctLocales = array();
-        foreach ($locales as $locale) {
-            if ($isPersistDefaultLocaleTranslation || ($defaultLocale !== $locale)) {
-                $distinctLocales['translationsLocales'][] = $locale;
-            } else {
-                $distinctLocales['defaultLocale'] = $locale;
-            }
+        if (isset($this->gedmoConfig[$translatableClass])) {
+            return $this->gedmoConfig[$translatableClass];
         }
 
-        return $distinctLocales;
+        $translatableClass = \Doctrine\Common\Util\ClassUtils::getRealClass($translatableClass);
+        $manager = $this->getManagerRegistry()->getManagerForClass($translatableClass);
+        $this->gedmoConfig[$translatableClass] = $this->gedmoTranslatableListener->getConfiguration($manager, $translatableClass);
+
+        return $this->gedmoConfig[$translatableClass];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslationClass($translatableClass)
+    {
+        $gedmoConfig = $this->getGedmoConfig($translatableClass);
+        return $gedmoConfig['translationClass'];
+    }
+
+    /**
+     *
+     * @param type $translatableClass
+     * @return type
+     */
+    protected function getTranslatableFields($translatableClass)
+    {
+        $gedmoConfig = $this->getGedmoConfig($translatableClass);
+        return isset($gedmoConfig['fields']) ? $gedmoConfig['fields'] : array();
     }
 }

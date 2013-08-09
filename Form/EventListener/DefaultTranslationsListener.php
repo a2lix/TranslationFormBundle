@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormEvent,
  *
  * @author David ALLIX
  */
-class DefaultTranslationsSubscriber implements EventSubscriberInterface
+class DefaultTranslationsListener implements EventSubscriberInterface
 {
     private $translationForm;
 
@@ -39,10 +39,11 @@ class DefaultTranslationsSubscriber implements EventSubscriberInterface
     {
         $form = $event->getForm();
 
-        $this->translationForm->init($form->getParent()->getConfig()->getDataClass());
-        $translationClass = $this->translationForm->getTranslationClass();
+        $translatableClass = $form->getParent()->getConfig()->getDataClass();
+        $translationClass = $translatableClass::getTranslationClass();
+
         $formOptions = $form->getConfig()->getOptions();
-        $childrenOptions = $this->translationForm->getChildrenOptions($formOptions);
+        $childrenOptions = $this->translationForm->getChildrenOptions($translationClass, $formOptions);
 
         foreach ($formOptions['locales'] as $locale) {
             if (isset($childrenOptions[$locale])) {

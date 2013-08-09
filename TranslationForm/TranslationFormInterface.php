@@ -10,45 +10,10 @@ interface TranslationFormInterface
     /**
      *
      */
-    public function init($translatableClass);
+    public function getChildrenOptions($class, $options);
 
     /**
      *
      */
-    public function getTranslatableClass();
-
-    /**
-     *
-     */
-    public function setTranslatableClass($translatableClass);
-
-    /**
-     *
-     */
-    public function getTranslationClass();
-
-    /**
-     *
-     */
-    public function setTranslationClass($translationClass);
-
-    /**
-     *
-     */
-    public function getTranslatableFields();
-
-    /**
-     *
-     */
-    public function setTranslatableFields($translatableFields);
-
-    /**
-     *
-     */
-    public function getDefaultLocale();
-
-    /**
-     *
-     */
-    public function getCurrentLocale();
+    public function guessMissingChildOptions($guesser, $class, $property, $options);
 }

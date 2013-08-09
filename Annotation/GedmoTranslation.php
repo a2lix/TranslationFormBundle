@@ -10,6 +10,6 @@ use Doctrine\Common\Annotations\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-class A2lixTranslation extends Annotation
+class GedmoTranslation extends Annotation
 {
 }

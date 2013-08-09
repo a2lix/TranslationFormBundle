@@ -2,9 +2,9 @@
 
 namespace A2lix\TranslationFormBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use A2lix\TranslationFormBundle\DependencyInjection\Compiler\TemplatingPass;
+use Symfony\Component\HttpKernel\Bundle\Bundle,
+    Symfony\Component\DependencyInjection\ContainerBuilder,
+    A2lix\TranslationFormBundle\DependencyInjection\Compiler\TemplatingPass;
 
 /**
  * @author David ALLIX

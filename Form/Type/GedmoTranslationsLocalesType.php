@@ -4,14 +4,14 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use A2lix\TranslationFormBundle\Form\DataMapper\GedmoTranslationMapper;
+    Symfony\Component\OptionsResolver\OptionsResolverInterface,
+    A2lix\TranslationFormBundle\Form\DataMapper\GedmoTranslationMapper;
 
 /**
-* Translations locales
-*
-* @author David ALLIX
-*/
+ * Translations locales (gedmo)
+ *
+ * @author David ALLIX
+ */
 class GedmoTranslationsLocalesType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -20,14 +20,15 @@ class GedmoTranslationsLocalesType extends AbstractType
 
         // Custom mapper for translations
         if (!$isDefaultTranslation) {
-            $builder->setDataMapper(new GedmoTranslationMapper($options['translation_class']));
+            $builder->setDataMapper(new GedmoTranslationMapper());
         }
 
         foreach ($options['locales'] as $locale) {
             if (isset($options['fields_options'][$locale])) {
                 $builder->add($locale, 'a2lix_translationsFields', array(
                     'fields' => $options['fields_options'][$locale],
-                    'inherit_data' => $isDefaultTranslation
+                    'translation_class' => $options['translation_class'],
+                    'inherit_data' => $isDefaultTranslation,
                 ));
             }
         }

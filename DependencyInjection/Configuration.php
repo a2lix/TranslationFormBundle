@@ -19,7 +19,6 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('a2lix_translation_form');
 
         $rootNode
-            ->append($this->getDefaultClassNode())
             ->children()
                 ->arrayNode('locales')
                     ->beforeNormalization()
@@ -30,59 +29,11 @@ class Configuration implements ConfigurationInterface
                     ->prototype('scalar')->end()
                 ->end()
                 ->booleanNode('default_required')->defaultTrue()->end()
-                ->booleanNode('use_aop')->defaultFalse()->end()
                 ->scalarNode('manager_registry')->defaultValue('doctrine')->end()
                 ->scalarNode('templating')->defaultValue("A2lixTranslationFormBundle::default.html.twig")->end()
             ->end()
         ;
 
         return $treeBuilder;
-    }
-
-    private function getDefaultClassNode()
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('default_class');
-
-        $node
-            ->append($this->getDefaultTypesClassNode())
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->scalarNode('service')
-                    ->cannotBeEmpty()
-                    ->defaultValue('A2lix\TranslationFormBundle\TranslationForm\DefaultTranslationForm')
-                ->end()
-            ->end()
-            ->children()
-                ->scalarNode('listener')
-                    ->cannotBeEmpty()
-                    ->defaultValue('A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsSubscriber')
-                ->end()
-            ->end()
-        ;
-
-        return $node;
-    }
-
-    private function getDefaultTypesClassNode()
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('types');
-
-        $node
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->scalarNode('translations')
-                    ->cannotBeEmpty()
-                    ->defaultValue('A2lix\TranslationFormBundle\Form\Type\TranslationsType')
-                ->end()
-                ->scalarNode('translationsFields')
-                    ->cannotBeEmpty()
-                    ->defaultValue('A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType')
-                ->end()
-            ->end()
-        ;
-
-        return $node;
     }
 }

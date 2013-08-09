@@ -28,23 +28,17 @@ class A2lixTranslationFormExtension extends Extension
 
         $container->setParameter('a2lix_translation_form.locales', $config['locales']);
         $container->setParameter('a2lix_translation_form.default_required', $config['default_required']);
-        $container->setParameter('a2lix_translation_form.templating', $config['templating']);
-        $container->setParameter('a2lix_translation_form.default_class.service', $config['default_class']['service']);
-        $container->setParameter('a2lix_translation_form.default_class.listener', $config['default_class']['listener']);
-        $container->setParameter('a2lix_translation_form.default_class.types.translations', $config['default_class']['types']['translations']);
-        $container->setParameter('a2lix_translation_form.default_class.types.translationsFields', $config['default_class']['types']['translationsFields']);
-
-        // Alias to wanted doctrine manager registry
         $container->setAlias('a2lix_translation_form.manager_registry', $config['manager_registry']);
+        $container->setParameter('a2lix_translation_form.templating', $config['templating']);
 
         // Enable gedmo?
         if ($container->hasParameter('stof_doctrine_extensions.default_locale')) {
             $loader->load('gedmo.xml');
-        }
 
-        // Use AOP ?
-        if ($config['use_aop']) {
-            $loader->load('aop.xml');
+            // If persistDefaultTranslation enabled, detect GedmoTranslation annotations is useless
+            if ($container->getParameter('stof_doctrine_extensions.persist_default_translation')) {
+                $container->removeDefinition('a2lix_translation_form.listener.controller');
+            }
         }
     }
 }

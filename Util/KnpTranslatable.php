@@ -24,12 +24,12 @@ trait KnpTranslatable
      * @param type $arguments
      * @return type
      */
-    public function __call($methodOrProperty, $arguments)
+    public function __call($method, $args)
     {
-        if (!method_exists(self::getTranslationEntityClass(), $methodOrProperty)) {
-            $methodOrProperty = 'get'. ucfirst($methodOrProperty);
+        if (!method_exists(self::getTranslationEntityClass(), $method)) {
+            $method = 'get'. ucfirst($method);
         }
 
-        return $this->proxyCurrentLocaleTranslation($methodOrProperty, $arguments);
+        return $this->proxyCurrentLocaleTranslation($method, $args);
     }
 }

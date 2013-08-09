@@ -27,6 +27,7 @@ class TranslationsFieldsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'fields' => array(),
+            'translation_class' => null
         ));
     }
 
