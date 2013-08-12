@@ -40,7 +40,7 @@ class DefaultTranslationsListener implements EventSubscriberInterface
         $form = $event->getForm();
 
         $translatableClass = $form->getParent()->getConfig()->getDataClass();
-        $translationClass = $translatableClass::getTranslationClass();
+        $translationClass = $translatableClass::getTranslationEntityClass();
 
         $formOptions = $form->getConfig()->getOptions();
         $childrenOptions = $this->translationForm->getChildrenOptions($translationClass, $formOptions);
