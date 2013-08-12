@@ -76,6 +76,8 @@ class GedmoTranslationsType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        $translatableListener = $this->translationForm->getGedmoTranslatableListener();
+
         $resolver->setDefaults(array(
             'required' => $this->required,
             'locales' => $this->locales,
@@ -83,8 +85,7 @@ class GedmoTranslationsType extends AbstractType
             'translatable_class' => null,
 
             // inherit_data is needed only if there is no persist of default locale and default locale is required to display
-            'inherit_data' => function(Options $options) {
-                $translatableListener = $this->translationForm->getGedmoTranslatableListener();
+            'inherit_data' => function(Options $options) use ($translatableListener) {
                 return (!$translatableListener->getPersistDefaultLocaleTranslation()
                     && (in_array($translatableListener->getDefaultLocale(), $options['locales'])));
             },
