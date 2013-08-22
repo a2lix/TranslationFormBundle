@@ -9,10 +9,11 @@ namespace A2lix\TranslationFormBundle\Util;
  */
 trait KnpTranslatable
 {
+
     /**
      * @Symfony\Component\Validator\Constraints\Valid(deep=true)
      */
-    private $translations;
+    protected $translations;
     private $newTranslations;
     private $currentLocale;
 
