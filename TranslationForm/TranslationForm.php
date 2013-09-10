@@ -45,7 +45,7 @@ abstract class TranslationForm implements TranslationFormInterface
         unset($options['translatable_class']);
 
         // Custom options by field
-        foreach ($this->getTranslatableFields($class) as $child) {
+        foreach (array_unique(array_merge(array_keys($options['fields']), $this->getTranslatableFields($class))) as $child) {
             $childOptions = (isset($options['fields'][$child]) ? $options['fields'][$child] : array()) + array('required' => $options['required']);
 
             if (!isset($childOptions['display']) || $childOptions['display']) {
