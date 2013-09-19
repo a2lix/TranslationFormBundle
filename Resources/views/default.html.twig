@@ -5,7 +5,7 @@
             {% set locale = translationsFields.vars.name %}
 
             <li {% if (app.request.locale == locale) %}class="active"{% endif %}>
-                <a href=".a2lix_translationsFields-{{ locale }}" data-toggle="tab">
+                <a href="javascript:void(0)" data-toggle="tab" data-target=".a2lix_translationsFields-{{ locale }}">
                    {{ locale|capitalize }}
                 </a>
             </li>
@@ -40,7 +40,7 @@
                     {% set locale = translationsFields.vars.name %}
 
                     <li {% if (app.request.locale == locale) %}class="active"{% endif %}>
-                        <a href=".a2lix_translationsFields-{{ locale }}" data-toggle="tab">
+                        <a href="javascript:void(0)" data-toggle="tab" data-target=".a2lix_translationsFields-{{ locale }}">
                             {{ locale|capitalize }} {% if isDefaultLocale %}[Default]{% endif %}
                         </a>
                     </li>
