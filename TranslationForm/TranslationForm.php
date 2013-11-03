@@ -80,8 +80,8 @@ abstract class TranslationForm implements TranslationFormInterface
      */
     public function guessMissingChildOptions($guesser, $class, $property, $options)
     {
-        if (!isset($options['form_type']) && ($typeGuess = $guesser->guessType($class, $property))) {
-            $options['form_type'] = $typeGuess->getType();
+        if (!isset($options['field_type']) && ($typeGuess = $guesser->guessType($class, $property))) {
+            $options['field_type'] = $typeGuess->getType();
         }
 
         if (!isset($options['pattern']) && ($patternGuess = $guesser->guessPattern($class, $property))) {
