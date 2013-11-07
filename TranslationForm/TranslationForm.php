@@ -41,7 +41,7 @@ abstract class TranslationForm implements TranslationFormInterface
         $fieldsOptions = array();
 
         // Add additionnal fields if necessary (Useful for upload field)
-        $extendedFields = $this->getTranslatableFields($class) + array_keys($options['fields']);
+        $extendedFields = array_unique(array_merge(array_keys($options['fields']), $this->getTranslatableFields($class)));
         
         foreach ($extendedFields as $field) {
             $fieldOptions = (isset($options['fields'][$field]) ? $options['fields'][$field] : array()) + array('required' => $options['required']);
