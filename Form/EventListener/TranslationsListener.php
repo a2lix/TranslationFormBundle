@@ -8,10 +8,9 @@ use Symfony\Component\Form\FormEvent,
     A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
 
 /**
- *
  * @author David ALLIX
  */
-class DefaultTranslationsListener implements EventSubscriberInterface
+class TranslationsListener implements EventSubscriberInterface
 {
     private $translationForm;
 
@@ -24,13 +23,6 @@ class DefaultTranslationsListener implements EventSubscriberInterface
         $this->translationForm = $translationForm;
     }
 
-    public static function getSubscribedEvents()
-    {
-        return array(
-            FormEvents::PRE_SET_DATA => 'preSetData',
-        );
-    }
-
     /**
      *
      * @param \Symfony\Component\Form\FormEvent $event
@@ -40,18 +32,45 @@ class DefaultTranslationsListener implements EventSubscriberInterface
         $form = $event->getForm();
 
         $translatableClass = $form->getParent()->getConfig()->getDataClass();
-        $translationClass = $translatableClass::getTranslationEntityClass();
+        $translationClass = $translatableClass .'Translation';
 
         $formOptions = $form->getConfig()->getOptions();
-        $childrenOptions = $this->translationForm->getChildrenOptions($translationClass, $formOptions);
+        $fieldsOptions = $this->translationForm->getFieldsOptions($translationClass, $formOptions);
 
         foreach ($formOptions['locales'] as $locale) {
-            if (isset($childrenOptions[$locale])) {
+            if (isset($fieldsOptions[$locale])) {
                 $form->add($locale, 'a2lix_translationsFields', array(
                     'data_class' => $translationClass,
-                    'fields' => $childrenOptions[$locale]
+                    'fields' => $fieldsOptions[$locale]
                 ));
             }
         }
+    }
+    
+    /**
+     *
+     * @param \Symfony\Component\Form\FormEvent $event
+     */
+    public function submit(FormEvent $event)
+    {
+        $data = $event->getData();
+
+        foreach ($data as $locale => $translation) {
+            // Remove useless Translation object
+            if (!$translation) {
+                $data->removeElement($translation);
+                
+            } else {
+                $translation->setLocale($locale);
+            }
+        }
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            FormEvents::PRE_SET_DATA => 'preSetData',
+            FormEvents::SUBMIT => 'submit',
+        );
     }
 }

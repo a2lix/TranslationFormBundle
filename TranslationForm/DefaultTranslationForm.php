@@ -2,6 +2,8 @@
 
 namespace A2lix\TranslationFormBundle\TranslationForm;
 
+use Doctrine\Common\Util\ClassUtils;
+
 /**
  * @author David ALLIX
  */
@@ -9,12 +11,12 @@ class DefaultTranslationForm extends TranslationForm
 {
     /**
      *
-     * @param type $translationClass
-     * @return type
+     * @param string $translationClass
+     * @return array
      */
     protected function getTranslatableFields($translationClass)
     {
-        $translationClass = \Doctrine\Common\Util\ClassUtils::getRealClass($translationClass);
+        $translationClass = ClassUtils::getRealClass($translationClass);
         $manager = $this->getManagerRegistry()->getManagerForClass($translationClass);
         $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
 

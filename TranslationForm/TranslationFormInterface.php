@@ -10,10 +10,10 @@ interface TranslationFormInterface
     /**
      *
      */
-    public function getChildrenOptions($class, $options);
+    public function getFieldsOptions($class, $options);
 
     /**
      *
      */
-    public function guessMissingChildOptions($guesser, $class, $property, $options);
+    public function guessMissingFieldOptions($guesser, $class, $property, $options);
 }

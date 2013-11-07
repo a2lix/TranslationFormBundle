@@ -26,59 +26,89 @@ abstract class TranslationForm implements TranslationFormInterface
 
     /**
      *
-     * @return type
+     * @return \Doctrine\Common\Persistence\ManagerRegistry
      */
     public function getManagerRegistry()
     {
         return $this->managerRegistry;
     }
-
+    
     /**
      * {@inheritdoc}
      */
-    public function getChildrenOptions($class, $options)
+    public function getFieldsOptions($class, $options)
     {
-        $childrenOptions = array();
+        $fieldsOptions = array();
 
-        // Clean some options
-        unset($options['inherit_data']);
-        unset($options['translatable_class']);
+        // Add additionnal fields if necessary (Useful for upload field)
+        $extendedFields = $this->getTranslatableFields($class) + array_keys($options['fields']);
+        
+        foreach ($extendedFields as $field) {
+            $fieldOptions = (isset($options['fields'][$field]) ? $options['fields'][$field] : array()) + array('required' => $options['required']);
 
-        // Custom options by field
-        foreach (array_unique(array_merge(array_keys($options['fields']), $this->getTranslatableFields($class))) as $child) {
-            $childOptions = (isset($options['fields'][$child]) ? $options['fields'][$child] : array()) + array('required' => $options['required']);
-
-            if (!isset($childOptions['display']) || $childOptions['display']) {
-                $childOptions = $this->guessMissingChildOptions($this->typeGuesser, $class, $child, $childOptions);
+            if (!isset($fieldOptions['display']) || $fieldOptions['display']) {
+                $fieldOptions = $this->guessMissingFieldOptions($this->typeGuesser, $class, $field, $fieldOptions);
 
                 // Custom options by locale
-                if (isset($childOptions['locale_options'])) {
-                    $localesChildOptions = $childOptions['locale_options'];
-                    unset($childOptions['locale_options']);
+                if (isset($fieldOptions['locale_options'])) {
+                    $localesFieldOptions = $fieldOptions['locale_options'];
+                    unset($fieldOptions['locale_options']);
 
                     foreach ($options['locales'] as $locale) {
-                        $localeChildOptions = isset($localesChildOptions[$locale]) ? $localesChildOptions[$locale] : array();
-                        if (!isset($localeChildOptions['display']) || $localeChildOptions['display']) {
-                            $childrenOptions[$locale][$child] = $localeChildOptions + $childOptions;
+                        $localeFieldOptions = isset($localesFieldOptions[$locale]) ? $localesFieldOptions[$locale] : array();
+                        if (!isset($localeFieldOptions['display']) || $localeFieldOptions['display']) {
+                            $fieldsOptions[$locale][$field] = $localeFieldOptions + $fieldOptions;
                         }
                     }
 
                 // General options for all locales
                 } else {
                     foreach ($options['locales'] as $locale) {
-                        $childrenOptions[$locale][$child] = $childOptions;
+                        $fieldsOptions[$locale][$field] = $fieldOptions;
                     }
                 }
             }
         }
 
-        return $childrenOptions;
+        return $fieldsOptions;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function guessMissingChildOptions($guesser, $class, $property, $options)
+    public function getFormsOptions($options)
+    {
+        $formsOptions = array();
+        
+        // Current options
+        $formOptions = $options['form_options'];
+        
+        // Custom options by locale
+        if (isset($formOptions['locale_options'])) {
+            $localesFormOptions = $formOptions['locale_options'];
+            unset($formOptions['locale_options']);
+            
+            foreach ($options['locales'] as $locale) {
+                $localeFormOptions = isset($localesFormOptions[$locale]) ? $localesFormOptions[$locale] : array();
+                if (!isset($localeFormOptions['display']) || $localeFormOptions['display']) {
+                    $formsOptions[$locale] = $localeFormOptions + $formOptions;
+                }
+            }
+            
+        // General options for all locales
+        } else {
+            foreach ($options['locales'] as $locale) {
+                $formsOptions[$locale] = $formOptions;
+            }
+        }
+
+        return $formsOptions;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function guessMissingFieldOptions($guesser, $class, $property, $options)
     {
         if (!isset($options['field_type']) && ($typeGuess = $guesser->guessType($class, $property))) {
             $options['field_type'] = $typeGuess->getType();

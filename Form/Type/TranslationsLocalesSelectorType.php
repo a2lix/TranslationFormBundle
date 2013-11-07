@@ -16,13 +16,17 @@ class TranslationsLocalesSelectorType extends AbstractType
 
     /**
      *
-     * @param type $locales
+     * @param array $locales
      */
-    public function __construct($locales)
+    public function __construct(array $locales)
     {
         $this->locales = $locales;
     }
 
+    /**
+     * 
+     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(

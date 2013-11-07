@@ -13,6 +13,11 @@ use Symfony\Component\Form\AbstractType,
  */
 class TranslationsFieldsType extends AbstractType
 {
+    /**
+     * 
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['fields'] as $fieldName => $fieldConfig) {
@@ -23,6 +28,10 @@ class TranslationsFieldsType extends AbstractType
         }
     }
 
+    /**
+     * 
+     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(

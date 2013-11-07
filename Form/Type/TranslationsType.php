@@ -5,8 +5,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsListener,
-    A2lix\TranslationFormBundle\Form\DataMapper\IndexByTranslationMapper;
+    A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 
 /**
  * Regroup by locales, all translations fields
@@ -21,23 +20,31 @@ class TranslationsType extends AbstractType
 
     /**
      *
-     * @param \A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsListener $translationsListener
-     * @param type $locales
-     * @param type $required
+     * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener $translationsListener
+     * @param array $locales
+     * @param boolean $required
      */
-    public function __construct(DefaultTranslationsListener $translationsListener, $locales, $required)
+    public function __construct(TranslationsListener $translationsListener, array $locales, $required)
     {
         $this->translationsListener = $translationsListener;
         $this->locales = $locales;
         $this->required = $required;
     }
 
+    /**
+     * 
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->setDataMapper(new IndexByTranslationMapper());
         $builder->addEventSubscriber($this->translationsListener);
     }
 
+    /**
+     * 
+     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(

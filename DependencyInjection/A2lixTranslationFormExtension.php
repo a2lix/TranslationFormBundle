@@ -30,15 +30,5 @@ class A2lixTranslationFormExtension extends Extension
         $container->setParameter('a2lix_translation_form.default_required', $config['default_required']);
         $container->setAlias('a2lix_translation_form.manager_registry', $config['manager_registry']);
         $container->setParameter('a2lix_translation_form.templating', $config['templating']);
-
-        // Enable gedmo?
-        if ($container->hasParameter('stof_doctrine_extensions.default_locale')) {
-            $loader->load('gedmo.xml');
-
-            // If persistDefaultTranslation enabled, detect GedmoTranslation annotations is useless
-            if ($container->getParameter('stof_doctrine_extensions.persist_default_translation')) {
-                $container->removeDefinition('a2lix_translation_form.listener.controller');
-            }
-        }
     }
 }
