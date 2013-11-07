@@ -1,7 +1,7 @@
 UPGRADE FROM 1.1 to 1.2
 =======================
 
-### [BC Break] Rename of type option into field_type
+### [BC Break] Rename of 'type' option into 'field_type'
 
 
 
