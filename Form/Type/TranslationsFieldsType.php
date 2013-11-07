@@ -26,8 +26,8 @@ class TranslationsFieldsType extends AbstractType
 
             $builder->add($fieldName, $fieldType, $fieldConfig);
         }
-    }
-
+    }  
+    
     /**
      * 
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
@@ -36,7 +36,6 @@ class TranslationsFieldsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'fields' => array(),
-            'translation_class' => null
         ));
     }
 

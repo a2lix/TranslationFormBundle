@@ -13,14 +13,17 @@ use Symfony\Component\Form\AbstractType,
 class TranslationsLocalesSelectorType extends AbstractType
 {
     private $locales;
+    private $defaultLocale;
 
     /**
      *
      * @param array $locales
+     * @param string $defaultLocale
      */
-    public function __construct(array $locales)
+    public function __construct(array $locales, $defaultLocale)
     {
         $this->locales = $locales;
+        $this->defaultLocale = $defaultLocale;
     }
 
     /**

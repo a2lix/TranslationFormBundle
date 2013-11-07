@@ -2,7 +2,9 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType,
+use Symfony\Component\Form\FormView,
+    Symfony\Component\Form\AbstractType,
+    Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
     A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
@@ -16,19 +18,22 @@ class TranslationsType extends AbstractType
 {
     private $translationsListener;
     private $locales;
-    private $required;
+    private $defaultLocale;
+    private $defaultRequired;
 
     /**
      *
      * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener $translationsListener
      * @param array $locales
-     * @param boolean $required
+     * @param string $defaultLocale
+     * @param boolean $defaultRequired
      */
-    public function __construct(TranslationsListener $translationsListener, array $locales, $required)
+    public function __construct(TranslationsListener $translationsListener, array $locales, $defaultLocale, $defaultRequired)
     {
         $this->translationsListener = $translationsListener;
         $this->locales = $locales;
-        $this->required = $required;
+        $this->defaultLocale = $defaultLocale;
+        $this->defaultRequired = $defaultRequired;
     }
 
     /**
@@ -43,13 +48,24 @@ class TranslationsType extends AbstractType
 
     /**
      * 
+     * @param \Symfony\Component\Form\FormView $view
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @param array $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['default_locale'] = $this->defaultLocale;
+    }    
+    
+    /**
+     * 
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
-            'required' => $this->required,
+            'required' => $this->defaultRequired,
             'locales' => $this->locales,
             'fields' => array(),
         ));
