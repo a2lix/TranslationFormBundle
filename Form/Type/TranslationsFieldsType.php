@@ -16,8 +16,8 @@ class TranslationsFieldsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['fields'] as $fieldName => $fieldConfig) {
-            $fieldType = $fieldConfig['type'];
-            unset($fieldConfig['type']);
+            $fieldType = $fieldConfig['field_type'];
+            unset($fieldConfig['field_type']);
 
             $builder->add($fieldName, $fieldType, $fieldConfig);
         }
