@@ -3,12 +3,13 @@
 namespace A2lix\TranslationFormBundle\TranslationForm;
 
 use Symfony\Component\Form\FormRegistry,
-    Doctrine\Common\Persistence\ManagerRegistry;
+    Doctrine\Common\Persistence\ManagerRegistry,
+    Doctrine\Common\Util\ClassUtils;
 
 /**
  * @author David ALLIX
  */
-abstract class TranslationForm implements TranslationFormInterface
+class TranslationForm implements TranslationFormInterface
 {
     private $typeGuesser;
     private $managerRegistry;
@@ -23,14 +24,26 @@ abstract class TranslationForm implements TranslationFormInterface
         $this->typeGuesser = $formRegistry->getTypeGuesser();
         $this->managerRegistry = $managerRegistry;
     }
-
+    
     /**
      *
-     * @return \Doctrine\Common\Persistence\ManagerRegistry
+     * @param string $translationClass
+     * @return array
      */
-    public function getManagerRegistry()
+    protected function getTranslationFields($translationClass)
     {
-        return $this->managerRegistry;
+        $translationClass = ClassUtils::getRealClass($translationClass);
+        $manager = $this->managerRegistry->getManagerForClass($translationClass);
+        $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
+
+        $fields = array();
+        foreach ($metadataClass->fieldMappings as $fieldMapping) {
+            if (!in_array($fieldMapping['fieldName'], array('id', 'locale'))) {
+                $fields[] = $fieldMapping['fieldName'];
+            }
+        }
+
+        return $fields;
     }
     
     /**
@@ -41,7 +54,7 @@ abstract class TranslationForm implements TranslationFormInterface
         $fieldsOptions = array();
 
         // Add additionnal fields if necessary (Useful for upload field)
-        $extendedFields = array_unique(array_merge(array_keys($options['fields']), $this->getTranslatableFields($class)));
+        $extendedFields = array_unique(array_merge(array_keys($options['fields']), $this->getTranslationFields($class)));
         
         foreach ($extendedFields as $field) {
             $fieldOptions = (isset($options['fields'][$field]) ? $options['fields'][$field] : array()) + array('required' => $options['required']);

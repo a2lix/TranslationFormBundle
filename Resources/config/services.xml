@@ -8,7 +8,7 @@
         <parameter key="a2lix_translation_form.locales" />
         <parameter key="a2lix_translation_form.default_required" />
 
-        <parameter key="a2lix_translation_form.default.service.translation.class">A2lix\TranslationFormBundle\TranslationForm\DefaultTranslationForm</parameter>
+        <parameter key="a2lix_translation_form.default.service.translation.class">A2lix\TranslationFormBundle\TranslationForm\TranslationForm</parameter>
         
         <parameter key="a2lix_translation_form.default.listener.translations.class">A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener</parameter>
         <parameter key="a2lix_translation_form.default.listener.translationsForms.class">A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener</parameter>

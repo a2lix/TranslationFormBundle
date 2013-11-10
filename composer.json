@@ -17,6 +17,9 @@
     "require": {
         "symfony/symfony": ">=2.3"
     },
+    "require-dev": {
+        "gedmo/doctrine-extensions": "dev-wip-v2.4.0"
+    },
     "suggest": {
         "a2lix/i18n-doctrine-bundle": "For A2lix strategy",
         "gedmo/doctrine-extensions": "For Gedmo strategy",
