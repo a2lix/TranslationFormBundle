@@ -14,16 +14,16 @@ trait GedmoTranslatable
         return $this->translations;
     }
 
-    public function addTranslation($translation)
+    public function addTranslation(\Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation $translation)
     {
         if (!$this->translations->contains($translation)) {
             $translation->setObject($this);
-            $this->translations->add($translation);
+            $this->translations->set($translation->getLocale(), $translation);
         }
         return $this;
     }
 
-    public function removeTranslation($translation)
+    public function removeTranslation(\Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation $translation)
     {
         if ($this->translations->contains($translation)) {
             $this->translations->removeElement($translation);
