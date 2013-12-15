@@ -9,8 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity
  * @ORM\Table(name="Product_translations", uniqueConstraints={
- *    @ORM\UniqueConstraint(name="lookup_unique_idx", columns={"locale", "object_id"}),
- *    @ORM\UniqueConstraint(name="slug_unique_idx", columns={"slug"})
+ *    @ORM\UniqueConstraint(name="lookup_unique_idx", columns={"locale", "object_id"})
  * })
  */
 class ProductTranslation extends AbstractTranslation
