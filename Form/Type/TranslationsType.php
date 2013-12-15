@@ -66,6 +66,7 @@ class TranslationsType extends AbstractType
         $resolver->setDefaults(array(
             'by_reference' => false,
             'required' => $this->defaultRequired,
+            'empty_data' => new \Doctrine\Common\Collections\ArrayCollection(),
             'locales' => $this->locales,
             'fields' => array(),
         ));
