@@ -53,10 +53,7 @@ class TranslationForm implements TranslationFormInterface
     {
         $fieldsOptions = array();
 
-        // Add additionnal fields if necessary (Useful for upload field)
-        $extendedFields = array_unique(array_merge(array_keys($options['fields']), $this->getTranslationFields($class)));
-        
-        foreach ($extendedFields as $field) {
+        foreach ($this->getFieldsList($options, $class) as $field) {
             $fieldOptions = (isset($options['fields'][$field]) ? $options['fields'][$field] : array()) + array('required' => $options['required']);
 
             if (!isset($fieldOptions['display']) || $fieldOptions['display']) {
@@ -85,7 +82,24 @@ class TranslationForm implements TranslationFormInterface
 
         return $fieldsOptions;
     }
-
+    
+    /**
+     * Combine formFields with translationFields. (Useful for upload field)
+     */
+    private function getFieldsList($options, $class)
+    {
+        $formFields = array_keys($options['fields']);
+        
+        // Check existing
+        foreach ($formFields as $field) {
+            if (!property_exists($class, $field)) {
+                throw new \Exception("Field '". $field ."' doesn't exist in ". $class);
+            }
+        }
+        
+        return array_unique(array_merge($formFields, $this->getTranslationFields($class)));
+    }
+    
     /**
      * {@inheritdoc}
      */
