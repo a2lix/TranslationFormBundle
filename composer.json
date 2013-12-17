@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "symfony/symfony": "2.3.*"
+        "symfony/symfony": ">=2.3"
     },
     "suggest": {
         "a2lix/i18n-doctrine-bundle": "For A2lix strategy",
