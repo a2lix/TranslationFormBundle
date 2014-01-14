@@ -54,7 +54,7 @@ class TranslationsType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['default_locale'] = $this->defaultLocale;
+        $view->vars['default_locale'] = $options['default_locale'];
     }    
     
     /**
@@ -68,6 +68,7 @@ class TranslationsType extends AbstractType
             'required' => $this->defaultRequired,
             'empty_data' => new \Doctrine\Common\Collections\ArrayCollection(),
             'locales' => $this->locales,
+            'default_locale' => $this->defaultLocale,
             'fields' => array(),
         ));
     }
