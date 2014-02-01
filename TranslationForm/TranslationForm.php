@@ -32,17 +32,21 @@ class TranslationForm implements TranslationFormInterface
      */
     protected function getTranslationFields($translationClass)
     {
+        $fields = array();
+        
         $translationClass = ClassUtils::getRealClass($translationClass);
         $manager = $this->managerRegistry->getManagerForClass($translationClass);
-        $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
-
-        $fields = array();
-        foreach ($metadataClass->fieldMappings as $fieldMapping) {
-            if (!in_array($fieldMapping['fieldName'], array('id', 'locale'))) {
-                $fields[] = $fieldMapping['fieldName'];
+        if (null === $manager)
+        {
+            $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
+            
+            foreach ($metadataClass->fieldMappings as $fieldMapping) {
+                if (!in_array($fieldMapping['fieldName'], array('id', 'locale'))) {
+                    $fields[] = $fieldMapping['fieldName'];
+                }
             }
         }
-
+        
         return $fields;
     }
     
