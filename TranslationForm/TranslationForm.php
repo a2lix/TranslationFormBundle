@@ -36,8 +36,7 @@ class TranslationForm implements TranslationFormInterface
         
         $translationClass = ClassUtils::getRealClass($translationClass);
         $manager = $this->managerRegistry->getManagerForClass($translationClass);
-        if (null === $manager)
-        {
+        if (null === $manager) {
             $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
             
             foreach ($metadataClass->fieldMappings as $fieldMapping) {
