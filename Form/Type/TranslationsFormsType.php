@@ -78,7 +78,6 @@ class TranslationsFormsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
-            'required' => false,
             'locales' => $this->locales,
             'required_locales' => $this->requiredLocales,
             'form_type' => null,
