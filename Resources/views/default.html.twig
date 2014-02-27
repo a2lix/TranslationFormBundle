@@ -7,7 +7,9 @@
 
             <li {% if app.request.locale == locale %}class="active"{% endif %}>
                 <a href="javascript:void(0)" data-toggle="tab" data-target=".a2lix_translationsFields-{{ locale }}">
-                   {{ locale|capitalize }} {% if form.vars.default_locale == locale %}[Default]{% endif %}
+                    {{ locale|capitalize }}
+                    {% if form.vars.default_locale == locale %}[Default]{% endif %}
+                    {% if translationsFields.vars.required %}*{% endif %}
                 </a>
             </li>
         {% endfor %}

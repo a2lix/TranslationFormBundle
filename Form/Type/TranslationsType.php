@@ -19,21 +19,21 @@ class TranslationsType extends AbstractType
     private $translationsListener;
     private $locales;
     private $defaultLocale;
-    private $defaultRequired;
+    private $requiredLocales;
 
     /**
      *
      * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener $translationsListener
      * @param array $locales
      * @param string $defaultLocale
-     * @param boolean $defaultRequired
+     * @param array $requiredLocales
      */
-    public function __construct(TranslationsListener $translationsListener, array $locales, $defaultLocale, $defaultRequired)
+    public function __construct(TranslationsListener $translationsListener, array $locales, $defaultLocale, array $requiredLocales = array())
     {
         $this->translationsListener = $translationsListener;
         $this->locales = $locales;
         $this->defaultLocale = $defaultLocale;
-        $this->defaultRequired = $defaultRequired;
+        $this->requiredLocales = $requiredLocales;
     }
 
     /**
@@ -55,6 +55,7 @@ class TranslationsType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['default_locale'] = $options['default_locale'];
+        $view->vars['required_locales'] = $options['required_locales'];
     }    
     
     /**
@@ -65,10 +66,11 @@ class TranslationsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
-            'required' => $this->defaultRequired,
+//            'required' => false,
             'empty_data' => new \Doctrine\Common\Collections\ArrayCollection(),
             'locales' => $this->locales,
             'default_locale' => $this->defaultLocale,
+            'required_locales' => $this->requiredLocales,
             'fields' => array(),
         ));
     }

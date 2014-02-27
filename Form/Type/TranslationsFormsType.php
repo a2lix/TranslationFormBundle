@@ -20,7 +20,7 @@ class TranslationsFormsType extends AbstractType
     private $translationsListener;
     private $locales;
     private $defaultLocale;
-    private $defaultRequired;
+    private $requiredLocales;
 
     /**
      *
@@ -28,15 +28,15 @@ class TranslationsFormsType extends AbstractType
      * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener $translationsListener
      * @param array $locales
      * @param string $defaultLocale
-     * @param boolean $defaultRequired
+     * @param array $requiredLocales
      */
-    public function __construct(TranslationForm $translationForm, TranslationsFormsListener $translationsListener, array $locales, $defaultLocale, $defaultRequired)
+    public function __construct(TranslationForm $translationForm, TranslationsFormsListener $translationsListener, array $locales, $defaultLocale, array $requiredLocales = array())
     {
         $this->translationForm = $translationForm;
         $this->translationsListener = $translationsListener;
         $this->locales = $locales;
         $this->defaultLocale = $defaultLocale;
-        $this->defaultRequired = $defaultRequired;
+        $this->requiredLocales = $requiredLocales;
     }
 
     /**
@@ -51,7 +51,9 @@ class TranslationsFormsType extends AbstractType
         $formsOptions = $this->translationForm->getFormsOptions($options);
         foreach ($options['locales'] as $locale) {
             if (isset($formsOptions[$locale])) {
-                $builder->add($locale, $options['form_type'], $formsOptions[$locale]);
+                $builder->add($locale, $options['form_type'],
+                    $formsOptions[$locale] + array('required' => in_array($locale, $options['required_locales']))
+                );
             }
         }
     }
@@ -65,6 +67,7 @@ class TranslationsFormsType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['default_locale'] = $this->defaultLocale;
+        $view->vars['required_locales'] = $options['required_locales'];
     }   
 
     /**
@@ -75,8 +78,9 @@ class TranslationsFormsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
-            'required' => $this->defaultRequired,
+            'required' => false,
             'locales' => $this->locales,
+            'required_locales' => $this->requiredLocales,
             'form_type' => null,
             'form_options' => array(),
         ));

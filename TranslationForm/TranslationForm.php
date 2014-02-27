@@ -33,10 +33,9 @@ class TranslationForm implements TranslationFormInterface
     protected function getTranslationFields($translationClass)
     {
         $fields = array();
-        
         $translationClass = ClassUtils::getRealClass($translationClass);
-        $manager = $this->managerRegistry->getManagerForClass($translationClass);
-        if (null !== $manager) {
+        
+        if ($manager = $this->managerRegistry->getManagerForClass($translationClass)) {
             $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
             
             foreach ($metadataClass->fieldMappings as $fieldMapping) {
@@ -57,7 +56,7 @@ class TranslationForm implements TranslationFormInterface
         $fieldsOptions = array();
 
         foreach ($this->getFieldsList($options, $class) as $field) {
-            $fieldOptions = (isset($options['fields'][$field]) ? $options['fields'][$field] : array()) + array('required' => $options['required']);
+            $fieldOptions = isset($options['fields'][$field]) ? $options['fields'][$field] : array();
 
             if (!isset($fieldOptions['display']) || $fieldOptions['display']) {
                 $fieldOptions = $this->guessMissingFieldOptions($this->typeGuesser, $class, $field, $fieldOptions);

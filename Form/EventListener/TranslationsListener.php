@@ -38,11 +38,12 @@ class TranslationsListener implements EventSubscriberInterface
         $formOptions = $form->getConfig()->getOptions();
         $fieldsOptions = $this->translationForm->getFieldsOptions($translationClass, $formOptions);
 
-        foreach ($formOptions['locales'] as $locale) {
+        foreach ($formOptions['locales'] as $locale) {            
             if (isset($fieldsOptions[$locale])) {
                 $form->add($locale, 'a2lix_translationsFields', array(
                     'data_class' => $translationClass,
-                    'fields' => $fieldsOptions[$locale]
+                    'fields' => $fieldsOptions[$locale],
+                    'required' => in_array($locale, $formOptions['required_locales'])
                 ));
             }
         }

@@ -43,7 +43,7 @@ class Product
     protected $medias;
     
     /**
-     * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="object", indexBy="locale", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="object", indexBy="locale", cascade={"all"}, orphanRemoval=true)
      * @Assert\Valid
      */
     protected $translations;
