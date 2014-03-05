@@ -31,10 +31,11 @@ class GedmoTranslationMapper implements DataMapperInterface
             $tmpFormData = array();
             foreach ($data as $translation) {
                 if ($locale === $translation->getLocale()) {
-                    if('checkbox' === $fields[$translation->getField()]['field_type'])
+                    if ('checkbox' === $fields[$translation->getField()]['field_type']) {
                         $tmpFormData[$translation->getField()] = (bool)$translation->getContent();
-                    else
+                    } else {
                         $tmpFormData[$translation->getField()] = $translation->getContent();
+                    }
                 }
             }
             $translationsFieldsForm->setData($tmpFormData);
