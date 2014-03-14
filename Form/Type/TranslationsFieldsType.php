@@ -14,7 +14,7 @@ use Symfony\Component\Form\AbstractType,
 class TranslationsFieldsType extends AbstractType
 {
     /**
-     * 
+     *
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
      */
@@ -26,10 +26,10 @@ class TranslationsFieldsType extends AbstractType
 
             $builder->add($fieldName, $fieldType, $fieldConfig);
         }
-    }  
-    
+    }
+
     /**
-     * 
+     *
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)

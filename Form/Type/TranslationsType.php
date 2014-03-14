@@ -37,7 +37,7 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     * 
+     *
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
      */
@@ -47,7 +47,7 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     * 
+     *
      * @param \Symfony\Component\Form\FormView $view
      * @param \Symfony\Component\Form\FormInterface $form
      * @param array $options
@@ -56,10 +56,10 @@ class TranslationsType extends AbstractType
     {
         $view->vars['default_locale'] = $options['default_locale'];
         $view->vars['required_locales'] = $options['required_locales'];
-    }    
-    
+    }
+
     /**
-     * 
+     *
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -71,6 +71,7 @@ class TranslationsType extends AbstractType
             'default_locale' => $this->defaultLocale,
             'required_locales' => $this->requiredLocales,
             'fields' => array(),
+            'exclude_fields' => array(),
         ));
     }
 
