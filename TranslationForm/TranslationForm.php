@@ -24,30 +24,31 @@ class TranslationForm implements TranslationFormInterface
         $this->typeGuesser = $formRegistry->getTypeGuesser();
         $this->managerRegistry = $managerRegistry;
     }
-    
+
     /**
      *
      * @param string $translationClass
+     * @param array  $exclude
      * @return array
      */
-    protected function getTranslationFields($translationClass)
+    protected function getTranslationFields($translationClass, array $exclude = array())
     {
         $fields = array();
         $translationClass = ClassUtils::getRealClass($translationClass);
-        
+
         if ($manager = $this->managerRegistry->getManagerForClass($translationClass)) {
             $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
-            
+
             foreach ($metadataClass->fieldMappings as $fieldMapping) {
-                if (!in_array($fieldMapping['fieldName'], array('id', 'locale'))) {
+                if (!in_array($fieldMapping['fieldName'], array('id', 'locale')) && !in_array($fieldMapping['fieldName'], $exclude)) {
                     $fields[] = $fieldMapping['fieldName'];
                 }
             }
         }
-        
+
         return $fields;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -84,46 +85,46 @@ class TranslationForm implements TranslationFormInterface
 
         return $fieldsOptions;
     }
-    
+
     /**
      * Combine formFields with translationFields. (Useful for upload field)
      */
     private function getFieldsList($options, $class)
     {
         $formFields = array_keys($options['fields']);
-        
+
         // Check existing
         foreach ($formFields as $field) {
             if (!property_exists($class, $field)) {
                 throw new \Exception("Field '". $field ."' doesn't exist in ". $class);
             }
         }
-        
-        return array_unique(array_merge($formFields, $this->getTranslationFields($class)));
+
+        return array_unique(array_merge($formFields, $this->getTranslationFields($class, $options['exclude_fields'])));
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function getFormsOptions($options)
+        public function getFormsOptions($options)
     {
         $formsOptions = array();
-        
+
         // Current options
         $formOptions = $options['form_options'];
-        
+
         // Custom options by locale
         if (isset($formOptions['locale_options'])) {
             $localesFormOptions = $formOptions['locale_options'];
             unset($formOptions['locale_options']);
-            
+
             foreach ($options['locales'] as $locale) {
                 $localeFormOptions = isset($localesFormOptions[$locale]) ? $localesFormOptions[$locale] : array();
                 if (!isset($localeFormOptions['display']) || $localeFormOptions['display']) {
                     $formsOptions[$locale] = $localeFormOptions + $formOptions;
                 }
             }
-            
+
         // General options for all locales
         } else {
             foreach ($options['locales'] as $locale) {
@@ -133,7 +134,7 @@ class TranslationForm implements TranslationFormInterface
 
         return $formsOptions;
     }
-    
+
     /**
      * {@inheritdoc}
      */
