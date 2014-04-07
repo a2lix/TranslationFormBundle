@@ -13,7 +13,6 @@ use Symfony\Component\Form\FormEvent,
 class TranslationsListener implements EventSubscriberInterface
 {
     private $translationForm;
-    private $unusedLocales = array();
 
     /**
      *
@@ -53,30 +52,14 @@ class TranslationsListener implements EventSubscriberInterface
      *
      * @param \Symfony\Component\Form\FormEvent $event
      */
-    public function preSubmit(FormEvent $event)
-    {
-        $data = $event->getData();
-
-        foreach ($data as $locale => $translation) {
-            // Detect and trace unused locale
-            if (!array_filter($translation)) {
-                $this->unusedLocales[$locale] = $locale;
-            }
-        }
-    }
-    
-    /**
-     *
-     * @param \Symfony\Component\Form\FormEvent $event
-     */
     public function submit(FormEvent $event)
     {
         $data = $event->getData();
 
         foreach ($data as $locale => $translation) {
-            // Remove unused locale if necessary
-            if (isset($this->unusedLocales[$locale])) {
-                unset($data[$locale]);
+            // Remove useless Translation object
+            if (!$translation) {
+                $data->removeElement($translation);
                 
             } else {
                 $translation->setLocale($locale);
@@ -88,7 +71,6 @@ class TranslationsListener implements EventSubscriberInterface
     {
         return array(
             FormEvents::PRE_SET_DATA => 'preSetData',
-            FormEvents::PRE_SUBMIT => 'preSubmit',
             FormEvents::SUBMIT => 'submit',
         );
     }
