@@ -49,7 +49,8 @@ class DefaultTranslationsListener implements EventSubscriberInterface
             if (isset($childrenOptions[$locale])) {
                 $form->add($locale, 'a2lix_translationsFields', array(
                     'data_class' => $translationClass,
-                    'fields' => $childrenOptions[$locale]
+                    'fields' => $childrenOptions[$locale],
+                    'required' => in_array($formOptions['required_locales'])
                 ));
             }
         }

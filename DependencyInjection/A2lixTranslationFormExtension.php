@@ -27,7 +27,7 @@ class A2lixTranslationFormExtension extends Extension
         $loader->load('services.xml');
 
         $container->setParameter('a2lix_translation_form.locales', $config['locales']);
-        $container->setParameter('a2lix_translation_form.default_required', $config['default_required']);
+        $container->setParameter('a2lix_translation_form.required_locales', $config['required_locales']);
         $container->setAlias('a2lix_translation_form.manager_registry', $config['manager_registry']);
         $container->setParameter('a2lix_translation_form.templating', $config['templating']);
 

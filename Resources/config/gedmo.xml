@@ -34,7 +34,7 @@
             <argument type="service" id="a2lix_translation_form.gedmo.listener.translations" />
             <argument type="service" id="a2lix_translation_form.gedmo.service.translation" />
             <argument>%a2lix_translation_form.locales%</argument>
-            <argument>%a2lix_translation_form.default_required%</argument>
+            <argument>%a2lix_translation_form.required_locales%</argument>
             <tag name="form.type" alias="a2lix_translations_gedmo" />
         </service>
         <service id="a2lix_translation_form.gedmo.type.translationsLocales" class="%a2lix_translation_form.gedmo.type.translationsLocales.class%">

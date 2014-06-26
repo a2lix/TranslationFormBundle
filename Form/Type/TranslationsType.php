@@ -17,7 +17,7 @@ class TranslationsType extends AbstractType
 {
     private $translationsListener;
     private $locales;
-    private $required;
+    private $requiredLocales;
 
     /**
      *
@@ -25,11 +25,11 @@ class TranslationsType extends AbstractType
      * @param type $locales
      * @param type $required
      */
-    public function __construct(DefaultTranslationsListener $translationsListener, $locales, $required)
+    public function __construct(DefaultTranslationsListener $translationsListener, $locales, $requiredLocales)
     {
         $this->translationsListener = $translationsListener;
         $this->locales = $locales;
-        $this->required = $required;
+        $this->requiredLocales = $requiredLocales;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -42,7 +42,8 @@ class TranslationsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
-            'required' => $this->required,
+            //'required' => true,
+            'required_locales' => $this->requiredLocales,
             'locales' => $this->locales,
             'fields' => array(),
         ));

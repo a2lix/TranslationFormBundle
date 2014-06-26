@@ -29,6 +29,7 @@ class GedmoTranslationsLocalesType extends AbstractType
                     'fields' => $options['fields_options'][$locale],
                     'translation_class' => $options['translation_class'],
                     'inherit_data' => $isDefaultTranslation,
+                    'required' => in_array($locale, $options['required_locales'])
                 ));
             }
         }
@@ -39,7 +40,8 @@ class GedmoTranslationsLocalesType extends AbstractType
         $resolver->setDefaults(array(
             'locales' => array(),
             'fields_options' => array(),
-            'translation_class' => null
+            'translation_class' => null,
+            'required_locales' => null
         ));
     }
 
