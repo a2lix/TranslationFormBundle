@@ -1,0 +1,10 @@
+<div id="locale_switcher">
+    <span>Locale switcher : </span>
+    <ul>
+    {% for locale in locales %}
+        <li {% if app.request.locale == locale %}class="active"{% endif %}>
+            <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale' : locale})) }}">{{ locale }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
