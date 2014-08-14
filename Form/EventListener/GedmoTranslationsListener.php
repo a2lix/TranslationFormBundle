@@ -39,7 +39,7 @@ class GedmoTranslationsListener implements EventSubscriberInterface
     {
         $form = $event->getForm();
 
-        $translatableClass = $form->getParent()->getConfig()->getDataClass();
+        $translatableClass = $form->getParent() ? $form->getParent()->getConfig()->getDataClass() : null;
 
         $formOptions = $form->getConfig()->getOptions();
         $childrenOptions = $this->translationForm->getChildrenOptions($translatableClass, $formOptions);
