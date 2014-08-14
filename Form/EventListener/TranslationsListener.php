@@ -30,8 +30,13 @@ class TranslationsListener implements EventSubscriberInterface
     public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
+        $parent = $form->getParent();
 
-        $translatableClass = $form->getParent()->getConfig()->getDataClass();
+        $translatableClass = $parent->getConfig()->getDataClass();
+        while ($translatableClass === null && $parent->getConfig()->getVirtual() && ($parent = $parent->getParent())) {
+            $translatableClass = $parent->getConfig()->getDataClass();
+        }
+
         $translationClass = $translatableClass .'Translation';
 
         $formOptions = $form->getConfig()->getOptions();
