@@ -31,8 +31,7 @@ class TranslationsListener implements EventSubscriberInterface
     {
         $form = $event->getForm();
 
-        $translatableClass = $form->getParent()->getConfig()->getDataClass();
-        $translationClass = $translatableClass .'Translation';
+        $translationClass = $this->getTranslationClass($form);
 
         $formOptions = $form->getConfig()->getOptions();
         $fieldsOptions = $this->translationForm->getFieldsOptions($translationClass, $formOptions);
@@ -73,5 +72,21 @@ class TranslationsListener implements EventSubscriberInterface
             FormEvents::PRE_SET_DATA => 'preSetData',
             FormEvents::SUBMIT => 'submit',
         );
+    }
+    
+    /**
+     *
+     * @param \Symfony\Component\Form\Form $form
+     */
+    private function getTranslationClass($form)
+    {
+        $translatableClass = $form->getParent()->getConfig()->getDataClass();
+        if (method_exists($translatableClass, "getTranslationEntityClass")) { // Knp
+            return $translatableClass::getTranslationEntityClass();
+        } elseif (method_exists($translatableClass, "getTranslationClass")) { // Gedmo
+            return $translatableClass::getTranslationClass();
+        } else {
+            return $translatableClass .'Translation';
+        }
     }
 }
