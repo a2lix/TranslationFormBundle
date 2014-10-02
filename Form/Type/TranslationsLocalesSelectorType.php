@@ -36,7 +36,7 @@ class TranslationsLocalesSelectorType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['default_locale'] = $options['default_locale'];
+        $view->vars['default_locale'] = $this->defaultLocale;
     }
 
     /**
