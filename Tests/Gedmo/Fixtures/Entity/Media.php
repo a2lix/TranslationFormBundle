@@ -16,7 +16,7 @@ class Media
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(length=10)
      */
@@ -37,7 +37,7 @@ class Media
      * @ORM\Column(nullable=true)
      */
     protected $description;
-    
+
     public function getId()
     {
         return $this->id;
@@ -53,7 +53,7 @@ class Media
         $this->locale = $locale;
         return $this;
     }
-    
+
     public function getProduct()
     {
         return $this->product;
@@ -85,5 +85,4 @@ class Media
         $this->description = $description;
         return $this;
     }
-
 }

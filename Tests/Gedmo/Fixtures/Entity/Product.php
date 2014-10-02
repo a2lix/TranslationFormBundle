@@ -34,14 +34,14 @@ class Product
      * @ORM\Column(nullable=true)
      */
     protected $url;
-    
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $medias
      * @ORM\OneToMany(targetEntity="Media", mappedBy="product", indexBy="locale", cascade={"all"}, orphanRemoval=true)
      * @Assert\Valid
      */
     protected $medias;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="object", indexBy="locale", cascade={"all"}, orphanRemoval=true)
      * @Assert\Valid
@@ -63,13 +63,13 @@ class Product
     {
         return $this->title;
     }
-    
+
     public function setTitle($title)
     {
         $this->title = $title;
         return $this;
     }
-    
+
     public function getDescription()
     {
         return $this->description;
@@ -91,7 +91,7 @@ class Product
         $this->url = $url;
         return $this;
     }
-    
+
     public function getTranslations()
     {
         return $this->translations;
@@ -113,7 +113,7 @@ class Product
         }
         return $this;
     }
-    
+
     public function getMedias()
     {
         return $this->medias;

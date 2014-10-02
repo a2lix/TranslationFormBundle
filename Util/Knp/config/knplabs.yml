@@ -3,7 +3,7 @@ parameters:
     knp.doctrine_behaviors.reflection.is_recursive: true
     knp.doctrine_behaviors.translatable_listener.class: Knp\DoctrineBehaviors\ORM\Translatable\TranslatableListener
     knp.doctrine_behaviors.translatable_listener.current_locale_callable.class: Knp\DoctrineBehaviors\ORM\Translatable\CurrentLocaleCallable
-    
+
 services:
     knp.doctrine_behaviors.reflection.class_analyzer:
         class:   "%knp.doctrine_behaviors.reflection.class_analyzer.class%"

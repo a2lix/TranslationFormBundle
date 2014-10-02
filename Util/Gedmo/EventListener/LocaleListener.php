@@ -23,7 +23,7 @@ class LocaleListener implements EventSubscriberInterface
     }
 
     /**
-     * 
+     *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
