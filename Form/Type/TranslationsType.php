@@ -7,33 +7,29 @@ use Symfony\Component\Form\FormView,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
+    A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener,
+    A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
 
 /**
  * Regroup by locales, all translations fields
  *
  * @author David ALLIX
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
  */
 class TranslationsType extends AbstractType
 {
     private $translationsListener;
-    private $locales;
-    private $defaultLocale;
-    private $requiredLocales;
+    private $localeProvider;
 
     /**
      *
      * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener $translationsListener
-     * @param array $locales
-     * @param string $defaultLocale
-     * @param array $requiredLocales
+     * @param \A2lix\TranslationFormBundle\Locale\LocaleProviderInterface          $localeProvider
      */
-    public function __construct(TranslationsListener $translationsListener, array $locales, $defaultLocale, array $requiredLocales = array())
+    public function __construct(TranslationsListener $translationsListener, LocaleProviderInterface $localeProvider)
     {
         $this->translationsListener = $translationsListener;
-        $this->locales = $locales;
-        $this->defaultLocale = $defaultLocale;
-        $this->requiredLocales = $requiredLocales;
+        $this->localeProvider = $localeProvider;
     }
 
     /**
@@ -67,9 +63,9 @@ class TranslationsType extends AbstractType
         $resolver->setDefaults(array(
             'by_reference' => false,
             'empty_data' => new \Doctrine\Common\Collections\ArrayCollection(),
-            'locales' => $this->locales,
-            'default_locale' => $this->defaultLocale,
-            'required_locales' => $this->requiredLocales,
+            'locales' => $this->localeProvider->getLocales(),
+            'default_locale' => $this->localeProvider->getDefaultLocale(),
+            'required_locales' => $this->localeProvider->getRequiredLocales(),
             'fields' => array(),
             'exclude_fields' => array(),
         ));
