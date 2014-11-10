@@ -47,8 +47,7 @@ class DefaultProvider implements LocaleProviderInterface
             throw new \InvalidArgumentException('Default locale should be contained in locales');
         }
 
-        $diff = array_diff($requiredLocales, $locales);
-        if (!empty($diff)) {
+        if (array_diff($requiredLocales, $locales)) {
             throw new \InvalidArgumentException('Required locales should be contained in locales');
         }
 
@@ -83,4 +82,4 @@ class DefaultProvider implements LocaleProviderInterface
     {
         return $this->requiredLocales;
     }
-} 
+}
