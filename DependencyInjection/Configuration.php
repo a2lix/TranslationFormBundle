@@ -7,6 +7,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder,
 
 /**
  * @author David ALLIX
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
  */
 class Configuration implements ConfigurationInterface
 {
@@ -20,6 +21,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('locale_provider')->defaultValue('default')->end()
                 ->arrayNode('locales')
                     ->beforeNormalization()
                         ->ifString()

@@ -8,35 +8,30 @@ use Symfony\Component\Form\FormView,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
     A2lix\TranslationFormBundle\TranslationForm\TranslationForm,
-    A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener;
+    A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener,
+    A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
 
 /**
- *
  * @author David ALLIX
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
  */
 class TranslationsFormsType extends AbstractType
 {
     private $translationForm;
     private $translationsListener;
-    private $locales;
-    private $defaultLocale;
-    private $requiredLocales;
+    private $localeProvider;
 
     /**
      *
-     * @param \A2lix\TranslationFormBundle\TranslationForm\TranslationForm $translationForm
+     * @param \A2lix\TranslationFormBundle\TranslationForm\TranslationForm              $translationForm
      * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener $translationsListener
-     * @param array $locales
-     * @param string $defaultLocale
-     * @param array $requiredLocales
+     * @param \A2lix\TranslationFormBundle\Locale\LocaleProviderInterface               $localeProvider
      */
-    public function __construct(TranslationForm $translationForm, TranslationsFormsListener $translationsListener, array $locales, $defaultLocale, array $requiredLocales = array())
+    public function __construct(TranslationForm $translationForm, TranslationsFormsListener $translationsListener,  LocaleProviderInterface $localeProvider)
     {
         $this->translationForm = $translationForm;
         $this->translationsListener = $translationsListener;
-        $this->locales = $locales;
-        $this->defaultLocale = $defaultLocale;
-        $this->requiredLocales = $requiredLocales;
+        $this->localeProvider = $localeProvider;
     }
 
     /**
@@ -66,7 +61,7 @@ class TranslationsFormsType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['default_locale'] = $this->defaultLocale;
+        $view->vars['default_locale'] = $this->localeProvider->getDefaultLocale();
         $view->vars['required_locales'] = $options['required_locales'];
     }   
 
@@ -78,8 +73,8 @@ class TranslationsFormsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
-            'locales' => $this->locales,
-            'required_locales' => $this->requiredLocales,
+            'locales' => $this->localeProvider->getLocales(),
+            'required_locales' => $this->localeProvider->getRequiredLocales(),
             'form_type' => null,
             'form_options' => array(),
         ));
