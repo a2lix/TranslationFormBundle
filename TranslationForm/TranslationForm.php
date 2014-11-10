@@ -106,7 +106,7 @@ class TranslationForm implements TranslationFormInterface
     /**
      * {@inheritdoc}
      */
-        public function getFormsOptions($options)
+    public function getFormsOptions($options)
     {
         $formsOptions = array();
 
