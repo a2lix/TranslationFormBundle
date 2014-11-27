@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('locale_provider')->defaultValue('default')->end()
+                ->scalarNode('default_locale')->isRequired(false)->end()
                 ->arrayNode('locales')
                     ->beforeNormalization()
                         ->ifString()
