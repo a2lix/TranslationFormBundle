@@ -5,7 +5,8 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
     Symfony\Component\OptionsResolver\Options,
-    Symfony\Component\HttpFoundation\Request;
+    Symfony\Component\HttpFoundation\Request,
+    Doctrine\ORM\EntityRepository;
 
 /**
  * Translated entity
@@ -30,6 +31,11 @@ class TranslatedEntityType extends AbstractType
         $resolver->setDefaults(array(
             'translation_path' => 'translations',
             'translation_property' => null,
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('e')
+                    ->select('e, t')
+                    ->join('e.translations', 't');
+            },
             'property' => function(Options $options) {
                 if (null === $this->request) {
                     throw new \Exception('Error while getting request');
