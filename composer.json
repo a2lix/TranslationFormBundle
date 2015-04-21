@@ -17,8 +17,8 @@
     "require-dev": {
         "phpunit/phpunit": "~4.1",
         "doctrine/common": "~2.3",
-        "gedmo/doctrine-extensions": "dev-wip-v2.4.0",
-        "knplabs/doctrine-behaviors": "1.0.x-dev"
+        "gedmo/doctrine-extensions": "~2.4",
+        "knplabs/doctrine-behaviors": "~1.0"
     },
     "suggest": {
         "a2lix/i18n-doctrine-bundle": "For A2lix strategy",
