@@ -30,10 +30,5 @@
         "psr-0": { "A2lix\\TranslationFormBundle": "" }
     },
     "prefer-stable": true,
-    "target-dir": "A2lix/TranslationFormBundle",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.x-dev"
-        }
-    }
+    "target-dir": "A2lix/TranslationFormBundle"
 }
