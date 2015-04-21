@@ -2,29 +2,28 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use Symfony\Component\Form\FormView,
-    Symfony\Component\Form\AbstractType,
-    Symfony\Component\Form\FormInterface,
-    Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener,
-    A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
+use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Regroup by locales, all translations fields
- *
  * @author David ALLIX
  * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
  */
 class TranslationsType extends AbstractType
 {
+    /** @var TranslationsListener */
     private $translationsListener;
+    /** @var LocaleProviderInterface */
     private $localeProvider;
 
     /**
-     *
-     * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener $translationsListener
-     * @param \A2lix\TranslationFormBundle\Locale\LocaleProviderInterface          $localeProvider
+     * @param TranslationsListener    $translationsListener
+     * @param LocaleProviderInterface $localeProvider
      */
     public function __construct(TranslationsListener $translationsListener, LocaleProviderInterface $localeProvider)
     {
@@ -33,9 +32,8 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array $options
+     * @param FormBuilderInterface $builder
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -43,10 +41,9 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     *
-     * @param \Symfony\Component\Form\FormView $view
-     * @param \Symfony\Component\Form\FormInterface $form
-     * @param array $options
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -55,12 +52,11 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     *
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'by_reference' => false,
             'empty_data' => function (FormInterface $form) {
                 return new \Doctrine\Common\Collections\ArrayCollection();
@@ -68,13 +64,8 @@ class TranslationsType extends AbstractType
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
-            'fields' => array(),
-            'exclude_fields' => array(),
-        ));
-    }
-
-    public function getName()
-    {
-        return 'a2lix_translations';
+            'fields' => [],
+            'excluded_fields' => [],
+        ]);
     }
 }

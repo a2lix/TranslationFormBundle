@@ -5,16 +5,14 @@ A2lixTranslationFormBundle
 [![Latest Stable Version](https://poser.pugx.org/a2lix/translation-form-bundle/v/stable.svg)](https://packagist.org/packages/a2lix/translation-form-bundle) [![Total Downloads](https://poser.pugx.org/a2lix/translation-form-bundle/downloads.svg)](https://packagist.org/packages/a2lix/translation-form-bundle) [![Latest Unstable Version](https://poser.pugx.org/a2lix/translation-form-bundle/v/unstable.svg)](https://packagist.org/packages/a2lix/translation-form-bundle) [![License](https://poser.pugx.org/a2lix/translation-form-bundle/license.svg)](https://packagist.org/packages/a2lix/translation-form-bundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/a2lix/TranslationFormBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/a2lix/TranslationFormBundle/?branch=master)
 
-* If you use symfony 2.2 or less, configure your composer.json with:
- * "a2lix/translation-form-bundle": "0.*@dev"
 
---> Documentation: https://github.com/a2lix/TranslationFormBundle/blob/0.x/README.md
+Which versions for "a2lix/translation-form-bundle"?
+
+- "~3.0.0" - [PHP5.5+ required] - For Symfony 2.8+ and 3.0 with modern strategy (KNP Labs, Prezent or A2lix strategy)
+- "~2.1.0" - [LOW MAINTENANCE] - For Symfony 2.7 with modern strategy (KNP Labs, Prezent or A2lix strategy)
+- "~2.0.0" - [LOW MAINTENANCE] - For Symfony 2.3 with modern strategy (KNP Labs, Prezent or A2lix strategy)
+- "~1.0" - [NO MAINTENANCE ANYMORE] - For Symfony 2.3 with old strategy (Gedmo that I discourage)
+- "~0.1" - [NO MAINTENANCE ANYMORE] - For Symfony 2.2 or less
 
 
-
-
-* If you use symfony 2.3 or more, configure your composer.json with :
- * "a2lix/translation-form-bundle": "1.*@dev"     if you need to use the old Gedmo strategy
- * "a2lix/translation-form-bundle": "2.*@dev"     otherwise (Manage wip2.4 Gedmo, A2lix, Knp and Prezent strategy)
-
---> New Documentation: http://a2lix.fr/bundles/translation-form/
+--> Documentation: http://a2lix.fr/bundles/translation-form/

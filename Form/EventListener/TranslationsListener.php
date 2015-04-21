@@ -2,55 +2,65 @@
 
 namespace A2lix\TranslationFormBundle\Form\EventListener;
 
-use Symfony\Component\Form\FormEvent,
-    Symfony\Component\Form\FormEvents,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
+use A2lix\AutoFormBundle\Form\Manipulator\FormManipulatorInterface;
+use A2lix\AutoFormBundle\Form\Type\AutoFormType;
+use Doctrine\Common\Util\ClassUtils;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * @author David ALLIX
  */
 class TranslationsListener implements EventSubscriberInterface
 {
-    private $translationForm;
+    /** @var FormManipulatorInterface */
+    private $formManipulator;
 
     /**
-     *
-     * @param \A2lix\TranslationFormBundle\TranslationForm\TranslationForm $translationForm
+     * @param FormManipulatorInterface $formManipulator
      */
-    public function __construct(TranslationForm $translationForm)
+    public function __construct(FormManipulatorInterface $formManipulator)
     {
-        $this->translationForm = $translationForm;
+        $this->formManipulator = $formManipulator;
     }
 
     /**
-     *
-     * @param \Symfony\Component\Form\FormEvent $event
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            FormEvents::PRE_SET_DATA => 'preSetData',
+            FormEvents::SUBMIT => 'submit',
+        ];
+    }
+
+    /**
+     * @param FormEvent $event
      */
     public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
-        
-        $translatableClass = $form->getParent()->getConfig()->getDataClass();
-        $translationClass = $this->getTranslationClass($translatableClass);
-
         $formOptions = $form->getConfig()->getOptions();
-        $fieldsOptions = $this->translationForm->getFieldsOptions($translationClass, $formOptions);
 
-        foreach ($formOptions['locales'] as $locale) {            
+        $translationClass = $this->getTranslationClass($form->getParent()->getConfig()->getDataClass());
+        $fieldsOptions = $this->getFieldsOptions($form->getConfig()->getOptions(), $translationClass);
+
+        foreach ($formOptions['locales'] as $locale) {
             if (isset($fieldsOptions[$locale])) {
-                $form->add($locale, 'a2lix_translationsFields', array(
+                $form->add($locale, 'A2lix\AutoFormBundle\Form\Type\AutoFormType', [
                     'data_class' => $translationClass,
+                    'required' => in_array($locale, $formOptions['required_locales'], true),
                     'fields' => $fieldsOptions[$locale],
-                    'required' => in_array($locale, $formOptions['required_locales'])
-                ));
+                    'excluded_fields' => $formOptions['excluded_fields'],
+                ]);
             }
         }
     }
-    
+
     /**
-     *
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      */
     public function submit(FormEvent $event)
     {
@@ -60,36 +70,60 @@ class TranslationsListener implements EventSubscriberInterface
             // Remove useless Translation object
             if (!$translation) {
                 $data->removeElement($translation);
-                
             } else {
                 $translation->setLocale($locale);
             }
         }
     }
 
-    public static function getSubscribedEvents()
-    {
-        return array(
-            FormEvents::PRE_SET_DATA => 'preSetData',
-            FormEvents::SUBMIT => 'submit',
-        );
-    }
-    
     /**
-     *
      * @param string $translatableClass
      */
     private function getTranslationClass($translatableClass)
     {
         // Knp
-        if (method_exists($translatableClass, "getTranslationEntityClass")) {
+        if (method_exists($translatableClass, 'getTranslationEntityClass')) {
             return $translatableClass::getTranslationEntityClass();
-        
-        // Gedmo    
-        } elseif (method_exists($translatableClass, "getTranslationClass")) {
+        }
+
+        // Gedmo
+        if (method_exists($translatableClass, 'getTranslationClass')) {
             return $translatableClass::getTranslationClass();
         }
-        
-        return $translatableClass .'Translation';
+
+        return $translatableClass . 'Translation';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldsOptions($options, $class)
+    {
+        $fieldsOptions = [];
+
+        $fieldsConfig = $this->formManipulator->getFieldsConfig(ClassUtils::getRealClass($class), $options);
+        foreach ($fieldsConfig as $fieldName => $fieldConfig) {
+            // Simplest case: General options for all locales
+            if (!isset($fieldConfig['locale_options'])) {
+                foreach ($options['locales'] as $locale) {
+                    $fieldsOptions[$locale][$fieldName] = $fieldConfig;
+                }
+
+                continue;
+            }
+
+            // Custom options by locale
+            $localesFieldOptions = $fieldConfig['locale_options'];
+            unset($fieldConfig['locale_options']);
+
+            foreach ($options['locales'] as $locale) {
+                $localeFieldOptions = isset($localesFieldOptions[$locale]) ? $localesFieldOptions[$locale] : [];
+                if (!isset($localeFieldOptions['display']) || (true === $localeFieldOptions['display'])) {
+                    $fieldsOptions[$locale][$fieldName] = $localeFieldOptions + $fieldConfig;
+                }
+            }
+        }
+
+        return $fieldsOptions;
     }
 }
