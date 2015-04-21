@@ -1,8 +1,9 @@
 <?php
-/**
- * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
- * @date 07/11/14
- * @copyright Copyright (c) Reiss Clothing Ltd.
+
+/*
+ * This file is part of A2lix projects.
+ *
+ * (c) Gonzalo Vilaseca <gvilaseca@reiss.co.uk> . Reiss Clothing Ltd.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,41 +11,24 @@
 
 namespace A2lix\TranslationFormBundle\Locale;
 
-/**
- * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
- */
 class DefaultProvider implements LocaleProviderInterface
 {
-    /**
-     * Locales
-     *
-     * @var array
-     */
+    /** @var array */
     protected $locales;
-
-    /**
-     * Default locale
-     *
-     * @var
-     */
+    /** @var string */
     protected $defaultLocale;
-
-    /**
-     * Required locales
-     *
-     * @var array
-     */
+    /** @var array */
     protected $requiredLocales;
 
     /**
-     * @param array $locales
-     * @param       $defaultLocale
-     * @param array $requiredLocales
+     * @param array  $locales
+     * @param string $defaultLocale
+     * @param array  $requiredLocales
      */
-    public function __construct(array $locales, $defaultLocale, array $requiredLocales = array())
+    public function __construct(array $locales, $defaultLocale, array $requiredLocales = [])
     {
-        if (!in_array($defaultLocale, $locales)) {
-            if (count($locales) > 0) {
+        if (!in_array($defaultLocale, $locales, true)) {
+            if (count($locales)) {
                 throw new \InvalidArgumentException(sprintf('Default locale `%s` not found within the configured locales `[%s]`. Perhaps you need to add it to your `a2lix_translation_form.locales` bundle configuration?', $defaultLocale, implode(',', $locales)));
             }
 
@@ -62,7 +46,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getLocales()
     {
@@ -71,7 +54,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getDefaultLocale()
     {
@@ -80,7 +62,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getRequiredLocales()
     {
