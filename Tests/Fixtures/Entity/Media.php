@@ -1,9 +1,17 @@
 <?php
 
-namespace A2lix\TranslationFormBundle\Tests\Gedmo\Fixtures\Entity;
+/*
+ * This file is part of A2lix projects.
+ *
+ * (c) David ALLIX
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -23,7 +31,6 @@ class Media
     protected $locale;
 
     /**
-     * @var Product $product
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="medias")
      */
     protected $product;
@@ -51,6 +58,7 @@ class Media
     public function setLocale($locale)
     {
         $this->locale = $locale;
+
         return $this;
     }
 
@@ -72,6 +80,7 @@ class Media
     public function setUrl($url)
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -83,6 +92,7 @@ class Media
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 }
