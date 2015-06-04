@@ -5,7 +5,9 @@ namespace A2lix\TranslationFormBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent,
     Symfony\Component\Form\FormEvents,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
+    A2lix\TranslationFormBundle\TranslationForm\TranslationForm,
+    Doctrine\Common\Annotations\AnnotationReader,
+    ReflectionClass;
 
 /**
  * @author David ALLIX
@@ -78,9 +80,14 @@ class TranslationsListener implements EventSubscriberInterface
     /**
      *
      * @param string $translatableClass
+     *
+     * @return string
      */
     private function getTranslationClass($translatableClass)
     {
+        $reader = new AnnotationReader();
+        $reflectionClass = new ReflectionClass($translatableClass);
+
         // Knp
         if (method_exists($translatableClass, "getTranslationEntityClass")) {
             return $translatableClass::getTranslationEntityClass();
@@ -88,8 +95,12 @@ class TranslationsListener implements EventSubscriberInterface
         // Gedmo    
         } elseif (method_exists($translatableClass, "getTranslationClass")) {
             return $translatableClass::getTranslationClass();
+
+        // Gedmo Annotations
+        } elseif (!is_null($reader->getClassAnnotation($reflectionClass, 'Gedmo\Mapping\Annotation\TranslationEntity'))){
+            return $reader->getClassAnnotation($reflectionClass, 'Gedmo\Mapping\Annotation\TranslationEntity')->class;
         }
-        
+
         return $translatableClass .'Translation';
     }
 }
