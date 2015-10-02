@@ -18,7 +18,8 @@
         "phpunit/phpunit": "~4.1",
         "doctrine/common": "~2.3",
         "gedmo/doctrine-extensions": "~2.4",
-        "knplabs/doctrine-behaviors": "1.0.*"
+        "knplabs/doctrine-behaviors": "1.0.*",
+        "sllh/php-cs-fixer-styleci-bridge": "~1.3"
     },
     "suggest": {
         "a2lix/i18n-doctrine-bundle": "For A2lix strategy",
