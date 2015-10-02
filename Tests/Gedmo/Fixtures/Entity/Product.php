@@ -1,10 +1,18 @@
 <?php
 
+/*
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @copyright Copyright (c) Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Tests\Gedmo\Fixtures\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -36,7 +44,7 @@ class Product
     protected $url;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $medias
+     * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Media", mappedBy="product", indexBy="locale", cascade={"all"}, orphanRemoval=true)
      * @Assert\Valid
      */
@@ -67,6 +75,7 @@ class Product
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -78,6 +87,7 @@ class Product
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -89,6 +99,7 @@ class Product
     public function setUrl($url)
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -103,6 +114,7 @@ class Product
             $translation->setObject($this);
             $this->translations->set($translation->getLocale(), $translation);
         }
+
         return $this;
     }
 
@@ -111,6 +123,7 @@ class Product
         if ($this->translations->contains($translation)) {
             $this->translations->removeElement($translation);
         }
+
         return $this;
     }
 
@@ -125,6 +138,7 @@ class Product
             $media->setProduct($this);
             $this->medias->set($media->getLocale(), $media);
         }
+
         return $this;
     }
 
@@ -133,6 +147,7 @@ class Product
         if ($this->medias->contains($media)) {
             $this->medias->removeElement($media);
         }
+
         return $this;
     }
 }

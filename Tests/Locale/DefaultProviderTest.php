@@ -1,7 +1,7 @@
 <?php
-/**
+
+/*
  * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
- * @date 07/11/14
  * @copyright Copyright (c) Reiss Clothing Ltd.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,7 +11,6 @@
 namespace A2lix\TranslationFormBundle\Tests\Locale;
 
 use A2lix\TranslationFormBundle\Locale\DefaultProvider;
-
 
 /**
  * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
@@ -84,7 +83,7 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
     {
         $expected = $this->provider->getDefaultLocale();
 
-        $this->assertEquals($this->defaultLocale, $expected);
+        $this->assertSame($this->defaultLocale, $expected);
     }
 
     public function getRequiredLocales()
@@ -94,4 +93,4 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(array_diff($expected, $requiredLocales), array_diff($requiredLocales, $expected));
     }
-} 
+}

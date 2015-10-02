@@ -1,10 +1,18 @@
 <?php
 
+/*
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @copyright Copyright (c) Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Form\EventListener;
 
-use Symfony\Component\Form\FormEvent,
-    Symfony\Component\Form\FormEvents,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * @author David ALLIX
@@ -12,7 +20,6 @@ use Symfony\Component\Form\FormEvent,
 class TranslationsFormsListener implements EventSubscriberInterface
 {
     /**
-     *
      * @param \Symfony\Component\Form\FormEvent $event
      */
     public function submit(FormEvent $event)
@@ -23,7 +30,6 @@ class TranslationsFormsListener implements EventSubscriberInterface
             // Remove useless Translation object
             if (!$translation) {
                 $data->removeElement($translation);
-
             } else {
                 $translation->setLocale($locale);
             }

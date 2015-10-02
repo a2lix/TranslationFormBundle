@@ -1,17 +1,24 @@
 <?php
 
+/*
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @copyright Copyright (c) Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Tests;
 
-use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
-use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Component\Form\Forms;
+use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
+use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
+use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormRegistry;
-use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
-
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\Test\TypeTestCase;
 
 abstract class TranslationsTypeTestCase extends TypeTestCase
 {
@@ -24,12 +31,12 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $emRegistry;
-    
+
     protected function getUsedEntityFixtures()
     {
         return array();
     }
-    
+
     protected function setUp()
     {
         if (!class_exists('Symfony\Component\Form\Form')) {
@@ -50,9 +57,9 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
 
         $this->em = DoctrineTestHelper::createTestEntityManager();
         $this->emRegistry = $this->getEmRegistry($this->em);
-        
+
         $schemaTool = new SchemaTool($this->em);
-        
+
         foreach ($this->getUsedEntityFixtures() as $class) {
             $classes[] = $this->em->getClassMetadata($class);
         }
@@ -66,17 +73,16 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
             $schemaTool->createSchema($classes);
         } catch (\Exception $e) {
         }
-        
-        
+
         parent::setUp();
-        
+
         $formExtensions = array(new DoctrineOrmExtension($this->emRegistry));
         $formRegistry = new FormRegistry($formExtensions, $this->getMock('Symfony\Component\Form\ResolvedFormTypeFactory'));
-        
+
         $translationForm = new \A2lix\TranslationFormBundle\TranslationForm\TranslationForm($formRegistry, $this->emRegistry);
         $translationsListener = new \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener($translationForm);
         $translationsFormsListener = new \A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener();
-        
+
         $this->factory = Forms::createFormFactoryBuilder()
             ->addExtensions(
                 $formExtensions
@@ -92,9 +98,9 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
                      ->getMock()
             )
             ->addTypes(array(
-                new \A2lix\TranslationFormBundle\Form\Type\TranslationsType($translationsListener, array('fr','en','de'), 'en'),
+                new \A2lix\TranslationFormBundle\Form\Type\TranslationsType($translationsListener, array('fr', 'en', 'de'), 'en'),
                 new \A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType(),
-                new \A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType($translationForm, $translationsFormsListener, array('fr','en','de'), 'en'),
+                new \A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType($translationForm, $translationsFormsListener, array('fr', 'en', 'de'), 'en'),
             ))
             ->getFormFactory();
 
@@ -128,7 +134,7 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
                   ->method('get')
                   ->with($this->equalTo('doctrine.orm.default_entity_manager'))
                   ->will($this->returnValue($em));
-        
+
         return new Registry($container, array(), array('default' => 'doctrine.orm.default_entity_manager'), 'default', 'default');
-    }    
+    }
 }

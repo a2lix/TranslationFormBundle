@@ -1,29 +1,36 @@
 <?php
 
+/*
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @copyright Copyright (c) Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    Symfony\Component\OptionsResolver\Options,
-    Symfony\Component\HttpFoundation\Request,
-    Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Translated entity
+ * Translated entity.
  *
  * @author David ALLIX
  */
 class TranslatedEntityType extends AbstractType
 {
     private $request;
-    
+
     public function setRequest(Request $request = null)
     {
         $this->request = $request;
     }
 
     /**
-     * 
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -36,12 +43,12 @@ class TranslatedEntityType extends AbstractType
                     ->select('e, t')
                     ->join('e.translations', 't');
             },
-            'property' => function(Options $options) {
+            'property' => function (Options $options) {
                 if (null === $this->request) {
                     throw new \Exception('Error while getting request');
                 }
-                
-                return $options['translation_path'] .'['. $this->request->getLocale() .'].'. $options['translation_property'];
+
+                return $options['translation_path'].'['.$this->request->getLocale().'].'.$options['translation_property'];
             },
         ));
     }
@@ -50,7 +57,7 @@ class TranslatedEntityType extends AbstractType
     {
         return 'entity';
     }
-    
+
     public function getName()
     {
         return 'a2lix_translatedEntity';

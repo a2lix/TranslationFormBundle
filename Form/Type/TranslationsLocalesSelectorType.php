@@ -1,12 +1,20 @@
 <?php
 
+/*
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @copyright Copyright (c) Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use Symfony\Component\Form\FormView,
-    Symfony\Component\Form\AbstractType,
-    Symfony\Component\Form\FormInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * @author David ALLIX
@@ -17,7 +25,6 @@ class TranslationsLocalesSelectorType extends AbstractType
     private $localeProvider;
 
     /**
-     *
      * @param \A2lix\TranslationFormBundle\Locale\LocaleProviderInterface $localeProvider
      */
     public function __construct(LocaleProviderInterface $localeProvider)
@@ -26,10 +33,9 @@ class TranslationsLocalesSelectorType extends AbstractType
     }
 
     /**
-     *
-     * @param \Symfony\Component\Form\FormView $view
+     * @param \Symfony\Component\Form\FormView      $view
      * @param \Symfony\Component\Form\FormInterface $form
-     * @param array $options
+     * @param array                                 $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -37,7 +43,6 @@ class TranslationsLocalesSelectorType extends AbstractType
     }
 
     /**
-     *
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -47,8 +52,8 @@ class TranslationsLocalesSelectorType extends AbstractType
             'expanded' => true,
             'multiple' => true,
             'attr' => array(
-                'class' => "a2lix_translationsLocalesSelector"
-            )
+                'class' => 'a2lix_translationsLocalesSelector',
+            ),
         ));
     }
 
