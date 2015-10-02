@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @copyright Copyright (c) Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Tests\Gedmo\Form;
 
 use A2lix\TranslationFormBundle\Tests\Gedmo\Fixtures\Entity\Product;
@@ -23,16 +31,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             'translations' => array(
                 'fr' => array(
                     'title' => 'title fr',
-                    'description' => 'desc fr'
+                    'description' => 'desc fr',
                 ),
                 'en' => array(
                     'title' => 'title en',
-                    'description' => 'desc en'
+                    'description' => 'desc en',
                 ),
                 'de' => array(
                     'title' => 'title de',
-                    'description' => 'desc de'
-                )
+                    'description' => 'desc de',
+                ),
             ),
         );
 
@@ -66,7 +74,7 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($product, $form->getData());
+        $this->assertSame($product, $form->getData());
 
         //
         // Edition: Modify values
@@ -76,16 +84,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             'translations' => array(
                 'fr' => array(
                     'title' => 'title frrrrrr',
-                    'description' => 'desc fr'
+                    'description' => 'desc fr',
                 ),
                 'en' => array(
                     'title' => 'title en',
-                    'description' => 'desc ennnnnnn'
+                    'description' => 'desc ennnnnnn',
                 ),
                 'de' => array(
                     'title' => 'title de',
-                    'description' => 'desc de'
-                )
+                    'description' => 'desc de',
+                ),
             ),
         );
         $product->getTranslations()['fr']->setTitle('title frrrrrr');
@@ -99,9 +107,7 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($product, $form->getData());
-
-
+        $this->assertSame($product, $form->getData());
 
 //        $view = $form->createView();
 //        $children = $view->children;
@@ -118,12 +124,12 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             'translations' => array(
                 'es' => array(
                     'title' => 'title es',
-                    'description' => 'desc es'
+                    'description' => 'desc es',
                 ),
                 'fr' => array(
                     'title' => 'title fr',
-                    'description' => 'desc fr'
-                )
+                    'description' => 'desc fr',
+                ),
             ),
         );
 
@@ -147,14 +153,14 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         $form = $this->factory->createBuilder('form', new Product())
             ->add('url')
             ->add('translations', 'a2lix_translations', array(
-                'locales' => array('es', 'fr', 'de')
+                'locales' => array('es', 'fr', 'de'),
             ))
             ->add('save', 'submit')
             ->getForm();
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($product, $form->getData());
+        $this->assertSame($product, $form->getData());
 
         //
         // Edition: Add 'de' locale
@@ -164,16 +170,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             'translations' => array(
                 'es' => array(
                     'title' => 'title es',
-                    'description' => 'desc es'
+                    'description' => 'desc es',
                 ),
                 'fr' => array(
                     'title' => 'title fr',
-                    'description' => 'desc fr'
+                    'description' => 'desc fr',
                 ),
                 'de' => array(
                     'title' => 'title de',
-                    'description' => 'desc de'
-                )
+                    'description' => 'desc de',
+                ),
             ),
         );
         $productTranslationDe = new ProductTranslation();
@@ -185,16 +191,14 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         $form = $this->factory->createBuilder('form', $product)
             ->add('url')
             ->add('translations', 'a2lix_translations', array(
-                'locales' => array('es', 'fr', 'de')
+                'locales' => array('es', 'fr', 'de'),
             ))
             ->add('save', 'submit')
             ->getForm();
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($product, $form->getData());
-
-
+        $this->assertSame($product, $form->getData());
 
 //        $view = $form->createView();
 //        $children = $view->children;
@@ -217,7 +221,7 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
                 ),
                 'de' => array(
                     'title' => 'title de',
-                )
+                ),
             ),
         );
 
@@ -245,19 +249,19 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             ->add('translations', 'a2lix_translations', array(
                 'fields' => array(
                     'title' => array(
-                        'label' => 'name'
+                        'label' => 'name',
                     ),
                     'description' => array(
-                        'display' => false
-                    )
-                )
+                        'display' => false,
+                    ),
+                ),
             ))
             ->add('save', 'submit')
             ->getForm();
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($product, $form->getData());
+        $this->assertSame($product, $form->getData());
 
         //
         // Edition: Add field
@@ -267,16 +271,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             'translations' => array(
                 'fr' => array(
                     'title' => 'title fr',
-                    'description' => 'desc fr'
+                    'description' => 'desc fr',
                 ),
                 'en' => array(
                     'title' => 'title en',
-                    'description' => 'desc en'
+                    'description' => 'desc en',
                 ),
                 'de' => array(
                     'title' => 'title de',
-                    'description' => 'desc de'
-                )
+                    'description' => 'desc de',
+                ),
             ),
         );
         $product->getTranslations()['fr']->setDescription('desc fr');
@@ -288,18 +292,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             ->add('translations', 'a2lix_translations', array(
                 'fields' => array(
                     'title' => array(
-                        'label' => 'name'
-                    )
-                )
+                        'label' => 'name',
+                    ),
+                ),
             ))
             ->add('save', 'submit')
             ->getForm();
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($product, $form->getData());
-
-
+        $this->assertSame($product, $form->getData());
 
 //        $view = $form->createView();
 //        $children = $view->children;

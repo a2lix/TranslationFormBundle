@@ -1,10 +1,18 @@
 <?php
 
+/*
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @copyright Copyright (c) Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\TranslationForm;
 
-use Symfony\Component\Form\FormRegistry,
-    Doctrine\Common\Persistence\ManagerRegistry,
-    Doctrine\Common\Util\ClassUtils;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Util\ClassUtils;
+use Symfony\Component\Form\FormRegistry;
 
 /**
  * @author David ALLIX
@@ -15,8 +23,7 @@ class TranslationForm implements TranslationFormInterface
     private $managerRegistry;
 
     /**
-     *
-     * @param \Symfony\Component\Form\FormRegistry $formRegistry
+     * @param \Symfony\Component\Form\FormRegistry         $formRegistry
      * @param \Doctrine\Common\Persistence\ManagerRegistry $managerRegistry
      */
     public function __construct(FormRegistry $formRegistry, ManagerRegistry $managerRegistry)
@@ -26,9 +33,9 @@ class TranslationForm implements TranslationFormInterface
     }
 
     /**
-     *
      * @param string $translationClass
      * @param array  $exclude
+     *
      * @return array
      */
     protected function getTranslationFields($translationClass, array $exclude = array())
@@ -87,7 +94,7 @@ class TranslationForm implements TranslationFormInterface
     }
 
     /**
-     * Combine formFields with translationFields. (Useful for upload field)
+     * Combine formFields with translationFields. (Useful for upload field).
      */
     private function getFieldsList($options, $class)
     {
@@ -96,7 +103,7 @@ class TranslationForm implements TranslationFormInterface
         // Check existing
         foreach ($formFields as $field) {
             if (!property_exists($class, $field)) {
-                throw new \Exception("Field '". $field ."' doesn't exist in ". $class);
+                throw new \Exception("Field '".$field."' doesn't exist in ".$class);
             }
         }
 

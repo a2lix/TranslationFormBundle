@@ -1,7 +1,7 @@
 <?php
-/**
+
+/*
  * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
- * @date 07/11/14
  * @copyright Copyright (c) Reiss Clothing Ltd.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -16,21 +16,21 @@ namespace A2lix\TranslationFormBundle\Locale;
 class DefaultProvider implements LocaleProviderInterface
 {
     /**
-     * Locales
+     * Locales.
      *
      * @var array
      */
     protected $locales;
 
     /**
-     * Default locale
+     * Default locale.
      *
      * @var
      */
     protected $defaultLocale;
 
     /**
-     * Required locales
+     * Required locales.
      *
      * @var array
      */
@@ -62,7 +62,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getLocales()
     {
@@ -71,7 +70,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getDefaultLocale()
     {
@@ -80,7 +78,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getRequiredLocales()
     {

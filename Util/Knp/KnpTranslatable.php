@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
+ * @copyright Copyright (c) Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Util\Knp;
 
 /**
@@ -9,7 +17,6 @@ namespace A2lix\TranslationFormBundle\Util\Knp;
  */
 trait KnpTranslatable
 {
-
     /**
      * @Symfony\Component\Validator\Constraints\Valid
      */
@@ -20,15 +27,15 @@ trait KnpTranslatable
     use \Knp\DoctrineBehaviors\Model\Translatable\TranslatableMethods;
 
     /**
-     *
      * @param type $method
      * @param type $arguments
+     *
      * @return type
      */
     public function __call($method, $args)
     {
         if (!method_exists(self::getTranslationEntityClass(), $method)) {
-            $method = 'get'. ucfirst($method);
+            $method = 'get'.ucfirst($method);
         }
 
         return $this->proxyCurrentLocaleTranslation($method, $args);
