@@ -3,7 +3,7 @@
 namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface,
+    Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\Options,
     Symfony\Component\HttpFoundation\Request,
     Doctrine\ORM\EntityRepository;
@@ -24,9 +24,9 @@ class TranslatedEntityType extends AbstractType
 
     /**
      * 
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'translation_path' => 'translations',

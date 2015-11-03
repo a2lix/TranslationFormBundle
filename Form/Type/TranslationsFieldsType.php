@@ -4,7 +4,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Translations fields
@@ -30,9 +30,9 @@ class TranslationsFieldsType extends AbstractType
 
     /**
      *
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'fields' => array(),

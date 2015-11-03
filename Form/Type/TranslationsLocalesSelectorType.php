@@ -5,7 +5,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 use Symfony\Component\Form\FormView,
     Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface,
+    Symfony\Component\OptionsResolver\OptionsResolver,
     A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
 
 /**
@@ -38,9 +38,9 @@ class TranslationsLocalesSelectorType extends AbstractType
 
     /**
      *
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'choices' => array_combine($this->localeProvider->getLocales(), $this->localeProvider->getLocales()),
