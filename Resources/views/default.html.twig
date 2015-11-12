@@ -4,9 +4,10 @@
         <ul class="a2lix_translationsLocales nav nav-tabs">
         {% for translationsFields in form %}
             {% set locale = translationsFields.vars.name %}
+            {% set suffix = locale~'-'~form.vars.id %}
 
             <li {% if app.request.locale == locale %}class="active"{% endif %}>
-                <a href="#" data-toggle="tab" data-target=".a2lix_translationsFields-{{ locale }}">
+                <a href="#" data-toggle="tab" data-target=".a2lix_translationsFields-{{ suffix }}">
                     {{ locale|capitalize }}
                     {% if form.vars.default_locale == locale %}[Default]{% endif %}
                     {% if translationsFields.vars.required %}*{% endif %}
@@ -18,8 +19,8 @@
         <div class="a2lix_translationsFields tab-content">
         {% for translationsFields in form %}
             {% set locale = translationsFields.vars.name %}
-
-            <div class="a2lix_translationsFields-{{ locale }} tab-pane {% if app.request.locale == locale %}active{% endif %}">
+            {% set suffix = locale~'-'~form.vars.id %}
+            <div class="a2lix_translationsFields-{{ suffix }} tab-pane {% if app.request.locale == locale %}active{% endif %}">
                 {{ form_errors(translationsFields) }}
                 {{ form_widget(translationsFields) }}
             </div>
