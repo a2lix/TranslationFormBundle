@@ -16,6 +16,13 @@ trait KnpTranslatable
     protected $translations;
     private $newTranslations;
     private $currentLocale;
+    
+    /**
+     * currentLocale is a non persisted field configured during postLoad event
+     */
+    protected $currentLocale;
+
+    protected $defaultLocale = 'en';
 
     use \Knp\DoctrineBehaviors\Model\Translatable\TranslatableMethods;
 
