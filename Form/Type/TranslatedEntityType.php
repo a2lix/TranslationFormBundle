@@ -2,33 +2,35 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    Symfony\Component\OptionsResolver\Options,
-    Symfony\Component\HttpFoundation\Request,
-    Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Translated entity
- *
  * @author David ALLIX
  */
 class TranslatedEntityType extends AbstractType
 {
-    private $request;
-    
-    public function setRequest(Request $request = null)
+    /** @var RequestStack */
+    private $requestStack;
+
+    /**
+     * @param RequestStack $requestStack
+     */
+    public function __construct(RequestStack $requestStack)
     {
-        $this->request = $request;
+        $this->requestStack = $requestStack;
     }
 
     /**
-     * 
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'translation_path' => 'translations',
             'translation_property' => null,
             'query_builder' => function (EntityRepository $er) {
@@ -36,23 +38,18 @@ class TranslatedEntityType extends AbstractType
                     ->select('e, t')
                     ->join('e.translations', 't');
             },
-            'property' => function(Options $options) {
-                if (null === $this->request) {
-                    throw new \Exception('Error while getting request');
+            'property' => function (Options $options) {
+                if (null === ($request = $this->requestStack->getCurrentRequest())) {
+                    throw new \RuntimeExceptionn('Error while getting request');
                 }
-                
-                return $options['translation_path'] .'['. $this->request->getLocale() .'].'. $options['translation_property'];
+
+                return $options['translation_path'] . '[' . $request->getLocale() . '].' . $options['translation_property'];
             },
-        ));
+        ]);
     }
 
     public function getParent()
     {
-        return 'entity';
-    }
-    
-    public function getName()
-    {
-        return 'a2lix_translatedEntity';
+        return EntityType::class;
     }
 }
