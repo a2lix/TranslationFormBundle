@@ -2,10 +2,11 @@
 
 namespace A2lix\TranslationFormBundle\Form\EventListener;
 
-use Symfony\Component\Form\FormEvent,
+use A2lix\TranslationFormBundle\Util\LegacyFormHelper,
+    A2lix\TranslationFormBundle\TranslationForm\TranslationForm,
+    Symfony\Component\Form\FormEvent,
     Symfony\Component\Form\FormEvents,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
+    Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * @author David ALLIX
@@ -37,13 +38,19 @@ class TranslationsListener implements EventSubscriberInterface
         $formOptions = $form->getConfig()->getOptions();
         $fieldsOptions = $this->translationForm->getFieldsOptions($translationClass, $formOptions);
 
-        foreach ($formOptions['locales'] as $locale) {            
-            if (isset($fieldsOptions[$locale])) {
-                $form->add($locale, 'a2lix_translationsFields', array(
-                    'data_class' => $translationClass,
-                    'fields' => $fieldsOptions[$locale],
-                    'required' => in_array($locale, $formOptions['required_locales'])
-                ));
+        if (isset($formOptions['locales'])) {
+            foreach ($formOptions['locales'] as $locale) {
+                if (isset($fieldsOptions[$locale])) {
+                    $form->add(
+                        $locale,
+                        LegacyFormHelper::getType('A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType'),
+                        array(
+                            'data_class' => $translationClass,
+                            'fields' => $fieldsOptions[$locale],
+                            'required' => in_array($locale, $formOptions['required_locales'])
+                        )
+                    );
+                }
             }
         }
     }
