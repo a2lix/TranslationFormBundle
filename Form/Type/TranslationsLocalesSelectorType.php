@@ -2,11 +2,12 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use Symfony\Component\Form\FormView,
+use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface,
+    Symfony\Component\Form\FormView,
     Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+    Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author David ALLIX
@@ -37,10 +38,9 @@ class TranslationsLocalesSelectorType extends AbstractType
     }
 
     /**
-     *
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'choices' => array_combine($this->localeProvider->getLocales(), $this->localeProvider->getLocales()),
@@ -52,12 +52,24 @@ class TranslationsLocalesSelectorType extends AbstractType
         ));
     }
 
+    // BC for SF < 2.7
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
     public function getParent()
     {
         return 'choice';
     }
 
+    // BC for SF < 3.0
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    public function getBlockPrefix()
     {
         return 'a2lix_translationsLocalesSelector';
     }
