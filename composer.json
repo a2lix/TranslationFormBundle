@@ -2,7 +2,7 @@
     "name": "a2lix/translation-form-bundle",
     "type": "symfony-bundle",
     "description": "Translate your doctrine objects easily with some helps",
-    "keywords": ["symfony2", "doctrine2", "i18n", "internationalization", "translation", "translatable", "form", "gedmo", "knplabs"],
+    "keywords": ["symfony2", "doctrine2", "i18n", "internationalization", "translation", "translatable", "form", "knplabs"],
     "homepage": "https://github.com/a2lix/TranslationFormBundle",
     "license": "MIT",
     "authors": [
@@ -12,23 +12,29 @@
         }
     ],
     "require": {
-        "symfony/symfony": "~2.7|~3.0"
+        "php": ">=5.4.0",
+        "symfony/form": "~2.8|~3.0",
+        "symfony/dependency-injection": "~2.8|~3.0",
+        "symfony/http-kernel": "~2.8|~3.0",
+        "symfony/config": "~2.8|~3.0",
+        "symfony/doctrine-bridge": "~2.8|~3.0",
+        "a2lix/auto-form-bundle": "@dev"
     },
     "require-dev": {
+        "symfony/validator": "~2.8|~3.0",
         "phpunit/phpunit": "~4.1",
-        "doctrine/common": "~2.3",
-        "gedmo/doctrine-extensions": "~2.4",
-        "knplabs/doctrine-behaviors": "1.0.*"
+        "fabpot/php-cs-fixer": "~1.10",
+        "doctrine/orm": "~2.4"
     },
     "suggest": {
-        "a2lix/i18n-doctrine-bundle": "For A2lix strategy",
-        "gedmo/doctrine-extensions": "For Gedmo strategy",
         "knplabs/doctrine-behaviors": "For Knp strategy",
+        "a2lix/i18n-doctrine-bundle": "For A2lix strategy",
         "prezent/doctrine-translatable-bundle": "For Prezent strategy"
     },
     "autoload": {
-        "psr-0": { "A2lix\\TranslationFormBundle": "" }
-    },
-    "prefer-stable": true,
-    "target-dir": "A2lix/TranslationFormBundle"
+        "psr-4": { "A2lix\\TranslationFormBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    }
 }
