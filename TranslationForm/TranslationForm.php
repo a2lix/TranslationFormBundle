@@ -3,6 +3,7 @@
 namespace A2lix\TranslationFormBundle\TranslationForm;
 
 use Symfony\Component\Form\FormRegistry,
+    Symfony\Component\HttpKernel\Kernel,
     Doctrine\Common\Persistence\ManagerRegistry,
     Doctrine\Common\Util\ClassUtils;
 
@@ -148,8 +149,14 @@ class TranslationForm implements TranslationFormInterface
             $options['pattern'] = $patternGuess->getValue();
         }
 
-        if (!isset($options['max_length']) && ($maxLengthGuess = $guesser->guessMaxLength($class, $property))) {
-            $options['max_length'] = $maxLengthGuess->getValue();
+        if (Kernel::VERSION_ID > '20512') {
+            if (!isset($options['attr']['maxlength']) && ($maxLengthGuess = $guesser->guessMaxLength($class, $property))) {
+                $options['attr']['maxlength'] = $maxLengthGuess->getValue();
+            }
+        } else {
+            if (!isset($options['max_length']) && ($maxLengthGuess = $guesser->guessMaxLength($class, $property))) {
+                $options['max_length'] = $maxLengthGuess->getValue();
+            }
         }
 
         return $options;
