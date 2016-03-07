@@ -8,8 +8,8 @@ use Doctrine\ORM\EntityRepository,
     Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\Options,
     Symfony\Component\HttpFoundation\Request,
-    Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\HttpFoundation\RequestStack;
+    Symfony\Bridge\Doctrine\Form\Type\EntityType,
+    Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Translated entity
