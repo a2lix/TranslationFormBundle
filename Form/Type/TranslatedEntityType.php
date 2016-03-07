@@ -7,7 +7,9 @@ use Doctrine\ORM\EntityRepository,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
     Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\Options,
-    Symfony\Component\HttpFoundation\Request;
+    Symfony\Component\HttpFoundation\Request,
+    Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Translated entity
@@ -16,8 +18,14 @@ use Doctrine\ORM\EntityRepository,
  */
 class TranslatedEntityType extends AbstractType
 {
+    private $requestStack;
     private $request;
-    
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
+
     public function setRequest(Request $request = null)
     {
         $this->request = $request;
@@ -36,14 +44,19 @@ class TranslatedEntityType extends AbstractType
                     ->select('e, t')
                     ->join('e.translations', 't');
             },
-            'property' => function(Options $options) {
-                if (null === $this->request) {
+            'choice_label' => function(Options $options) {
+                if (null === $this->requestStack->getCurrentRequest() and null === $this->request) {
                     throw new \Exception('Error while getting request');
+                } 
+                
+                if(null !== $this->requestStack->getCurrentRequest()) {
+                    return $options['translation_path'] .'['. $this->requestStack->getCurrentRequest()->getLocale() .'].'. $options['translation_property'];
+                } else {
+                    return $options['translation_path'] .'['. $this->request->getLocale() .'].'. $options['translation_property'];
                 }
-
-                return $options['translation_path'] .'['. $this->request->getLocale() .'].'. $options['translation_property'];
             },
         ));
+
     }
 
     // BC for SF < 2.7
@@ -54,7 +67,7 @@ class TranslatedEntityType extends AbstractType
 
     public function getParent()
     {
-        return 'entity';
+        return EntityType::class;
     }
 
     // BC for SF < 3.0
@@ -65,6 +78,6 @@ class TranslatedEntityType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'a2lix_translatedEntity';
+        return TranslatedEntityType::class;
     }
 }
