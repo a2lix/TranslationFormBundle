@@ -7,7 +7,8 @@ use Doctrine\ORM\EntityRepository,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
     Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\Options,
-    Symfony\Component\HttpFoundation\Request;
+    Symfony\Component\HttpFoundation\Request,
+    Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * Translated entity
@@ -54,7 +55,7 @@ class TranslatedEntityType extends AbstractType
 
     public function getParent()
     {
-        return 'entity';
+        return EntityType::class;
     }
 
     // BC for SF < 3.0
