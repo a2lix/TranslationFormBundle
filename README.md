@@ -9,15 +9,15 @@ A2lixTranslationFormBundle
 
 ### Documentation
 
-http://a2lix.fr/bundles/translation-form/
+http://a2lix.fr/bundles/translation-form
 
 
 ### Which version for ````"a2lix/translation-form-bundle"```` ?
 
-- ````"~2.0.0"```` - [LOW MAINTENANCE] - For Symfony 2.3+ with modern strategy (KNP Labs, Prezent or A2lix strategy)
-- ````"~1.0"```` - [NO MAINTENANCE ANYMORE] - For Symfony 2.3 with old strategy support: Gedmo that I discourage
-- ````"~0.1"```` - [NO MAINTENANCE ANYMORE] - For Symfony 2.2 or less
+- ````"~2.0.0"```` - [LOW MAINTENANCE] - For Symfony 2.3+/3.0 with modern strategies ([KnpLabs](https://github.com/KnpLabs/DoctrineBehaviors#translatable), [Prezent](https://github.com/Prezent/doctrine-translatable-bundle) or [A2lix](https://github.com/a2lix/I18nDoctrineBundle))
+- ````"~1.0"```` - [NO MAINTENANCE ANYMORE] - For Symfony 2.3 with old strategy support: [Gedmo](https://github.com/Atlantic18/DoctrineExtensions/blob/master/doc/translatable.md) that I discourage
+- ````"~0.1"```` - [NO MAINTENANCE ANYMORE] - For Symfony 2.2 or less with old strategy support: [Gedmo](https://github.com/Atlantic18/DoctrineExtensions/blob/master/doc/translatable.md) that I discourage
 
 Only for testing, because in development, (as its main dependency https://github.com/a2lix/AutoFormBundle), you can also give a try/help on this branch :
 
-- ````"3.0@dev"```` - [RETHINK VERSION - PHP5.5+ required] - For Symfony 2.8+ and 3.0 with modern strategy (KNP Labs, Prezent or A2lix strategy)
+- ````"3.0@dev"```` - [RETHINK VERSION - PHP5.5+ required] - For Symfony 2.8+ and 3.0 with modern strategies ([KnpLabs](https://github.com/KnpLabs/DoctrineBehaviors#translatable), [Prezent](https://github.com/Prezent/doctrine-translatable-bundle) or [A2lix](https://github.com/a2lix/I18nDoctrineBundle))
