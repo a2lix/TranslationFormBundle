@@ -4,6 +4,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
+    Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
     A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsListener,
     A2lix\TranslationFormBundle\Form\DataMapper\IndexByTranslationMapper;
@@ -38,7 +39,20 @@ class TranslationsType extends AbstractType
         $builder->addEventSubscriber($this->translationsListener);
     }
 
+    /**
+     * BC for SF < 2.7
+     * 
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'by_reference' => false,
@@ -48,7 +62,20 @@ class TranslationsType extends AbstractType
         ));
     }
 
+    /**
+     * BC for SF < 2.8
+     * 
+     * {@inheritdoc}
+     */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'a2lix_translations';
     }
