@@ -23,7 +23,7 @@
     "require-dev": {
         "symfony/validator": "~2.8|~3.0",
         "phpunit/phpunit": "~4.1",
-        "fabpot/php-cs-fixer": "~1.10",
+        "friendsofphp/php-cs-fixer": "~1.10",
         "doctrine/orm": "~2.4"
     },
     "suggest": {
