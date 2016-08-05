@@ -4,6 +4,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
+    Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
     A2lix\TranslationFormBundle\Form\DataMapper\GedmoTranslationMapper;
 
@@ -34,7 +35,20 @@ class GedmoTranslationsLocalesType extends AbstractType
         }
     }
 
+    /**
+     * BC for SF < 2.7
+     * 
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'locales' => array(),
@@ -43,7 +57,20 @@ class GedmoTranslationsLocalesType extends AbstractType
         ));
     }
 
+    /**
+     * BC for SF < 2.8
+     *
+     * {@inheritdoc}
+     */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'a2lix_translationsLocales_gedmo';
     }

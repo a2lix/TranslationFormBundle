@@ -4,6 +4,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
+    Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
     A2lix\TranslationFormBundle\Form\EventListener\GedmoTranslationsListener,
     A2lix\TranslationFormBundle\TranslationForm\GedmoTranslationForm,
@@ -74,7 +75,20 @@ class GedmoTranslationsType extends AbstractType
         $view->vars['simple_way'] = !$options['inherit_data'];
     }
 
+    /**
+     * BC for SF < 2.7
+     * 
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $translatableListener = $this->translationForm->getGedmoTranslatableListener();
 
@@ -92,7 +106,20 @@ class GedmoTranslationsType extends AbstractType
         ));
     }
 
+    /**
+     * BC for SF < 2.8
+     *
+     * {@inheritdoc}
+     */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'a2lix_translations_gedmo';
     }

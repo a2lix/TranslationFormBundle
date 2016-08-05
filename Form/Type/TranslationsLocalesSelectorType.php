@@ -3,6 +3,7 @@
 namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
+    Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -23,7 +24,20 @@ class TranslationsLocalesSelectorType extends AbstractType
         $this->locales = $locales;
     }
 
+    /**
+     * BC for SF < 2.7
+     * 
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'choices' => array_combine($this->locales, $this->locales),
@@ -35,14 +49,21 @@ class TranslationsLocalesSelectorType extends AbstractType
         ));
     }
 
-    public function getParent()
+    /**
+     * BC for SF < 2.8
+     * 
+     * {@inheritdoc}
+     */
+    public function getName()
     {
-        return 'choice';
+        return $this->getBlockPrefix();
     }
 
-    public function getName()
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'a2lix_translationsLocalesSelector';
     }
-
 }
