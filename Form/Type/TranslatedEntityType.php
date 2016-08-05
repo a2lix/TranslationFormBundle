@@ -54,8 +54,19 @@ class TranslatedEntityType extends AbstractType
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
         return EntityType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'a2lix_translatedEntity';
     }
 }

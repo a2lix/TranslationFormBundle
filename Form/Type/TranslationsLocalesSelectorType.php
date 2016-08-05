@@ -57,8 +57,19 @@ class TranslationsLocalesSelectorType extends AbstractType
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
         return ChoiceType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'a2lix_translationsLocalesSelector';
     }
 }

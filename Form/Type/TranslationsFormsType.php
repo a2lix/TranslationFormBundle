@@ -73,4 +73,12 @@ class TranslationsFormsType extends AbstractType
             'form_options' => [],
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'a2lix_translationsForms';
+    }
 }

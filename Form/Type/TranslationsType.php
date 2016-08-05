@@ -74,4 +74,12 @@ class TranslationsType extends AbstractType
             'excluded_fields' => [],
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'a2lix_translations';
+    }
 }
