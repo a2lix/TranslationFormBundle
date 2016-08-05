@@ -54,14 +54,19 @@ class TranslatedEntityType extends AbstractType
         ]);
     }
 
-    // BC for SF < 2.7
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
         return EntityType::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'a2lix_translatedEntity';
     }
 }
