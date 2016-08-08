@@ -34,15 +34,14 @@ class TranslationsFormsListener implements EventSubscriberInterface
     public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
+        $formOptions = $form->getConfig()->getOptions();
 
-        $formsOptions = $this->getFormsOptions($form->getConfig()->getOptions());
-
-        foreach ($formsOptions['locales'] as $locale) {
-            if (isset($formsOptions[$locale])) {
-                $form->add($locale, $formsOptions['form_type'],
-                    $formsOptions[$locale] + ['required' => in_array($locale, $formsOptions['required_locales'], true)]
-                );
-            }
+        foreach ($formOptions['locales'] as $locale) {
+            $form->add($locale, $formOptions['form_type'],
+                $formOptions['form_options'] + [
+                    'required' => in_array($locale, $formOptions['required_locales'], true)
+                ]
+            );
         }
     }
 
@@ -61,38 +60,5 @@ class TranslationsFormsListener implements EventSubscriberInterface
                 $translation->setLocale($locale);
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFormsOptions($options)
-    {
-        $formsOptions = [];
-
-        // Current options
-        $formOptions = $options['form_options'];
-
-        // Simplest case: General options for all locales
-        if (!isset($formOptions['locale_options'])) {
-            foreach ($options['locales'] as $locale) {
-                $formsOptions[$locale] = $formOptions;
-            }
-
-            return $formsOptions;
-        }
-
-        // Custom options by locale
-        $localesFormOptions = $formOptions['locale_options'];
-        unset($formOptions['locale_options']);
-
-        foreach ($options['locales'] as $locale) {
-            $localeFormOptions = isset($localesFormOptions[$locale]) ? $localesFormOptions[$locale] : [];
-            if (!isset($localeFormOptions['display']) || $localeFormOptions['display']) {
-                $formsOptions[$locale] = $localeFormOptions + $formOptions;
-            }
-        }
-
-        return $formsOptions;
     }
 }
