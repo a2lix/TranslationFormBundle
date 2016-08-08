@@ -7,7 +7,8 @@ use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface,
     Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    Symfony\Component\OptionsResolver\OptionsResolver;
+    Symfony\Component\OptionsResolver\OptionsResolver,
+    Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * @author David ALLIX
@@ -60,7 +61,7 @@ class TranslationsLocalesSelectorType extends AbstractType
 
     public function getParent()
     {
-        return 'choice';
+        return ChoiceType::class;
     }
 
     // BC for SF < 3.0
