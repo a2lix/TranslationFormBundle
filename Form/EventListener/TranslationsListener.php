@@ -83,6 +83,7 @@ class TranslationsListener implements EventSubscriberInterface
 
     /**
      * @param string $translatableClass
+     * @return string
      */
     private function getTranslationClass($translatableClass)
     {
@@ -100,7 +101,10 @@ class TranslationsListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     *
+     * @param array $options
+     * @param string $class
+     * @return array
      */
     public function getFieldsOptions($options, $class)
     {
