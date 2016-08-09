@@ -41,7 +41,7 @@ class Product
     protected $url;
 
     /**
-     * @ORM\OneToMany(targetEntity="Media", mappedBy="product", indexBy="locale", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="MediaLocalize", mappedBy="product", indexBy="locale", cascade={"all"}, orphanRemoval=true)
      */
     protected $medias;
 
