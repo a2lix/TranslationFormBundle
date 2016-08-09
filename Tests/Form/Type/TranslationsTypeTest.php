@@ -24,17 +24,16 @@ class TranslationsTypeTest extends TypeTestCase
     protected function getExtensions()
     {
         $translationsType = $this->getConfiguredTranslationsType(['en', 'fr', 'de'], 'en', ['en', 'fr']);
-        $AutoFormType = $this->getConfiguredAutoFormType();
+        $autoFormType = $this->getConfiguredAutoFormType();
 
         return [new PreloadedExtension([
             $translationsType,
-            $AutoFormType,
+            $autoFormType,
         ], [])];
     }
 
-    public function testSubmitValidDefaultConfigurationData()
+    public function testCreationValidDefaultConfigurationData()
     {
-        // Creation
         $productTranslationEn = new ProductTranslation();
         $productTranslationEn->setLocale('en')
                              ->setTitle('title en')
@@ -82,6 +81,14 @@ class TranslationsTypeTest extends TypeTestCase
         $this->assertTrue($form->isSynchronized());
         $this->assertEquals($product, $form->getData());
 
+        return $product;
+    }
+
+    /**
+     * @depends testCreationValidDefaultConfigurationData
+     */
+    public function testEditionValidDefaultConfigurationData($product)
+    {
         // Edition
         $product->getTranslations()['en']->setDescription('desc ennnnnnn');
         $product->getTranslations()['fr']->setTitle('title frrrrrr');

@@ -12,10 +12,10 @@
 namespace A2lix\TranslationFormBundle\Form\EventListener;
 
 use A2lix\AutoFormBundle\Form\Manipulator\FormManipulatorInterface;
-use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 
 class TranslationsListener implements EventSubscriberInterface
 {
@@ -49,8 +49,8 @@ class TranslationsListener implements EventSubscriberInterface
         $form = $event->getForm();
         $formOptions = $form->getConfig()->getOptions();
 
+        $fieldsOptions = $this->getFieldsOptions($form, $formOptions);
         $translationClass = $this->getTranslationClass($form->getParent()->getConfig()->getDataClass());
-        $fieldsOptions = $this->getFieldsOptions($form->getConfig()->getOptions(), $translationClass);
 
         foreach ($formOptions['locales'] as $locale) {
             if (isset($fieldsOptions[$locale])) {
@@ -102,20 +102,20 @@ class TranslationsListener implements EventSubscriberInterface
     }
 
     /**
-     * @param array  $options
-     * @param string $class
+     * @param FormInterface $form
+     * @param array         $formOptions
      *
      * @return array
      */
-    public function getFieldsOptions($options, $class)
+    public function getFieldsOptions(FormInterface $form, array $formOptions)
     {
         $fieldsOptions = [];
 
-        $fieldsConfig = $this->formManipulator->getFieldsConfig(ClassUtils::getRealClass($class), $options);
+        $fieldsConfig = $this->formManipulator->getFieldsConfig($form);
         foreach ($fieldsConfig as $fieldName => $fieldConfig) {
             // Simplest case: General options for all locales
             if (!isset($fieldConfig['locale_options'])) {
-                foreach ($options['locales'] as $locale) {
+                foreach ($formOptions['locales'] as $locale) {
                     $fieldsOptions[$locale][$fieldName] = $fieldConfig;
                 }
 
@@ -126,7 +126,7 @@ class TranslationsListener implements EventSubscriberInterface
             $localesFieldOptions = $fieldConfig['locale_options'];
             unset($fieldConfig['locale_options']);
 
-            foreach ($options['locales'] as $locale) {
+            foreach ($formOptions['locales'] as $locale) {
                 $localeFieldOptions = isset($localesFieldOptions[$locale]) ? $localesFieldOptions[$locale] : [];
                 if (!isset($localeFieldOptions['display']) || (true === $localeFieldOptions['display'])) {
                     $fieldsOptions[$locale][$fieldName] = $localeFieldOptions + $fieldConfig;

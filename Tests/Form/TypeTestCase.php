@@ -74,4 +74,12 @@ abstract class TypeTestCase extends BaseTypeTestCase
 
         return new \A2lix\TranslationFormBundle\Form\Type\TranslationsType($translationsListener, $localProvider);
     }
+
+    protected function getConfiguredTranslationsFormsType($locales, $defaultLocale, $requiredLocales)
+    {
+        $translationsFormsListener = new \A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener($this->getDefaultFormManipulator());
+        $localProvider = new \A2lix\TranslationFormBundle\Locale\DefaultProvider($locales, $defaultLocale, $requiredLocales);
+
+        return new \A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType($translationsFormsListener, $localProvider);
+    }
 }

@@ -18,6 +18,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsFormsType extends AbstractType
@@ -73,6 +74,15 @@ class TranslationsFormsType extends AbstractType
             'form_type' => null,
             'form_options' => [],
         ]);
+
+        $resolver->setNormalizer('form_options', function (Options $options, $value) {
+            // Check mandatory data_class option when AutoFormType use
+            if (is_a($options['form_type'], '\A2lix\AutoFormBundle\Form\Type\AutoFormType', true) && !isset($value['data_class'])) {
+                throw new \RuntimeException(sprintf('Missing "data_class" option under "form_options" of TranslationsFormsType. Required when "form_type" use "AutoFormType".'));
+            }
+
+            return $value;
+        });
     }
 
     /**
