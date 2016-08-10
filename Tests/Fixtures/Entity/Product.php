@@ -126,7 +126,7 @@ class Product
         return $this->medias;
     }
 
-    public function addMedia(Media $media)
+    public function addMedia(MediaLocalize $media)
     {
         if (!$this->medias->contains($media)) {
             $media->setProduct($this);

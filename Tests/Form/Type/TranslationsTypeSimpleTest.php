@@ -11,7 +11,7 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Form\Type;
 
-use A2lix\TranslationFormBundle\Form\Type\TranslationsType as A2lixTranslationsType;
+use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Product;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\ProductTranslation;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
@@ -19,11 +19,15 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\PreloadedExtension;
 
-class TranslationsTypeTest extends TypeTestCase
+class TranslationsTypeSimpleTest extends TypeTestCase
 {
+    protected $locales = ['en', 'fr', 'de'];
+    protected $defaultLocale = 'en';
+    protected $requiredLocales = ['en', 'fr'];
+
     protected function getExtensions()
     {
-        $translationsType = $this->getConfiguredTranslationsType(['en', 'fr', 'de'], 'en', ['en', 'fr']);
+        $translationsType = $this->getConfiguredTranslationsType($this->locales, $this->defaultLocale, $this->requiredLocales);
         $autoFormType = $this->getConfiguredAutoFormType();
 
         return [new PreloadedExtension([
@@ -32,8 +36,36 @@ class TranslationsTypeTest extends TypeTestCase
         ], [])];
     }
 
-    public function testCreationValidDefaultConfigurationData()
+    public function testEmptyForm()
     {
+        $form = $this->factory->createBuilder(FormType::class, new Product())
+            ->add('url')
+            ->add('translations', TranslationsType::class)
+            ->add('save', SubmitType::class)
+            ->getForm();
+
+        $translationsForm = $form->get('translations')->all();
+        $translationsLocales = array_keys($translationsForm);
+        $translationsRequiredLocales = array_keys(array_filter($translationsForm, function ($form) {
+            return $form->isRequired();
+        }));
+
+        $this->assertEquals($this->locales, $translationsLocales, 'Locales should be same as config');
+        $this->assertEquals($this->requiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
+
+        $this->assertEquals(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
+        $this->assertEquals(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
+        $this->assertEquals(['title', 'description'], array_keys($translationsForm['de']->all()), 'Fields should matches ProductTranslation fields');
+    }
+
+    public function testCreationForm()
+    {
+        $form = $this->factory->createBuilder(FormType::class, new Product())
+            ->add('url')
+            ->add('translations', TranslationsType::class)
+            ->add('save', SubmitType::class)
+            ->getForm();
+
         $productTranslationEn = new ProductTranslation();
         $productTranslationEn->setLocale('en')
                              ->setTitle('title en')
@@ -71,12 +103,6 @@ class TranslationsTypeTest extends TypeTestCase
             ],
         ];
 
-        $form = $this->factory->createBuilder(FormType::class, new Product())
-            ->add('url')
-            ->add('translations', A2lixTranslationsType::class)
-            ->add('save', SubmitType::class)
-            ->getForm();
-
         $form->submit($formData);
         $this->assertTrue($form->isSynchronized());
         $this->assertEquals($product, $form->getData());
@@ -85,11 +111,10 @@ class TranslationsTypeTest extends TypeTestCase
     }
 
     /**
-     * @depends testCreationValidDefaultConfigurationData
+     * @depends testCreationForm
      */
-    public function testEditionValidDefaultConfigurationData($product)
+    public function testEditionForm($product)
     {
-        // Edition
         $product->getTranslations()['en']->setDescription('desc ennnnnnn');
         $product->getTranslations()['fr']->setTitle('title frrrrrr');
 
@@ -113,7 +138,7 @@ class TranslationsTypeTest extends TypeTestCase
 
         $form = $this->factory->createBuilder(FormType::class, new Product())
             ->add('url')
-            ->add('translations', A2lixTranslationsType::class)
+            ->add('translations', TranslationsType::class)
             ->add('save', SubmitType::class)
             ->getForm();
 
