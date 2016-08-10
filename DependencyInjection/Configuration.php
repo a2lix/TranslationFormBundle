@@ -1,18 +1,24 @@
 <?php
 
+/*
+ * This file is part of A2lix projects.
+ *
+ * (c) David ALLIX
+ * (c) Gonzalo Vilaseca <gvilaseca@reiss.co.uk> . Reiss Clothing Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\TreeBuilder,
-    Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * @author David ALLIX
- * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
- */
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
@@ -26,7 +32,9 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('locales')
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function($v) { return preg_split('/\s*,\s*/', $v); })
+                        ->then(function ($v) {
+                            return preg_split('/\s*,\s*/', $v);
+                        })
                     ->end()
                     ->requiresAtLeastOneElement()
                     ->prototype('scalar')->end()
@@ -34,12 +42,13 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('required_locales')
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function($v) { return preg_split('/\s*,\s*/', $v); })
+                        ->then(function ($v) {
+                            return preg_split('/\s*,\s*/', $v);
+                        })
                     ->end()
                     ->prototype('scalar')->end()
                 ->end()
-                ->scalarNode('manager_registry')->defaultValue('doctrine')->end()
-                ->scalarNode('templating')->defaultValue("A2lixTranslationFormBundle::default.html.twig")->end()
+                ->scalarNode('templating')->defaultValue('A2lixTranslationFormBundle::default.html.twig')->end()
             ->end()
         ;
 
