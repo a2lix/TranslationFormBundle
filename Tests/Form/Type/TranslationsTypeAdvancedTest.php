@@ -69,11 +69,7 @@ class TranslationsTypeAdvancedTest extends TypeTestCase
         $form = $this->factory->createBuilder(FormType::class, new Product())
             ->add('url')
             ->add('translations', TranslationsType::class, [
-                'fields' => [
-                    'description' => [
-                        'display' => false,
-                    ],
-                ],
+                'excluded_fields' => ['description'],
             ])
             ->add('save', SubmitType::class)
             ->getForm();
@@ -81,6 +77,6 @@ class TranslationsTypeAdvancedTest extends TypeTestCase
         $translationsForm = $form->get('translations')->all();
         $this->assertEquals(['title'], array_keys($translationsForm['en']->all()), 'Fields should not contains description');
         $this->assertEquals(['title'], array_keys($translationsForm['fr']->all()), 'Fields should not contains description');
-        $this->assertEquals(['title'], array_keys($translationsForm['es']->all()), 'Fields should not contains description');
+        $this->assertEquals(['title'], array_keys($translationsForm['de']->all()), 'Fields should not contains description');
     }
 }
