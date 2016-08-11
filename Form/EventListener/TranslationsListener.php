@@ -50,7 +50,7 @@ class TranslationsListener implements EventSubscriberInterface
         $formOptions = $form->getConfig()->getOptions();
 
         $fieldsOptions = $this->getFieldsOptions($form, $formOptions);
-        $translationClass = $this->getTranslationClass($form->getParent()->getConfig()->getDataClass());
+        $translationClass = $this->getTranslationClass($form->getParent());
 
         foreach ($formOptions['locales'] as $locale) {
             if (isset($fieldsOptions[$locale])) {
@@ -83,12 +83,16 @@ class TranslationsListener implements EventSubscriberInterface
     }
 
     /**
-     * @param string $translatableClass
+     * @param FormInterface $form
      *
      * @return string
      */
-    private function getTranslationClass($translatableClass)
+    private function getTranslationClass(FormInterface $form)
     {
+        do {
+            $translatableClass = $form->getConfig()->getDataClass();
+        } while ((null === $translatableClass) && $form->getConfig()->getVirtual() && ($form = $form->getParent()));
+
         // Knp
         if (method_exists($translatableClass, 'getTranslationEntityClass')) {
             return $translatableClass::getTranslationEntityClass();
