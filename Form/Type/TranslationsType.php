@@ -70,9 +70,12 @@ class TranslationsType extends AbstractType
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
+            'theming_granularity' => 'field',
             'fields' => [],
             'excluded_fields' => [],
         ]);
+
+        $resolver->setAllowedValues('theming_granularity', ['field', 'locale_field']);
     }
 
     /**
