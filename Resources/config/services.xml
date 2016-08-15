@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="a2lix_translation_form.locales" />
         <parameter key="a2lix_translation_form.default_required" />
+        <parameter key="a2lix_translation_form.required_locales" />
 
         <parameter key="a2lix_translation_form.default.service.translation.class">A2lix\TranslationFormBundle\TranslationForm\DefaultTranslationForm</parameter>
         <parameter key="a2lix_translation_form.default.listener.translations.class">A2lix\TranslationFormBundle\Form\EventListener\DefaultTranslationsListener</parameter>
@@ -28,7 +29,7 @@
         <service id="a2lix_translation_form.default.type.translations" class="%a2lix_translation_form.default.type.translations.class%">
             <argument type="service" id="a2lix_translation_form.default.listener.translations" />
             <argument>%a2lix_translation_form.locales%</argument>
-            <argument>%a2lix_translation_form.default_required%</argument>
+            <argument>%a2lix_translation_form.required_locales%</argument>
             <tag name="form.type" alias="a2lix_translations" />
         </service>
         <service id="a2lix_translation_form.default.type.translationsFields" class="%a2lix_translation_form.default.type.translationsFields.class%">
@@ -36,7 +37,7 @@
         </service>
         <service id="a2lix_translation_form.default.type.translationsForms" class="%a2lix_translation_form.default.type.translationsForms.class%">
             <argument>%a2lix_translation_form.locales%</argument>
-            <argument>%a2lix_translation_form.default_required%</argument>
+            <argument>%a2lix_translation_form.required_locales%</argument>
             <tag name="form.type" alias="a2lix_translationsForms" />
         </service>
         <service id="a2lix_translation_form.default.type.translationsLocalesSelector" class="%a2lix_translation_form.default.type.translationsLocalesSelector.class%">

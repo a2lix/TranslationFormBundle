@@ -49,6 +49,7 @@ class GedmoTranslationsListener implements EventSubscriberInterface
                 $form->add($locale, 'a2lix_translationsFields', array(
                     'fields' => $childrenOptions[$locale],
                     'translation_class' => $this->translationForm->getTranslationClass($translatableClass),
+                    'required' => in_array($locale, $formOptions['required_locales'])
                 ));
             }
         }
