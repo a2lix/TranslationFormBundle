@@ -3,6 +3,18 @@ $(function() {
         evt.preventDefault();
 
         var target = $(this).attr('data-target');
+
+        if (target === 'all') {
+            $(this).parent().siblings().find('a').each(function (i, el) {
+                var targetData = $(el).data('target');
+
+                $('li:has(a[data-target="' + targetData + '"])').removeClass('active');
+                $('li:has(a[data-target="all"]), div' + targetData, 'div.a2lix_translations').addClass('active');
+            });
+
+            return;
+        }
+
         $('li:has(a[data-target="' + target + '"]), div' + target, 'div.a2lix_translations').addClass('active')
             .siblings().removeClass('active');
     });
