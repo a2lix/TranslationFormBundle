@@ -36,7 +36,7 @@ $(function() {
                 // Tab target by class for a2lixTranslation
                 var a2lixTranslClass = /a2lix_translationsFields-[\S]+/.exec(this.className);
                 if (a2lixTranslClass.length) {
-                    $tabNavs.find('a[data-target=".'+ a2lixTranslClass[0] +'"]')
+                    $tabNavs.find('a[data-target=*"'+ a2lixTranslClass[0] +'"]')
                             .trigger('click');
 
                     return true;
