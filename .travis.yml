@@ -1,22 +1,43 @@
 language: php
 
+php:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - hhvm
+
+env:
+  global:
+    - TARGET=test
+
+matrix:
+    fast_finish: true
+  include:
+    - php: 7.0
+      env: TARGET=cs_dry_run
+    - php: 5.5
+      env: COMPOSER_FLAGS="--prefer-lowest"
+    # Test 2.7 LTS
+    - php: 5.6
+      env: SYMFONY-VERSION=2.7.*
+    # Test 2.8 LTS
+    - php: 5.6
+      env: SYMFONY_VERSION=2.8.*
+    # Test latest stable 3.x release
+    - php: 5.6
+      env: SYMFONY_VERSION=^3.0
+    # Test latest release (including beta releases)
+    - php: 7.1
+      env: DEPENDENCIES=beta
+  allow failures:
+    - php: hhvm
+    
 sudo: false
 
 cache:
-    directories:
-      - $HOME/.composer/cache
-
-matrix:
-    include:
-        - php: hhvm
-          env: COMPOSER_EXTRA="--prefer-lowest --prefer-stable"
-        - php: 5.5
-          env: COMPOSER_EXTRA="--prefer-lowest --prefer-stable"
-        - php: 5.6
-          env: COMPOSER_EXTRA="--prefer-lowest --prefer-stable"
-        - php: 7.0
-          env: COMPOSER_EXTRA="--prefer-lowest --prefer-stable"
-    fast_finish: true
+  directories:
+    - $HOME/.composer/cache
 
 install:
     - composer --prefer-source $COMPOSER_EXTRA update
