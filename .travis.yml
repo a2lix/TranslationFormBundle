@@ -30,8 +30,6 @@ matrix:
     # Test latest release (including beta releases)
     - php: 7.1
       env: DEPENDENCIES=beta
-  allow failures:
-    - php: hhvm
     
 sudo: false
 
