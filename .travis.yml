@@ -12,7 +12,7 @@ env:
     - TARGET=test
 
 matrix:
-    fast_finish: true
+  fast_finish: true
   include:
     - php: 7.0
       env: TARGET=cs_dry_run
@@ -30,6 +30,8 @@ matrix:
     # Test latest release (including beta releases)
     - php: 7.1
       env: DEPENDENCIES=beta
+  allow failures:
+    - php: hhvm
     
 sudo: false
 
