@@ -27,10 +27,9 @@
         "prezent/doctrine-translatable-bundle": "For Prezent strategy"
     },
     "autoload": {
-        "psr-0": { "A2lix\\TranslationFormBundle": "" }
+        "psr-4": { "A2lix\\TranslationFormBundle\\": "" }
     },
     "prefer-stable": true,
-    "target-dir": "A2lix/TranslationFormBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
