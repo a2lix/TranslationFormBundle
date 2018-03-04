@@ -2,7 +2,7 @@
     "name": "a2lix/translation-form-bundle",
     "type": "symfony-bundle",
     "description": "Translate your doctrine objects easily with some helps",
-    "keywords": ["symfony2", "doctrine2", "i18n", "internationalization", "translation", "translatable", "form", "gedmo", "knplabs"],
+    "keywords": ["symfony2", "symfony", "doctrine2", "i18n", "internationalization", "translation", "translatable", "form", "gedmo", "knplabs"],
     "homepage": "https://github.com/a2lix/TranslationFormBundle",
     "license": "MIT",
     "authors": [
@@ -12,9 +12,9 @@
         }
     ],
     "require": {
-        "symfony/form": "^2.3 || ^3.0",
-        "symfony/validator": "^2.3 || ^3.0",
-        "symfony/event-dispatcher": "^2.3 || ^3.0"
+        "symfony/form": "~2.8|~3.0|~4.0",
+        "symfony/validator": "~2.8|~3.0|~4.0",
+        "symfony/event-dispatcher": "~2.8|~3.0|~4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.1",
