@@ -18,6 +18,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
 
     public function testSubmitValidDefaultConfigurationData()
     {
+        if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
+            $formType = 'Symfony\Component\Form\Extension\Core\Type\FormType';
+            $translationsType = 'A2lix\TranslationFormBundle\Form\Type\TranslationsType';
+            $submitType = 'Symfony\Component\Form\Extension\Core\Type\SubmitType';
+        } else {
+            $formType = 'form';
+            $translationsType = 'a2lix_translations';
+            $submitType = 'submit';
+        }
+
         $formData = array(
             'url' => 'a2lix.fr',
             'translations' => array(
@@ -58,10 +68,10 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         //
         // Creation
         //
-        $form = $this->factory->createBuilder('form', new Product())
+        $form = $this->factory->createBuilder($formType, new Product())
             ->add('url')
-            ->add('translations', 'a2lix_translations')
-            ->add('save', 'submit')
+            ->add('translations', $translationsType)
+            ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
 
@@ -91,10 +101,10 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         $product->getTranslations()['fr']->setTitle('title frrrrrr');
         $product->getTranslations()['en']->setTitle('desc ennnnnnn');
 
-        $form = $this->factory->createBuilder('form', $product)
+        $form = $this->factory->createBuilder($formType, $product)
             ->add('url')
-            ->add('translations', 'a2lix_translations')
-            ->add('save', 'submit')
+            ->add('translations', $translationsType)
+            ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
 
@@ -113,6 +123,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
 
     public function testSubmitValidConfiguration1Data()
     {
+        if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
+            $formType = 'Symfony\Component\Form\Extension\Core\Type\FormType';
+            $translationsType = 'A2lix\TranslationFormBundle\Form\Type\TranslationsType';
+            $submitType = 'Symfony\Component\Form\Extension\Core\Type\SubmitType';
+        } else {
+            $formType = 'form';
+            $translationsType = 'a2lix_translations';
+            $submitType = 'submit';
+        }
+
         $formData = array(
             'url' => 'a2lix.fr',
             'translations' => array(
@@ -144,12 +164,12 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         //
         // Creation
         //
-        $form = $this->factory->createBuilder('form', new Product())
+        $form = $this->factory->createBuilder($formType, new Product())
             ->add('url')
-            ->add('translations', 'a2lix_translations', array(
+            ->add('translations', $translationsType, array(
                 'locales' => array('es', 'fr', 'de')
             ))
-            ->add('save', 'submit')
+            ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
 
@@ -182,12 +202,12 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
                              ->setDescription('desc de');
         $product->addTranslation($productTranslationDe);
 
-        $form = $this->factory->createBuilder('form', $product)
+        $form = $this->factory->createBuilder($formType, $product)
             ->add('url')
-            ->add('translations', 'a2lix_translations', array(
+            ->add('translations', $translationsType, array(
                 'locales' => array('es', 'fr', 'de')
             ))
-            ->add('save', 'submit')
+            ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
 
@@ -206,6 +226,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
 
     public function testSubmitValidConfiguration2Data()
     {
+        if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
+            $formType = 'Symfony\Component\Form\Extension\Core\Type\FormType';
+            $translationsType = 'A2lix\TranslationFormBundle\Form\Type\TranslationsType';
+            $submitType = 'Symfony\Component\Form\Extension\Core\Type\SubmitType';
+        } else {
+            $formType = 'form';
+            $translationsType = 'a2lix_translations';
+            $submitType = 'submit';
+        }
+
         $formData = array(
             'url' => 'a2lix.fr',
             'translations' => array(
@@ -240,9 +270,9 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         //
         // Creation
         //
-        $form = $this->factory->createBuilder('form', new Product())
+        $form = $this->factory->createBuilder($formType, new Product())
             ->add('url')
-            ->add('translations', 'a2lix_translations', array(
+            ->add('translations', $translationsType, array(
                 'fields' => array(
                     'title' => array(
                         'label' => 'name'
@@ -252,7 +282,7 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
                     )
                 )
             ))
-            ->add('save', 'submit')
+            ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
 
@@ -283,16 +313,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         $product->getTranslations()['en']->setDescription('desc en');
         $product->getTranslations()['de']->setDescription('desc de');
 
-        $form = $this->factory->createBuilder('form', $product)
+        $form = $this->factory->createBuilder($formType, $product)
             ->add('url')
-            ->add('translations', 'a2lix_translations', array(
+            ->add('translations', $translationsType, array(
                 'fields' => array(
                     'title' => array(
                         'label' => 'name'
                     )
                 )
             ))
-            ->add('save', 'submit')
+            ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
 

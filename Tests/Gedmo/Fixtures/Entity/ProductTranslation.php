@@ -3,7 +3,7 @@
 namespace A2lix\TranslationFormBundle\Tests\Gedmo\Fixtures\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Translatable\Entity\MappedSuperclass\AbstractTranslation;
+use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    @ORM\UniqueConstraint(name="lookup_unique_idx", columns={"locale", "object_id"})
  * })
  */
-class ProductTranslation extends AbstractTranslation
+class ProductTranslation extends AbstractPersonalTranslation
 {
    /**
     * @ORM\ManyToOne(targetEntity="Product", inversedBy="translations")

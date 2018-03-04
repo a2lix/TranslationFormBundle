@@ -24,12 +24,12 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $emRegistry;
-    
+
     protected function getUsedEntityFixtures()
     {
         return array();
     }
-    
+
     protected function setUp()
     {
         if (!class_exists('Symfony\Component\Form\Form')) {
@@ -50,9 +50,9 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
 
         $this->em = DoctrineTestHelper::createTestEntityManager();
         $this->emRegistry = $this->getEmRegistry($this->em);
-        
+
         $schemaTool = new SchemaTool($this->em);
-        
+
         foreach ($this->getUsedEntityFixtures() as $class) {
             $classes[] = $this->em->getClassMetadata($class);
         }
@@ -66,39 +66,65 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
             $schemaTool->createSchema($classes);
         } catch (\Exception $e) {
         }
-        
-        
+
+
         parent::setUp();
-        
+
         $formExtensions = array(new DoctrineOrmExtension($this->emRegistry));
-        $formRegistry = new FormRegistry($formExtensions, $this->getMock('Symfony\Component\Form\ResolvedFormTypeFactory'));
-        
+        $resolvedFormTypeFactory = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $formRegistry = new FormRegistry(
+            $formExtensions,
+            $resolvedFormTypeFactory
+        );
+
         $translationForm = new \A2lix\TranslationFormBundle\TranslationForm\TranslationForm($formRegistry, $this->emRegistry);
         $translationsListener = new \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener($translationForm);
         $translationsFormsListener = new \A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener();
-        
+
+        if (interface_exists('Symfony\Component\Validator\Validator\ValidatorInterface')) {
+            $validator = $this->getMockBuilder('Symfony\Component\Validator\Validator\ValidatorInterface')
+                 ->disableOriginalConstructor()
+                 ->getMock();
+        } else {
+            $validator = $this->getMockBuilder('Symfony\Component\Validator\ValidatorInterface')
+                 ->disableOriginalConstructor()
+                 ->getMock();
+        }
+
+        $validator->expects($this->any())
+            ->method('validate')
+            ->will($this->returnValue(array()));
+
         $this->factory = Forms::createFormFactoryBuilder()
             ->addExtensions(
                 $formExtensions
             )
-            ->addTypeExtension(
-                new FormTypeValidatorExtension(
-                    $this->getMock('Symfony\Component\Validator\ValidatorInterface')
-                )
-            )
+            ->addTypeExtension(new FormTypeValidatorExtension($validator))
             ->addTypeGuesser(
                 $this->getMockBuilder('Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser')
                      ->disableOriginalConstructor()
                      ->getMock()
             )
             ->addTypes(array(
-                new \A2lix\TranslationFormBundle\Form\Type\TranslationsType($translationsListener, array('fr','en','de'), 'en'),
+                new \A2lix\TranslationFormBundle\Form\Type\TranslationsType(
+                    $translationsListener,
+                    new \A2lix\TranslationFormBundle\Locale\DefaultProvider(array('fr','en','de'), 'en')
+                ),
                 new \A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType(),
-                new \A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType($translationForm, $translationsFormsListener, array('fr','en','de'), 'en'),
+                new \A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType(
+                    $translationForm,
+                    $translationsFormsListener,
+                    new \A2lix\TranslationFormBundle\Locale\DefaultProvider(array('fr','en','de'), 'en')
+                ),
             ))
             ->getFormFactory();
 
-        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->builder = new FormBuilder(null, null, $this->dispatcher, $this->factory);
     }
 
@@ -123,12 +149,14 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
 
     protected function getEmRegistry($em)
     {
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $container->expects($this->any())
                   ->method('get')
                   ->with($this->equalTo('doctrine.orm.default_entity_manager'))
                   ->will($this->returnValue($em));
-        
+
         return new Registry($container, array(), array('default' => 'doctrine.orm.default_entity_manager'), 'default', 'default');
-    }    
+    }
 }
