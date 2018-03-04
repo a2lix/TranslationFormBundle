@@ -43,7 +43,8 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
 
         // set expectations for constructor calls
         $this->setExpectedException(
-            'InvalidArgumentException', 'Default locale should be contained in locales'
+            'InvalidArgumentException',
+            'Default locale `de` not found within the configured locales `[es,en]`'
         );
 
         // now call the constructor
@@ -94,4 +95,4 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(array_diff($expected, $requiredLocales), array_diff($requiredLocales, $expected));
     }
-} 
+}
