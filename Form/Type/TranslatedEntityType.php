@@ -36,7 +36,7 @@ class TranslatedEntityType extends AbstractType
                     ->select('e, t')
                     ->join('e.translations', 't');
             },
-            'property' => function(Options $options) {
+            'choice_label' => function(Options $options) {
                 if (null === $this->request) {
                     throw new \Exception('Error while getting request');
                 }
