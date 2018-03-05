@@ -1,17 +1,25 @@
 <?php
 
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Tests;
 
-use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
-use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Component\Form\Forms;
+use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
+use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
+use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormRegistry;
-use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
-
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\Test\TypeTestCase;
 
 abstract class TranslationsTypeTestCase extends TypeTestCase
 {
@@ -24,11 +32,6 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $emRegistry;
-
-    protected function getUsedEntityFixtures()
-    {
-        return array();
-    }
 
     protected function setUp()
     {
@@ -66,7 +69,6 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
             $schemaTool->createSchema($classes);
         } catch (\Exception $e) {
         }
-
 
         parent::setUp();
 
@@ -111,13 +113,13 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
             ->addTypes(array(
                 new \A2lix\TranslationFormBundle\Form\Type\TranslationsType(
                     $translationsListener,
-                    new \A2lix\TranslationFormBundle\Locale\DefaultProvider(array('fr','en','de'), 'en')
+                    new \A2lix\TranslationFormBundle\Locale\DefaultProvider(array('fr', 'en', 'de'), 'en')
                 ),
                 new \A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType(),
                 new \A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType(
                     $translationForm,
                     $translationsFormsListener,
-                    new \A2lix\TranslationFormBundle\Locale\DefaultProvider(array('fr','en','de'), 'en')
+                    new \A2lix\TranslationFormBundle\Locale\DefaultProvider(array('fr', 'en', 'de'), 'en')
                 ),
             ))
             ->getFormFactory();
@@ -134,6 +136,11 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
 
         $this->em = null;
         $this->emRegistry = null;
+    }
+
+    protected function getUsedEntityFixtures()
+    {
+        return array();
     }
 
     protected function persist(array $entities)

@@ -1,8 +1,9 @@
 <?php
-/**
- * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
- * @date 07/11/14
- * @copyright Copyright (c) Reiss Clothing Ltd.
+
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,7 +12,6 @@
 namespace A2lix\TranslationFormBundle\Tests\Locale;
 
 use A2lix\TranslationFormBundle\Locale\DefaultProvider;
-
 
 /**
  * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>

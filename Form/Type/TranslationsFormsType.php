@@ -1,16 +1,25 @@
 <?php
 
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use A2lix\TranslationFormBundle\TranslationForm\TranslationForm,
-    A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener,
-    A2lix\TranslationFormBundle\Locale\LocaleProviderInterface,
-    Symfony\Component\Form\FormView,
-    Symfony\Component\Form\AbstractType,
-    Symfony\Component\Form\FormInterface,
-    Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    Symfony\Component\OptionsResolver\OptionsResolver;
+use A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener;
+use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * @author David ALLIX
@@ -23,12 +32,11 @@ class TranslationsFormsType extends AbstractType
     private $localeProvider;
 
     /**
-     *
      * @param \A2lix\TranslationFormBundle\TranslationForm\TranslationForm              $translationForm
      * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener $translationsListener
      * @param \A2lix\TranslationFormBundle\Locale\LocaleProviderInterface               $localeProvider
      */
-    public function __construct(TranslationForm $translationForm, TranslationsFormsListener $translationsListener,  LocaleProviderInterface $localeProvider)
+    public function __construct(TranslationForm $translationForm, TranslationsFormsListener $translationsListener, LocaleProviderInterface $localeProvider)
     {
         $this->translationForm = $translationForm;
         $this->translationsListener = $translationsListener;
@@ -36,9 +44,8 @@ class TranslationsFormsType extends AbstractType
     }
 
     /**
-     * 
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array $options
+     * @param array                                        $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -54,12 +61,11 @@ class TranslationsFormsType extends AbstractType
             }
         }
     }
-    
+
     /**
-     * 
-     * @param \Symfony\Component\Form\FormView $view
+     * @param \Symfony\Component\Form\FormView      $view
      * @param \Symfony\Component\Form\FormInterface $form
-     * @param array $options
+     * @param array                                 $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -89,7 +95,6 @@ class TranslationsFormsType extends AbstractType
     {
         $this->configureOptions($resolver);
     }
-
 
     // BC for SF < 3.0
     public function getName()

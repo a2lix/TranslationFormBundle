@@ -1,12 +1,21 @@
 <?php
 
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Form\EventListener;
 
-use A2lix\TranslationFormBundle\Util\LegacyFormHelper,
-    A2lix\TranslationFormBundle\TranslationForm\TranslationForm,
-    Symfony\Component\Form\FormEvent,
-    Symfony\Component\Form\FormEvents,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
+use A2lix\TranslationFormBundle\Util\LegacyFormHelper;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * @author David ALLIX
@@ -16,7 +25,6 @@ class TranslationsListener implements EventSubscriberInterface
     private $translationForm;
 
     /**
-     *
      * @param \A2lix\TranslationFormBundle\TranslationForm\TranslationForm $translationForm
      */
     public function __construct(TranslationForm $translationForm)
@@ -25,13 +33,12 @@ class TranslationsListener implements EventSubscriberInterface
     }
 
     /**
-     *
      * @param \Symfony\Component\Form\FormEvent $event
      */
     public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
-        
+
         $translatableClass = $form->getParent()->getConfig()->getDataClass();
         $translationClass = $this->getTranslationClass($translatableClass);
 
@@ -47,16 +54,15 @@ class TranslationsListener implements EventSubscriberInterface
                         array(
                             'data_class' => $translationClass,
                             'fields' => $fieldsOptions[$locale],
-                            'required' => in_array($locale, $formOptions['required_locales'])
+                            'required' => in_array($locale, $formOptions['required_locales']),
                         )
                     );
                 }
             }
         }
     }
-    
+
     /**
-     *
      * @param \Symfony\Component\Form\FormEvent $event
      */
     public function submit(FormEvent $event)
@@ -67,7 +73,6 @@ class TranslationsListener implements EventSubscriberInterface
             // Remove useless Translation object
             if (!$translation) {
                 $data->removeElement($translation);
-                
             } else {
                 $translation->setLocale($locale);
             }
@@ -81,22 +86,21 @@ class TranslationsListener implements EventSubscriberInterface
             FormEvents::SUBMIT => 'submit',
         );
     }
-    
+
     /**
-     *
      * @param string $translatableClass
      */
     private function getTranslationClass($translatableClass)
     {
         // Knp
-        if (method_exists($translatableClass, "getTranslationEntityClass")) {
+        if (method_exists($translatableClass, 'getTranslationEntityClass')) {
             return $translatableClass::getTranslationEntityClass();
-        
-        // Gedmo    
-        } elseif (method_exists($translatableClass, "getTranslationClass")) {
+
+        // Gedmo
+        } elseif (method_exists($translatableClass, 'getTranslationClass')) {
             return $translatableClass::getTranslationClass();
         }
-        
-        return $translatableClass .'Translation';
+
+        return $translatableClass.'Translation';
     }
 }
