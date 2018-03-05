@@ -1,23 +1,31 @@
 <?php
 
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType,
-    Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface,
-    Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Translations fields
+ * Translations fields.
  *
  * @author David ALLIX
  */
 class TranslationsFieldsType extends AbstractType
 {
     /**
-     *
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array $options
+     * @param array                                        $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
