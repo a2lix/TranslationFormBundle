@@ -2,13 +2,28 @@
     "name": "a2lix/translation-form-bundle",
     "type": "symfony-bundle",
     "description": "Translate your doctrine objects easily with some helps",
-    "keywords": ["symfony2", "doctrine2", "i18n", "internationalization", "translation", "translatable", "form", "gedmo", "knplabs"],
+    "keywords": [
+        "symfony",
+        "doctrine2",
+        "i18n",
+        "internationalization",
+        "translation",
+        "translatable",
+        "form",
+        "gedmo",
+        "knplabs",
+        "prezent"
+    ],
     "homepage": "https://github.com/a2lix/TranslationFormBundle",
     "license": "MIT",
     "authors": [
         {
             "name": "David ALLIX",
             "homepage": "http://a2lix.fr"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/a2lix/TranslationFormBundle/contributors"
         }
     ],
     "require": {
@@ -37,13 +52,18 @@
         "knplabs/doctrine-behaviors": "For Knp strategy",
         "prezent/doctrine-translatable-bundle": "For Prezent strategy"
     },
-    "autoload": {
-        "psr-4": { "A2lix\\TranslationFormBundle\\": "" }
+    "config": {
+        "sort-packages": true
     },
-    "prefer-stable": true,
     "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "A2lix\\TranslationFormBundle\\": ""
+        }
+    },
+    "prefer-stable": true
 }
