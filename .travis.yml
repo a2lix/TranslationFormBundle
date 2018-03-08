@@ -42,13 +42,15 @@ matrix:
     - php: '7.2'
       env: SYMFONY=3.4.*
     - php: '7.2'
-      env: SYMFONY='dev-master as 3.4.x-dev'
+      env: SYMFONY=4.0.*
+    - php: '7.2'
+      env: SYMFONY='dev-master as 4.1.x-dev'
     - php: '7.2'
       env: SYMFONY_DEPRECATIONS_HELPER=0
   allow_failures:
     - php: nightly
     - env: SYMFONY_DEPRECATIONS_HELPER=0
-    - env: SYMFONY='dev-master as 3.4.x-dev'
+    - env: SYMFONY='dev-master as 4.1.x-dev'
 
 before_install:
   - echo memory_limit = -1 >> $HOME/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
