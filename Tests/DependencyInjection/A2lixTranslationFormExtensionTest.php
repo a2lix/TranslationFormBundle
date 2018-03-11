@@ -20,8 +20,8 @@ class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
     {
         $this->load();
         $this->assertContainerBuilderHasParameter('a2lix_translation_form.locale_provider', 'default');
-        $this->assertContainerBuilderHasParameter('a2lix_translation_form.locales', array('es', 'en'));
-        $this->assertContainerBuilderHasParameter('a2lix_translation_form.required_locales', array());
+        $this->assertContainerBuilderHasParameter('a2lix_translation_form.locales', ['es', 'en']);
+        $this->assertContainerBuilderHasParameter('a2lix_translation_form.required_locales', []);
         $this->assertContainerBuilderHasParameter('a2lix_translation_form.default_locale', 'es');
         $this->assertContainerBuilderHasParameter(
             'a2lix_translation_form.templating',
@@ -31,16 +31,16 @@ class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
 
     protected function getContainerExtensions()
     {
-        return array(
+        return [
             new A2lixTranslationFormExtension(),
-        );
+        ];
     }
 
     protected function getMinimalConfiguration()
     {
-        return array(
-            'locales' => array('es', 'en'),
+        return [
+            'locales' => ['es', 'en'],
             'default_locale' => 'es',
-        );
+        ];
     }
 }

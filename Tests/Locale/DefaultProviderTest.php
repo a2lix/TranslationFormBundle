@@ -41,7 +41,7 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
         // set expectations for constructor calls
         $this->setExpectedException(
             'InvalidArgumentException', 'Default locale `de` not found within the configured locales `[es,en]`.'
-                . ' Perhaps you need to add it to your `a2lix_translation_form.locales` bundle configuration?'
+                .' Perhaps you need to add it to your `a2lix_translation_form.locales` bundle configuration?'
         );
 
         // now call the constructor

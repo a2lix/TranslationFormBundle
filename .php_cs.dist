@@ -13,7 +13,7 @@ $rules = [
     '@Symfony' => true,
     '@Symfony:risky' => true,
     'array_syntax' => [
-        'syntax' => 'long',
+        'syntax' => 'short',
     ],
     'combine_consecutive_issets' => true,
     'combine_consecutive_unsets' => true,

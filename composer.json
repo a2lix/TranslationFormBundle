@@ -50,8 +50,8 @@
         "symfony/validator": "^2.8 || ^3.0 || ^4.0"
     },
     "suggest": {
-        "knplabs/doctrine-behaviors": "For Knp strategy",
         "a2lix/i18n-doctrine-bundle": "For A2lix strategy",
+        "knplabs/doctrine-behaviors": "For Knp strategy",
         "prezent/doctrine-translatable-bundle": "For Prezent strategy"
     },
     "config": {

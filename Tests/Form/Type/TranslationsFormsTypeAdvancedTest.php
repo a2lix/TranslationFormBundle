@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of A2lix projects.
+ * This file is part of the TranslationFormBundle package.
  *
- * (c) David ALLIX
+ * (c) David ALLIX <http://a2lix.fr>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,17 +24,6 @@ class TranslationsFormsTypeAdvancedTest extends TypeTestCase
     protected $locales = ['en', 'fr', 'de'];
     protected $defaultLocale = 'en';
     protected $requiredLocales = ['en', 'fr'];
-
-    protected function getExtensions()
-    {
-        $translationsFormsType = $this->getConfiguredTranslationsFormsType($this->locales, $this->defaultLocale, $this->requiredLocales);
-        $autoFormType = $this->getConfiguredAutoFormType();
-
-        return [new PreloadedExtension([
-            $translationsFormsType,
-            $autoFormType,
-        ], [])];
-    }
 
     public function testEmptyFormOverrideLocales()
     {
@@ -63,5 +52,16 @@ class TranslationsFormsTypeAdvancedTest extends TypeTestCase
         $this->assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
         $this->assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
         $this->assertEquals(['url', 'description'], array_keys($mediasForm['es']->all()), 'Fields should matches MediaLocalizeType fields');
+    }
+
+    protected function getExtensions()
+    {
+        $translationsFormsType = $this->getConfiguredTranslationsFormsType($this->locales, $this->defaultLocale, $this->requiredLocales);
+        $autoFormType = $this->getConfiguredAutoFormType();
+
+        return [new PreloadedExtension([
+            $translationsFormsType,
+            $autoFormType,
+        ], [])];
     }
 }

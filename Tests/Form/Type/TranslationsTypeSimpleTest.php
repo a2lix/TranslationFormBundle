@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of A2lix projects.
+ * This file is part of the TranslationFormBundle package.
  *
- * (c) David ALLIX
+ * (c) David ALLIX <http://a2lix.fr>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,17 +24,6 @@ class TranslationsTypeSimpleTest extends TypeTestCase
     protected $locales = ['en', 'fr', 'de'];
     protected $defaultLocale = 'en';
     protected $requiredLocales = ['en', 'fr'];
-
-    protected function getExtensions()
-    {
-        $translationsType = $this->getConfiguredTranslationsType($this->locales, $this->defaultLocale, $this->requiredLocales);
-        $autoFormType = $this->getConfiguredAutoFormType();
-
-        return [new PreloadedExtension([
-            $translationsType,
-            $autoFormType,
-        ], [])];
-    }
 
     public function testEmptyForm()
     {
@@ -152,5 +141,16 @@ class TranslationsTypeSimpleTest extends TypeTestCase
         foreach (array_keys($formData) as $key) {
             $this->assertArrayHasKey($key, $children);
         }
+    }
+
+    protected function getExtensions()
+    {
+        $translationsType = $this->getConfiguredTranslationsType($this->locales, $this->defaultLocale, $this->requiredLocales);
+        $autoFormType = $this->getConfiguredAutoFormType();
+
+        return [new PreloadedExtension([
+            $translationsType,
+            $autoFormType,
+        ], [])];
     }
 }

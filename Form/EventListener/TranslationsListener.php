@@ -84,30 +84,6 @@ class TranslationsListener implements EventSubscriberInterface
 
     /**
      * @param FormInterface $form
-     *
-     * @return string
-     */
-    private function getTranslationClass(FormInterface $form)
-    {
-        do {
-            $translatableClass = $form->getConfig()->getDataClass();
-        } while ((null === $translatableClass) && $form->getConfig()->getVirtual() && ($form = $form->getParent()));
-
-        // Knp
-        if (method_exists($translatableClass, 'getTranslationEntityClass')) {
-            return $translatableClass::getTranslationEntityClass();
-        }
-
-        // Gedmo
-        if (method_exists($translatableClass, 'getTranslationClass')) {
-            return $translatableClass::getTranslationClass();
-        }
-
-        return $translatableClass . 'Translation';
-    }
-
-    /**
-     * @param FormInterface $form
      * @param array         $formOptions
      *
      * @return array
@@ -140,5 +116,29 @@ class TranslationsListener implements EventSubscriberInterface
         }
 
         return $fieldsOptions;
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return string
+     */
+    private function getTranslationClass(FormInterface $form)
+    {
+        do {
+            $translatableClass = $form->getConfig()->getDataClass();
+        } while ((null === $translatableClass) && $form->getConfig()->getVirtual() && ($form = $form->getParent()));
+
+        // Knp
+        if (method_exists($translatableClass, 'getTranslationEntityClass')) {
+            return $translatableClass::getTranslationEntityClass();
+        }
+
+        // Gedmo
+        if (method_exists($translatableClass, 'getTranslationClass')) {
+            return $translatableClass::getTranslationClass();
+        }
+
+        return $translatableClass.'Translation';
     }
 }

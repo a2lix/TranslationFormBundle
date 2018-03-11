@@ -23,7 +23,6 @@ class LocaleProviderPass implements CompilerPassInterface
     {
         $localeProvider = $container->getParameter('a2lix_translation_form.locale_provider');
 
-
         if ('default' !== $localeProvider) {
             $container->setAlias('a2lix_translation_form.default.service.locale_provider', $localeProvider);
 
