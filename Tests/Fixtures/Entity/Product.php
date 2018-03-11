@@ -11,6 +11,7 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,8 +53,8 @@ class Product
 
     public function __construct()
     {
-        $this->medias = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->medias = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     public function getId()
