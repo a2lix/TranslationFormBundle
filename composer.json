@@ -42,6 +42,7 @@
         "doctrine/orm": "^2.4",
         "gedmo/doctrine-extensions": "^2.4",
         "knplabs/doctrine-behaviors": "^1.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^0.7 || ^1.2",
         "symfony/doctrine-bridge": "^2.3.5 || ^3.0 || ^4.0",
         "symfony/phpunit-bridge": "^4.0",
         "symfony/validator": "^2.3 || ^3.0 || ^4.0"
