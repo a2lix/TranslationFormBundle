@@ -13,12 +13,12 @@
 
         <parameter key="a2lix_translation_form.default.listener.translations.class">A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener</parameter>
         <parameter key="a2lix_translation_form.default.listener.translationsForms.class">A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener</parameter>
-        
+
         <parameter key="a2lix_translation_form.default.type.translations.class">A2lix\TranslationFormBundle\Form\Type\TranslationsType</parameter>
         <parameter key="a2lix_translation_form.default.type.translationsFields.class">A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType</parameter>
         <parameter key="a2lix_translation_form.default.type.translationsForms.class">A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType</parameter>
         <parameter key="a2lix_translation_form.default.type.translationsLocalesSelector.class">A2lix\TranslationFormBundle\Form\Type\TranslationsLocalesSelectorType</parameter>
-        <parameter key="a2lix_translation_form.default.type.translatedEntity.class">A2lix\TranslationFormBundle\Form\Type\TranslatedEntityType</parameter>   
+        <parameter key="a2lix_translation_form.default.type.translatedEntity.class">A2lix\TranslationFormBundle\Form\Type\TranslatedEntityType</parameter>
     </parameters>
 
     <services>
@@ -36,7 +36,7 @@
         </service>
         <service id="a2lix_translation_form.default.listener.translationsForms" class="%a2lix_translation_form.default.listener.translationsForms.class%">
         </service>
-        
+
         <!-- Form Types -->
         <service id="a2lix_translation_form.default.type.translations" class="%a2lix_translation_form.default.type.translations.class%">
             <argument type="service" id="a2lix_translation_form.default.listener.translations" />
@@ -58,9 +58,9 @@
         </service>
         <service id="a2lix_translation_form.default.type.translatedEntity" class="%a2lix_translation_form.default.type.translatedEntity.class%">
             <call method="setRequest">
-                <argument type="service" id="request" on-invalid="null" strict="false" />
+                <argument type="service" id="request" on-invalid="null" />
             </call>
             <tag name="form.type" alias="a2lix_translatedEntity" />
-        </service>       
+        </service>
     </services>
 </container>
