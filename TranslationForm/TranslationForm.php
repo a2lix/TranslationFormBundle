@@ -25,8 +25,8 @@ class TranslationForm implements TranslationFormInterface
     private $managerRegistry;
 
     /**
-     * @param \Symfony\Component\Form\FormRegistry         $formRegistry
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $managerRegistry
+     * @param FormRegistry    $formRegistry
+     * @param ManagerRegistry $managerRegistry
      */
     public function __construct(FormRegistry $formRegistry, ManagerRegistry $managerRegistry)
     {
@@ -39,10 +39,10 @@ class TranslationForm implements TranslationFormInterface
      */
     public function getFieldsOptions($class, $options)
     {
-        $fieldsOptions = array();
+        $fieldsOptions = [];
 
         foreach ($this->getFieldsList($options, $class) as $field) {
-            $fieldOptions = isset($options['fields'][$field]) ? $options['fields'][$field] : array();
+            $fieldOptions = isset($options['fields'][$field]) ? $options['fields'][$field] : [];
 
             if (!isset($fieldOptions['display']) || $fieldOptions['display']) {
                 $fieldOptions = $this->guessMissingFieldOptions($this->typeGuesser, $class, $field, $fieldOptions);
@@ -53,7 +53,7 @@ class TranslationForm implements TranslationFormInterface
                     unset($fieldOptions['locale_options']);
 
                     foreach ($options['locales'] as $locale) {
-                        $localeFieldOptions = isset($localesFieldOptions[$locale]) ? $localesFieldOptions[$locale] : array();
+                        $localeFieldOptions = isset($localesFieldOptions[$locale]) ? $localesFieldOptions[$locale] : [];
                         if (!isset($localeFieldOptions['display']) || $localeFieldOptions['display']) {
                             $fieldsOptions[$locale][$field] = $localeFieldOptions + $fieldOptions;
                         }
@@ -76,7 +76,7 @@ class TranslationForm implements TranslationFormInterface
      */
     public function getFormsOptions($options)
     {
-        $formsOptions = array();
+        $formsOptions = [];
 
         // Current options
         $formOptions = $options['form_options'];
@@ -87,7 +87,7 @@ class TranslationForm implements TranslationFormInterface
             unset($formOptions['locale_options']);
 
             foreach ($options['locales'] as $locale) {
-                $localeFormOptions = isset($localesFormOptions[$locale]) ? $localesFormOptions[$locale] : array();
+                $localeFormOptions = isset($localesFormOptions[$locale]) ? $localesFormOptions[$locale] : [];
                 if (!isset($localeFormOptions['display']) || $localeFormOptions['display']) {
                     $formsOptions[$locale] = $localeFormOptions + $formOptions;
                 }
@@ -137,16 +137,16 @@ class TranslationForm implements TranslationFormInterface
      *
      * @return array
      */
-    protected function getTranslationFields($translationClass, array $exclude = array())
+    protected function getTranslationFields($translationClass, array $exclude = [])
     {
-        $fields = array();
+        $fields = [];
         $translationClass = ClassUtils::getRealClass($translationClass);
 
         if ($manager = $this->managerRegistry->getManagerForClass($translationClass)) {
             $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
 
             foreach ($metadataClass->fieldMappings as $fieldMapping) {
-                if (!in_array($fieldMapping['fieldName'], array('id', 'locale')) && !in_array($fieldMapping['fieldName'], $exclude)) {
+                if (!in_array($fieldMapping['fieldName'], ['id', 'locale']) && !in_array($fieldMapping['fieldName'], $exclude)) {
                     $fields[] = $fieldMapping['fieldName'];
                 }
             }

@@ -32,8 +32,8 @@ class TranslationsType extends AbstractType
     private $localeProvider;
 
     /**
-     * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener $translationsListener
-     * @param \A2lix\TranslationFormBundle\Locale\LocaleProviderInterface          $localeProvider
+     * @param TranslationsListener    $translationsListener
+     * @param LocaleProviderInterface $localeProvider
      */
     public function __construct(TranslationsListener $translationsListener, LocaleProviderInterface $localeProvider)
     {
@@ -42,8 +42,8 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array                                        $options
+     * @param FormBuilderInterface $builder
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -51,9 +51,9 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     * @param \Symfony\Component\Form\FormView      $view
-     * @param \Symfony\Component\Form\FormInterface $form
-     * @param array                                 $options
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -66,7 +66,7 @@ class TranslationsType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'by_reference' => false,
             'empty_data' => function (FormInterface $form) {
                 return new \Doctrine\Common\Collections\ArrayCollection();
@@ -74,9 +74,9 @@ class TranslationsType extends AbstractType
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
-            'fields' => array(),
-            'exclude_fields' => array(),
-        ));
+            'fields' => [],
+            'exclude_fields' => [],
+        ]);
     }
 
     // BC for SF < 2.7

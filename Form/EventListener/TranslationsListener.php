@@ -25,7 +25,7 @@ class TranslationsListener implements EventSubscriberInterface
     private $translationForm;
 
     /**
-     * @param \A2lix\TranslationFormBundle\TranslationForm\TranslationForm $translationForm
+     * @param TranslationForm $translationForm
      */
     public function __construct(TranslationForm $translationForm)
     {
@@ -33,7 +33,7 @@ class TranslationsListener implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      */
     public function preSetData(FormEvent $event)
     {
@@ -51,11 +51,11 @@ class TranslationsListener implements EventSubscriberInterface
                     $form->add(
                         $locale,
                         LegacyFormHelper::getType('A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType'),
-                        array(
+                        [
                             'data_class' => $translationClass,
                             'fields' => $fieldsOptions[$locale],
                             'required' => in_array($locale, $formOptions['required_locales']),
-                        )
+                        ]
                     );
                 }
             }
@@ -63,7 +63,7 @@ class TranslationsListener implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      */
     public function submit(FormEvent $event)
     {
@@ -81,10 +81,10 @@ class TranslationsListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FormEvents::PRE_SET_DATA => 'preSetData',
             FormEvents::SUBMIT => 'submit',
-        );
+        ];
     }
 
     /**

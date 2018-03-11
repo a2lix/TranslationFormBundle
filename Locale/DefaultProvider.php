@@ -42,7 +42,7 @@ class DefaultProvider implements LocaleProviderInterface
      * @param       $defaultLocale
      * @param array $requiredLocales
      */
-    public function __construct(array $locales, $defaultLocale, array $requiredLocales = array())
+    public function __construct(array $locales, $defaultLocale, array $requiredLocales = [])
     {
         if (!in_array($defaultLocale, $locales)) {
             if (count($locales) > 0) {

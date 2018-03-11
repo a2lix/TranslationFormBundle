@@ -24,8 +24,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class TranslationsFieldsType extends AbstractType
 {
     /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array                                        $options
+     * @param FormBuilderInterface $builder
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -42,9 +42,9 @@ class TranslationsFieldsType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'fields' => array(),
-        ));
+        $resolver->setDefaults([
+            'fields' => [],
+        ]);
     }
 
     // BC for SF < 2.7

@@ -11,6 +11,7 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Gedmo\Fixtures\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -45,7 +46,6 @@ class Product
     protected $url;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Media", mappedBy="product", indexBy="locale", cascade={"all"}, orphanRemoval=true)
      * @Assert\Valid
      */
@@ -59,8 +59,8 @@ class Product
 
     public function __construct()
     {
-        $this->medias = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->medias = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     public function getId()

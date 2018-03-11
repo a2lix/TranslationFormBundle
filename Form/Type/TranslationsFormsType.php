@@ -32,20 +32,23 @@ class TranslationsFormsType extends AbstractType
     private $localeProvider;
 
     /**
-     * @param \A2lix\TranslationFormBundle\TranslationForm\TranslationForm              $translationForm
-     * @param \A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener $translationsListener
-     * @param \A2lix\TranslationFormBundle\Locale\LocaleProviderInterface               $localeProvider
+     * @param TranslationForm           $translationForm
+     * @param TranslationsFormsListener $translationsListener
+     * @param LocaleProviderInterface   $localeProvider
      */
-    public function __construct(TranslationForm $translationForm, TranslationsFormsListener $translationsListener, LocaleProviderInterface $localeProvider)
-    {
+    public function __construct(
+        TranslationForm $translationForm,
+        TranslationsFormsListener $translationsListener,
+        LocaleProviderInterface $localeProvider
+    ) {
         $this->translationForm = $translationForm;
         $this->translationsListener = $translationsListener;
         $this->localeProvider = $localeProvider;
     }
 
     /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array                                        $options
+     * @param FormBuilderInterface $builder
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -56,16 +59,16 @@ class TranslationsFormsType extends AbstractType
         foreach ($options['locales'] as $locale) {
             if (isset($formsOptions[$locale])) {
                 $builder->add($locale, $options['form_type'],
-                    $formsOptions[$locale] + array('required' => in_array($locale, $options['required_locales']))
+                    $formsOptions[$locale] + ['required' => in_array($locale, $options['required_locales'])]
                 );
             }
         }
     }
 
     /**
-     * @param \Symfony\Component\Form\FormView      $view
-     * @param \Symfony\Component\Form\FormInterface $form
-     * @param array                                 $options
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -78,7 +81,7 @@ class TranslationsFormsType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'by_reference' => false,
             'empty_data' => function (FormInterface $form) {
                 return new \Doctrine\Common\Collections\ArrayCollection();
@@ -86,8 +89,8 @@ class TranslationsFormsType extends AbstractType
             'locales' => $this->localeProvider->getLocales(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
             'form_type' => null,
-            'form_options' => array(),
-        ));
+            'form_options' => [],
+        ]);
     }
 
     // BC for SF < 2.7
