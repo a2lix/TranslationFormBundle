@@ -33,15 +33,15 @@ you have a feature idea to propose, feel free to open an issue
 
 This package is available under the [MIT license](LICENSE).
 
-[travis_stable_badge]: https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle.svg?branch=3.x
-[travis_stable_link]: https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle
-[travis_unstable_badge]: https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle.svg?branch=master
-[travis_unstable_link]: https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle
+[travis_stable_badge]: https://travis-ci.org/a2lix/TranslationFormBundle.svg?branch=2.x
+[travis_stable_link]: https://travis-ci.org/a2lix/TranslationFormBundle
+[travis_unstable_badge]: https://travis-ci.org/a2lix/TranslationFormBundle.svg?branch=master
+[travis_unstable_link]: https://travis-ci.org/a2lix/TranslationFormBundle
 
-[coveralls_stable_badge]: https://coveralls.io/repos/github/sonata-project/SonataDoctrineORMAdminBundle/badge.svg?branch=3.x
-[coveralls_stable_link]: https://coveralls.io/github/sonata-project/SonataDoctrineORMAdminBundle?branch=3.x
-[coveralls_unstable_badge]: https://coveralls.io/repos/github/sonata-project/SonataDoctrineORMAdminBundle/badge.svg?branch=master
-[coveralls_unstable_link]: https://coveralls.io/github/sonata-project/SonataDoctrineORMAdminBundle?branch=master
+[coveralls_stable_badge]: https://coveralls.io/repos/github/a2lix/TranslationFormBundle/badge.svg?branch=2.x
+[coveralls_stable_link]: https://coveralls.io/github/a2lix/TranslationFormBundle?branch=2.x
+[coveralls_unstable_badge]: https://coveralls.io/repos/github/a2lix/TranslationFormBundle/badge.svg?branch=master
+[coveralls_unstable_link]: https://coveralls.io/github/a2lix/TranslationFormBundle?branch=master
 
 [scrutinizer_stable_badge]: https://scrutinizer-ci.com/g/a2lix/TranslationFormBundle/badges/quality-score.png?b=2.x
 [scrutinizer_stable_link]: https://scrutinizer-ci.com/g/a2lix/TranslationFormBundle/?branch=2.x
