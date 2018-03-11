@@ -28,7 +28,9 @@ abstract class TypeTestCase extends BaseTypeTestCase
     {
         parent::setUp();
 
-        $validator = $this->getMock('\Symfony\Component\Validator\Validator\ValidatorInterface');
+        $validator = $this->getMockBuilder('\Symfony\Component\Validator\Validator\ValidatorInterface')
+                     ->disableOriginalConstructor()
+                     ->getMock();
         $validator->method('validate')->will($this->returnValue(new ConstraintViolationList()));
 
         $this->factory = Forms::createFormFactoryBuilder()
@@ -43,7 +45,9 @@ abstract class TypeTestCase extends BaseTypeTestCase
             )
             ->getFormFactory();
 
-        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->builder = new FormBuilder(null, null, $this->dispatcher, $this->factory);
     }
 

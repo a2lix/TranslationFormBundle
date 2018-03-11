@@ -27,7 +27,6 @@ class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
             'a2lix_translation_form.templating',
             'A2lixTranslationFormBundle::default.html.twig'
         );
-        $this->assertContainerBuilderHasAlias('a2lix_translation_form.manager_registry', 'doctrine');
     }
 
     protected function getContainerExtensions()
