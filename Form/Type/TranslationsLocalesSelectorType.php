@@ -27,7 +27,7 @@ class TranslationsLocalesSelectorType extends AbstractType
     private $localeProvider;
 
     /**
-     * @param \A2lix\TranslationFormBundle\Locale\LocaleProviderInterface $localeProvider
+     * @param LocaleProviderInterface $localeProvider
      */
     public function __construct(LocaleProviderInterface $localeProvider)
     {
@@ -35,9 +35,9 @@ class TranslationsLocalesSelectorType extends AbstractType
     }
 
     /**
-     * @param \Symfony\Component\Form\FormView      $view
-     * @param \Symfony\Component\Form\FormInterface $form
-     * @param array                                 $options
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -49,14 +49,14 @@ class TranslationsLocalesSelectorType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'choices' => array_combine($this->localeProvider->getLocales(), $this->localeProvider->getLocales()),
             'expanded' => true,
             'multiple' => true,
-            'attr' => array(
+            'attr' => [
                 'class' => 'a2lix_translationsLocalesSelector',
-            ),
-        ));
+            ],
+        ]);
     }
 
     // BC for SF < 2.7

@@ -13,13 +13,13 @@ namespace A2lix\TranslationFormBundle\Util;
 
 final class LegacyFormHelper
 {
-    private static $map = array(
+    private static $map = [
         'A2lix\TranslationFormBundle\Form\Type\TranslationsType' => 'a2lix_translations',
         'A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType' => 'a2lix_translationsFields',
         'A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType' => 'a2lix_translationsForms',
         'A2lix\TranslationFormBundle\Form\Type\TranslatedEntityType' => 'a2lix_translatedEntity',
         'A2lix\TranslationFormBundle\Form\Type\TranslationsLocalesSelectorType' => 'a2lix_translationsLocalesSelector',
-    );
+    ];
 
     private function __construct()
     {

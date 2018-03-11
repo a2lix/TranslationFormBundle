@@ -24,7 +24,7 @@ class LocaleListener implements EventSubscriberInterface
     private $translatableListener;
 
     /**
-     * @param \Gedmo\Translatable\TranslatableListener $translatableListener
+     * @param TranslatableListener $translatableListener
      */
     public function __construct(TranslatableListener $translatableListener)
     {
@@ -32,7 +32,7 @@ class LocaleListener implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     * @param GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -41,8 +41,8 @@ class LocaleListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::REQUEST => array('onKernelRequest', -10),
-        );
+        return [
+            KernelEvents::REQUEST => ['onKernelRequest', -10],
+        ];
     }
 }

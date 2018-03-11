@@ -31,11 +31,11 @@ class LocaleProviderPass implements CompilerPassInterface
 
             $definition = $container->getDefinition('a2lix_translation_form.default.service.parameter_locale_provider');
 
-            $definition->setArguments(array(
+            $definition->setArguments([
                 $container->getParameter('a2lix_translation_form.locales'),
                 $container->getParameter('a2lix_translation_form.default_locale'),
                 $container->getParameter('a2lix_translation_form.required_locales'),
-            ));
+            ]);
         } else {
             $container->setAlias('a2lix_translation_form.default.service.locale_provider', $localeProvider);
         }

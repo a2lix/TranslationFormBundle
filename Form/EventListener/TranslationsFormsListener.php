@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormEvents;
 class TranslationsFormsListener implements EventSubscriberInterface
 {
     /**
-     * @param \Symfony\Component\Form\FormEvent $event
+     * @param FormEvent $event
      */
     public function submit(FormEvent $event)
     {
@@ -39,8 +39,8 @@ class TranslationsFormsListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FormEvents::SUBMIT => 'submit',
-        );
+        ];
     }
 }

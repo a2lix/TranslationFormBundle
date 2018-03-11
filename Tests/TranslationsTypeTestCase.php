@@ -11,6 +11,13 @@
 
 namespace A2lix\TranslationFormBundle\Tests;
 
+use A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener;
+use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
+use A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType;
+use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
+use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
+use A2lix\TranslationFormBundle\Locale\DefaultProvider;
+use A2lix\TranslationFormBundle\TranslationForm\TranslationForm;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
@@ -72,7 +79,7 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
 
         parent::setUp();
 
-        $formExtensions = array(new DoctrineOrmExtension($this->emRegistry));
+        $formExtensions = [new DoctrineOrmExtension($this->emRegistry)];
         $resolvedFormTypeFactory = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -82,9 +89,9 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
             $resolvedFormTypeFactory
         );
 
-        $translationForm = new \A2lix\TranslationFormBundle\TranslationForm\TranslationForm($formRegistry, $this->emRegistry);
-        $translationsListener = new \A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener($translationForm);
-        $translationsFormsListener = new \A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener();
+        $translationForm = new TranslationForm($formRegistry, $this->emRegistry);
+        $translationsListener = new TranslationsListener($translationForm);
+        $translationsFormsListener = new TranslationsFormsListener();
 
         if (interface_exists('Symfony\Component\Validator\Validator\ValidatorInterface')) {
             $validator = $this->getMockBuilder('Symfony\Component\Validator\Validator\ValidatorInterface')
@@ -98,7 +105,7 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
 
         $validator->expects($this->any())
             ->method('validate')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->factory = Forms::createFormFactoryBuilder()
             ->addExtensions(
@@ -110,18 +117,15 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
                      ->disableOriginalConstructor()
                      ->getMock()
             )
-            ->addTypes(array(
-                new \A2lix\TranslationFormBundle\Form\Type\TranslationsType(
-                    $translationsListener,
-                    new \A2lix\TranslationFormBundle\Locale\DefaultProvider(array('fr', 'en', 'de'), 'en')
-                ),
-                new \A2lix\TranslationFormBundle\Form\Type\TranslationsFieldsType(),
-                new \A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType(
+            ->addTypes([
+                new TranslationsType($translationsListener, new DefaultProvider(['fr', 'en', 'de'], 'en')),
+                new TranslationsFieldsType(),
+                new TranslationsFormsType(
                     $translationForm,
                     $translationsFormsListener,
-                    new \A2lix\TranslationFormBundle\Locale\DefaultProvider(array('fr', 'en', 'de'), 'en')
+                    new DefaultProvider(['fr', 'en', 'de'], 'en')
                 ),
-            ))
+            ])
             ->getFormFactory();
 
         $this->dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
@@ -140,7 +144,7 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
 
     protected function getUsedEntityFixtures()
     {
-        return array();
+        return [];
     }
 
     protected function persist(array $entities)
@@ -164,6 +168,6 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
                   ->with($this->equalTo('doctrine.orm.default_entity_manager'))
                   ->will($this->returnValue($em));
 
-        return new Registry($container, array(), array('default' => 'doctrine.orm.default_entity_manager'), 'default', 'default');
+        return new Registry($container, [], ['default' => 'doctrine.orm.default_entity_manager'], 'default', 'default');
     }
 }

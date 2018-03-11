@@ -29,23 +29,23 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             $submitType = 'submit';
         }
 
-        $formData = array(
+        $formData = [
             'url' => 'a2lix.fr',
-            'translations' => array(
-                'fr' => array(
+            'translations' => [
+                'fr' => [
                     'title' => 'title fr',
                     'description' => 'desc fr',
-                ),
-                'en' => array(
+                ],
+                'en' => [
                     'title' => 'title en',
                     'description' => 'desc en',
-                ),
-                'de' => array(
+                ],
+                'de' => [
                     'title' => 'title de',
                     'description' => 'desc de',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $productTranslationFr = new ProductTranslation();
         $productTranslationFr->setLocale('fr')
@@ -82,23 +82,23 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         //
         // Edition: Modify values
         //
-        $formData = array(
+        $formData = [
             'url' => 'a2lix.fr',
-            'translations' => array(
-                'fr' => array(
+            'translations' => [
+                'fr' => [
                     'title' => 'title frrrrrr',
                     'description' => 'desc fr',
-                ),
-                'en' => array(
+                ],
+                'en' => [
                     'title' => 'title en',
                     'description' => 'desc ennnnnnn',
-                ),
-                'de' => array(
+                ],
+                'de' => [
                     'title' => 'title de',
                     'description' => 'desc de',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $product->getTranslations()['fr']->setTitle('title frrrrrr');
         $product->getTranslations()['en']->setTitle('desc ennnnnnn');
 
@@ -111,13 +111,6 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
 
         $this->assertTrue($form->isSynchronized());
         $this->assertEquals($product, $form->getData());
-
-//        $view = $form->createView();
-//        $children = $view->children;
-//
-//        foreach (array_keys($formData) as $key) {
-//            $this->assertArrayHasKey($key, $children);
-//        }
     }
 
     public function testSubmitValidConfiguration1Data()
@@ -132,19 +125,19 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             $submitType = 'submit';
         }
 
-        $formData = array(
+        $formData = [
             'url' => 'a2lix.fr',
-            'translations' => array(
-                'es' => array(
+            'translations' => [
+                'es' => [
                     'title' => 'title es',
                     'description' => 'desc es',
-                ),
-                'fr' => array(
+                ],
+                'fr' => [
                     'title' => 'title fr',
                     'description' => 'desc fr',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $productTranslationEs = new ProductTranslation();
         $productTranslationEs->setLocale('es')
@@ -165,9 +158,9 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         //
         $form = $this->factory->createBuilder($formType, new Product())
             ->add('url')
-            ->add('translations', $translationsType, array(
-                'locales' => array('es', 'fr', 'de'),
-            ))
+            ->add('translations', $translationsType, [
+                'locales' => ['es', 'fr', 'de'],
+            ])
             ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
@@ -178,23 +171,23 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         //
         // Edition: Add 'de' locale
         //
-        $formData = array(
+        $formData = [
             'url' => 'a2lix.fr',
-            'translations' => array(
-                'es' => array(
+            'translations' => [
+                'es' => [
                     'title' => 'title es',
                     'description' => 'desc es',
-                ),
-                'fr' => array(
+                ],
+                'fr' => [
                     'title' => 'title fr',
                     'description' => 'desc fr',
-                ),
-                'de' => array(
+                ],
+                'de' => [
                     'title' => 'title de',
                     'description' => 'desc de',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $productTranslationDe = new ProductTranslation();
         $productTranslationDe->setLocale('de')
                              ->setTitle('title de')
@@ -203,22 +196,15 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
 
         $form = $this->factory->createBuilder($formType, $product)
             ->add('url')
-            ->add('translations', $translationsType, array(
-                'locales' => array('es', 'fr', 'de'),
-            ))
+            ->add('translations', $translationsType, [
+                'locales' => ['es', 'fr', 'de'],
+            ])
             ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
         $this->assertEquals($product, $form->getData());
-
-//        $view = $form->createView();
-//        $children = $view->children;
-//
-//        foreach (array_keys($formData) as $key) {
-//            $this->assertArrayHasKey($key, $children);
-//        }
     }
 
     public function testSubmitValidConfiguration2Data()
@@ -233,20 +219,20 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
             $submitType = 'submit';
         }
 
-        $formData = array(
+        $formData = [
             'url' => 'a2lix.fr',
-            'translations' => array(
-                'fr' => array(
+            'translations' => [
+                'fr' => [
                     'title' => 'title fr',
-                ),
-                'en' => array(
+                ],
+                'en' => [
                     'title' => 'title en',
-                ),
-                'de' => array(
+                ],
+                'de' => [
                     'title' => 'title de',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $productTranslationFr = new ProductTranslation();
         $productTranslationFr->setLocale('fr')
@@ -269,16 +255,16 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         //
         $form = $this->factory->createBuilder($formType, new Product())
             ->add('url')
-            ->add('translations', $translationsType, array(
-                'fields' => array(
-                    'title' => array(
+            ->add('translations', $translationsType, [
+                'fields' => [
+                    'title' => [
                         'label' => 'name',
-                    ),
-                    'description' => array(
+                    ],
+                    'description' => [
                         'display' => false,
-                    ),
-                ),
-            ))
+                    ],
+                ],
+            ])
             ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
@@ -289,56 +275,49 @@ class TranslationsTypeTest extends TranslationsTypeTestCase
         //
         // Edition: Add field
         //
-        $formData = array(
+        $formData = [
             'url' => 'a2lix.fr',
-            'translations' => array(
-                'fr' => array(
+            'translations' => [
+                'fr' => [
                     'title' => 'title fr',
                     'description' => 'desc fr',
-                ),
-                'en' => array(
+                ],
+                'en' => [
                     'title' => 'title en',
                     'description' => 'desc en',
-                ),
-                'de' => array(
+                ],
+                'de' => [
                     'title' => 'title de',
                     'description' => 'desc de',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $product->getTranslations()['fr']->setDescription('desc fr');
         $product->getTranslations()['en']->setDescription('desc en');
         $product->getTranslations()['de']->setDescription('desc de');
 
         $form = $this->factory->createBuilder($formType, $product)
             ->add('url')
-            ->add('translations', $translationsType, array(
-                'fields' => array(
-                    'title' => array(
+            ->add('translations', $translationsType, [
+                'fields' => [
+                    'title' => [
                         'label' => 'name',
-                    ),
-                ),
-            ))
+                    ],
+                ],
+            ])
             ->add('save', $submitType)
             ->getForm();
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
         $this->assertEquals($product, $form->getData());
-
-//        $view = $form->createView();
-//        $children = $view->children;
-//
-//        foreach (array_keys($formData) as $key) {
-//            $this->assertArrayHasKey($key, $children);
-//        }
     }
 
     protected function getUsedEntityFixtures()
     {
-        return array(
+        return [
             'A2lix\\TranslationFormBundle\\Tests\\Gedmo\\Fixtures\\Entity\\Product',
             'A2lix\\TranslationFormBundle\\Tests\\Gedmo\\Fixtures\\Entity\\ProductTranslation',
-        );
+        ];
     }
 }

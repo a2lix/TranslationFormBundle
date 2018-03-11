@@ -25,9 +25,9 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->locales = array('es', 'en', 'pt');
+        $this->locales = ['es', 'en', 'pt'];
         $this->defaultLocale = 'en';
-        $this->requiredLocales = array('es', 'en');
+        $this->requiredLocales = ['es', 'en'];
 
         $this->provider = new DefaultProvider($this->locales, $this->defaultLocale, $this->requiredLocales);
     }
@@ -50,7 +50,7 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
         // now call the constructor
         $reflectedClass = new \ReflectionClass($classname);
         $constructor = $reflectedClass->getConstructor();
-        $constructor->invoke($mock, array('es', 'en'), 'de', array());
+        $constructor->invoke($mock, ['es', 'en'], 'de', []);
     }
 
     public function testRequiredLocaleAreInLocales()
@@ -70,7 +70,7 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
         // now call the constructor
         $reflectedClass = new \ReflectionClass($classname);
         $constructor = $reflectedClass->getConstructor();
-        $constructor->invoke($mock, array('es', 'en'), 'en', array('en', 'pt'));
+        $constructor->invoke($mock, ['es', 'en'], 'en', ['en', 'pt']);
     }
 
     public function testGetLocales()
