@@ -2,44 +2,70 @@
     "name": "a2lix/translation-form-bundle",
     "type": "symfony-bundle",
     "description": "Translate your doctrine objects easily with some helps",
-    "keywords": ["symfony2", "doctrine2", "i18n", "internationalization", "translation", "translatable", "form", "knplabs"],
+    "keywords": [
+        "symfony",
+        "doctrine2",
+        "i18n",
+        "internationalization",
+        "translation",
+        "translatable",
+        "form",
+        "gedmo",
+        "knplabs",
+        "prezent"
+    ],
     "homepage": "https://github.com/a2lix/TranslationFormBundle",
     "license": "MIT",
     "authors": [
         {
             "name": "David ALLIX",
             "homepage": "http://a2lix.fr"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/a2lix/TranslationFormBundle/contributors"
         }
     ],
     "require": {
         "php": "^5.4 || ^7.0",
-        "symfony/form": "~2.8|~3.0",
-        "symfony/dependency-injection": "~2.8|~3.0",
-        "symfony/http-kernel": "~2.8|~3.0",
-        "symfony/config": "~2.8|~3.0",
-        "symfony/doctrine-bridge": "~2.8|~3.0",
-        "a2lix/auto-form-bundle": "@dev"
+        "a2lix/auto-form-bundle": "@dev",
+        "symfony/config": "^2.8 || ^3.0 || ^4.0",
+        "symfony/dependency-injection": "^2.8 || ^3.0 || ^4.0",
+        "symfony/doctrine-bridge": "^2.8 || ^3.0 || ^4.0",
+        "symfony/event-dispatcher": "^2.8 || ^3.0 || ^4.0",
+        "symfony/form": "^2.8 || ^3.0 || ^4.0",
+        "symfony/http-foundation": "^2.8 || ^3.0 || ^4.0",
+        "symfony/http-kernel": "^2.8 || ^3.0 || ^4.0",
+        "symfony/options-resolver": "^2.8 || ^3.0 || ^4.0"
     },
     "require-dev": {
-        "symfony/validator": "~2.8|~3.0",
-        "phpunit/phpunit": "~4.1",
-        "friendsofphp/php-cs-fixer": "~1.10",
-        "doctrine/orm": "^2.4"
+        "doctrine/common": "^2.3",
+        "doctrine/doctrine-bundle": "^1.0",
+        "doctrine/orm": "^2.4",
+        "gedmo/doctrine-extensions": "^2.4",
+        "knplabs/doctrine-behaviors": "^1.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^0.7 || ^1.2",
+        "symfony/doctrine-bridge": "^2.8 || ^3.0 || ^4.0",
+        "symfony/phpunit-bridge": "^4.0",
+        "symfony/validator": "^2.8 || ^3.0 || ^4.0"
     },
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",
         "a2lix/i18n-doctrine-bundle": "For A2lix strategy",
         "prezent/doctrine-translatable-bundle": "For Prezent strategy"
     },
-    "autoload": {
-        "psr-4": { "A2lix\\TranslationFormBundle\\": "" },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+    "config": {
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
             "dev-master": "3.x-dev"
         }
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "A2lix\\TranslationFormBundle\\": ""
+        }
+    },
+    "prefer-stable": true
 }
