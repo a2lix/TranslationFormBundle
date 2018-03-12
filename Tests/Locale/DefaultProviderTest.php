@@ -1,8 +1,9 @@
 <?php
-/**
- * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
- * @date 07/11/14
- * @copyright Copyright (c) Reiss Clothing Ltd.
+
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,7 +12,6 @@
 namespace A2lix\TranslationFormBundle\Tests\Locale;
 
 use A2lix\TranslationFormBundle\Locale\DefaultProvider;
-
 
 /**
  * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
@@ -25,9 +25,9 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->locales = array('es', 'en', 'pt');
+        $this->locales = ['es', 'en', 'pt'];
         $this->defaultLocale = 'en';
-        $this->requiredLocales = array('es', 'en');
+        $this->requiredLocales = ['es', 'en'];
 
         $this->provider = new DefaultProvider($this->locales, $this->defaultLocale, $this->requiredLocales);
     }
@@ -43,13 +43,14 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
 
         // set expectations for constructor calls
         $this->setExpectedException(
-            'InvalidArgumentException', 'Default locale should be contained in locales'
+            'InvalidArgumentException',
+            'Default locale `de` not found within the configured locales `[es,en]`'
         );
 
         // now call the constructor
         $reflectedClass = new \ReflectionClass($classname);
         $constructor = $reflectedClass->getConstructor();
-        $constructor->invoke($mock, array('es', 'en'), 'de', array());
+        $constructor->invoke($mock, ['es', 'en'], 'de', []);
     }
 
     public function testRequiredLocaleAreInLocales()
@@ -69,7 +70,7 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
         // now call the constructor
         $reflectedClass = new \ReflectionClass($classname);
         $constructor = $reflectedClass->getConstructor();
-        $constructor->invoke($mock, array('es', 'en'), 'en', array('en', 'pt'));
+        $constructor->invoke($mock, ['es', 'en'], 'en', ['en', 'pt']);
     }
 
     public function testGetLocales()
@@ -94,4 +95,4 @@ class DefaultProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(array_diff($expected, $requiredLocales), array_diff($requiredLocales, $expected));
     }
-} 
+}

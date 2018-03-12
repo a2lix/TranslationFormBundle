@@ -1,11 +1,20 @@
 <?php
 
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Util\Gedmo\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\HttpKernel\Event\GetResponseEvent,
-    Symfony\Component\HttpKernel\KernelEvents,
-    Gedmo\Translatable\TranslatableListener;
+use Gedmo\Translatable\TranslatableListener;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * @author David ALLIX
@@ -15,7 +24,7 @@ class LocaleListener implements EventSubscriberInterface
     private $translatableListener;
 
     /**
-     * @param \Gedmo\Translatable\TranslatableListener $translatableListener
+     * @param TranslatableListener $translatableListener
      */
     public function __construct(TranslatableListener $translatableListener)
     {
@@ -23,8 +32,7 @@ class LocaleListener implements EventSubscriberInterface
     }
 
     /**
-     *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     * @param GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -33,8 +41,8 @@ class LocaleListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::REQUEST => array('onKernelRequest', -10),
-        );
+        return [
+            KernelEvents::REQUEST => ['onKernelRequest', -10],
+        ];
     }
 }

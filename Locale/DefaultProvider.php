@@ -1,8 +1,9 @@
 <?php
-/**
- * @author Gonzalo Vilaseca <gvilaseca@reiss.co.uk>
- * @date 07/11/14
- * @copyright Copyright (c) Reiss Clothing Ltd.
+
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,21 +17,21 @@ namespace A2lix\TranslationFormBundle\Locale;
 class DefaultProvider implements LocaleProviderInterface
 {
     /**
-     * Locales
+     * Locales.
      *
      * @var array
      */
     protected $locales;
 
     /**
-     * Default locale
+     * Default locale.
      *
      * @var
      */
     protected $defaultLocale;
 
     /**
-     * Required locales
+     * Required locales.
      *
      * @var array
      */
@@ -41,7 +42,7 @@ class DefaultProvider implements LocaleProviderInterface
      * @param       $defaultLocale
      * @param array $requiredLocales
      */
-    public function __construct(array $locales, $defaultLocale, array $requiredLocales = array())
+    public function __construct(array $locales, $defaultLocale, array $requiredLocales = [])
     {
         if (!in_array($defaultLocale, $locales)) {
             if (count($locales) > 0) {
@@ -62,7 +63,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getLocales()
     {
@@ -71,7 +71,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getDefaultLocale()
     {
@@ -80,7 +79,6 @@ class DefaultProvider implements LocaleProviderInterface
 
     /**
      * {@inheritdoc}
-     *
      */
     public function getRequiredLocales()
     {

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the TranslationFormBundle package.
+ *
+ * (c) David ALLIX <http://a2lix.fr>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace A2lix\TranslationFormBundle\Util\Gedmo;
 
 /**
@@ -20,6 +29,7 @@ trait GedmoTranslatable
             $translation->setObject($this);
             $this->translations->set($translation->getLocale(), $translation);
         }
+
         return $this;
     }
 
@@ -28,6 +38,7 @@ trait GedmoTranslatable
         if ($this->translations->contains($translation)) {
             $this->translations->removeElement($translation);
         }
+
         return $this;
     }
 }

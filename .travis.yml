@@ -1,0 +1,69 @@
+branches:
+  only:
+    - master
+    - 2.x
+
+language: php
+
+php:
+  - '5.4'
+  - '5.5'
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - '7.2'
+  - nightly
+
+sudo: false
+dist: trusty
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+env:
+  global:
+    - PATH="$HOME/.local/bin:$PATH"
+    - SYMFONY_DEPRECATIONS_HELPER=weak
+
+matrix:
+  fast_finish: true
+  include:
+    - php: '5.4'
+      env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: '7.0'
+      env: SYMFONY=2.3.*
+    - php: '7.2'
+      env: SYMFONY=2.7.*
+    - php: '7.2'
+      env: SYMFONY=2.8.*
+    - php: '7.2'
+      env: SYMFONY=3.3.*
+    - php: '7.2'
+      env: SYMFONY=3.4.*
+    - php: '7.2'
+      env: SYMFONY=4.0.*
+    - php: '7.2'
+      env: SYMFONY='dev-master as 4.1.x-dev'
+    - php: '7.2'
+      env: SYMFONY_DEPRECATIONS_HELPER=0
+  allow_failures:
+    - php: nightly
+    - env: SYMFONY_DEPRECATIONS_HELPER=0
+    - env: SYMFONY='dev-master as 4.1.x-dev'
+
+before_install:
+  - echo memory_limit = -1 >> $HOME/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
+  - if [ $SYMFONY != "" ]; then composer require symfony/symfony:$SYMFONY --no-update; fi;
+
+install:
+  - mkdir --parents $HOME/bin
+  - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar --output-document=$HOME/bin/coveralls
+  - chmod u+x $HOME/bin/coveralls
+  - composer update --prefer-dist --no-interaction --prefer-stable $COMPOSER_FLAGS
+
+script:
+  - SYMFONY_PHPUNIT_VERSION=5.7 vendor/bin/simple-phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+  - coveralls -v
