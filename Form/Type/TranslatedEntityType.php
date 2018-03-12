@@ -38,9 +38,9 @@ class TranslatedEntityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         // BC for SF < 2.7
-        $optionProperty = "choice_label";
-        if(in_array("property", $resolver->getDefinedOptions())){
-            $optionProperty = "property";
+        $optionProperty = 'choice_label';
+        if (in_array('property', $resolver->getDefinedOptions())) {
+            $optionProperty = 'property';
         }
 
         $resolver->setDefaults([
@@ -51,7 +51,7 @@ class TranslatedEntityType extends AbstractType
                     ->select('e, t')
                     ->join('e.translations', 't');
             },
-            $optionProperty => function(Options $options) {
+            $optionProperty => function (Options $options) {
                 if (null === $this->request) {
                     throw new \Exception('Error while getting request');
                 }
