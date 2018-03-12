@@ -36,43 +36,24 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
     private $em;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Doctrine\Bundle\DoctrineBundle\Registry
      */
     private $emRegistry;
 
     protected function setUp()
     {
-        if (!class_exists('Symfony\Component\Form\Form')) {
-            $this->markTestSkipped('The "Form" component is not available');
-        }
-
-        if (!class_exists('Doctrine\DBAL\Platforms\MySqlPlatform')) {
-            $this->markTestSkipped('Doctrine DBAL is not available.');
-        }
-
-        if (!class_exists('Doctrine\Common\Version')) {
-            $this->markTestSkipped('Doctrine Common is not available.');
-        }
-
-        if (!class_exists('Doctrine\ORM\EntityManager')) {
-            $this->markTestSkipped('Doctrine ORM is not available.');
-        }
-
         $this->em = DoctrineTestHelper::createTestEntityManager();
         $this->emRegistry = $this->getEmRegistry($this->em);
 
         $schemaTool = new SchemaTool($this->em);
 
+        $classes = [];
         foreach ($this->getUsedEntityFixtures() as $class) {
             $classes[] = $this->em->getClassMetadata($class);
         }
 
         try {
             $schemaTool->dropSchema($classes);
-        } catch (\Exception $e) {
-        }
-
-        try {
             $schemaTool->createSchema($classes);
         } catch (\Exception $e) {
         }
@@ -84,23 +65,19 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $formRegistry = new FormRegistry(
-            $formExtensions,
-            $resolvedFormTypeFactory
-        );
-
+        $formRegistry = new FormRegistry($formExtensions, $resolvedFormTypeFactory);
         $translationForm = new TranslationForm($formRegistry, $this->emRegistry);
         $translationsListener = new TranslationsListener($translationForm);
         $translationsFormsListener = new TranslationsFormsListener();
 
         if (interface_exists('Symfony\Component\Validator\Validator\ValidatorInterface')) {
             $validator = $this->getMockBuilder('Symfony\Component\Validator\Validator\ValidatorInterface')
-                 ->disableOriginalConstructor()
-                 ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         } else {
             $validator = $this->getMockBuilder('Symfony\Component\Validator\ValidatorInterface')
-                 ->disableOriginalConstructor()
-                 ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         }
 
         $validator->expects($this->any())
@@ -114,8 +91,8 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
             ->addTypeExtension(new FormTypeValidatorExtension($validator))
             ->addTypeGuesser(
                 $this->getMockBuilder('Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser')
-                     ->disableOriginalConstructor()
-                     ->getMock()
+                    ->disableOriginalConstructor()
+                    ->getMock()
             )
             ->addTypes([
                 new TranslationsType($translationsListener, new DefaultProvider(['fr', 'en', 'de'], 'en')),
@@ -163,10 +140,11 @@ abstract class TranslationsTypeTestCase extends TypeTestCase
         $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')
             ->disableOriginalConstructor()
             ->getMock();
+
         $container->expects($this->any())
-                  ->method('get')
-                  ->with($this->equalTo('doctrine.orm.default_entity_manager'))
-                  ->will($this->returnValue($em));
+            ->method('get')
+            ->with($this->equalTo('doctrine.orm.default_entity_manager'))
+            ->will($this->returnValue($em));
 
         return new Registry($container, [], ['default' => 'doctrine.orm.default_entity_manager'], 'default', 'default');
     }
