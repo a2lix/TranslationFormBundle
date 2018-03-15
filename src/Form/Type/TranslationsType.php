@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -21,45 +23,27 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsType extends AbstractType
 {
-    /** @var TranslationsListener */
     private $translationsListener;
-    /** @var LocaleProviderInterface */
     private $localeProvider;
 
-    /**
-     * @param TranslationsListener    $translationsListener
-     * @param LocaleProviderInterface $localeProvider
-     */
     public function __construct(TranslationsListener $translationsListener, LocaleProviderInterface $localeProvider)
     {
         $this->translationsListener = $translationsListener;
         $this->localeProvider = $localeProvider;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventSubscriber($this->translationsListener);
     }
 
-    /**
-     * @param FormView      $view
-     * @param FormInterface $form
-     * @param array         $options
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['default_locale'] = $options['default_locale'];
         $view->vars['required_locales'] = $options['required_locales'];
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'by_reference' => false,
@@ -77,10 +61,7 @@ class TranslationsType extends AbstractType
         $resolver->setAllowedValues('theming_granularity', ['field', 'locale_field']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'a2lix_translations';
     }

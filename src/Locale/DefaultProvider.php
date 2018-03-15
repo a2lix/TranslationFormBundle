@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -13,18 +15,10 @@ namespace A2lix\TranslationFormBundle\Locale;
 
 class DefaultProvider implements LocaleProviderInterface
 {
-    /** @var array */
     protected $locales;
-    /** @var string */
     protected $defaultLocale;
-    /** @var array */
     protected $requiredLocales;
 
-    /**
-     * @param array  $locales
-     * @param string $defaultLocale
-     * @param array  $requiredLocales
-     */
     public function __construct(array $locales, $defaultLocale, array $requiredLocales = [])
     {
         if (!in_array($defaultLocale, $locales, true)) {
@@ -44,26 +38,17 @@ class DefaultProvider implements LocaleProviderInterface
         $this->requiredLocales = $requiredLocales;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getLocales()
+    public function getLocales(): array
     {
         return $this->locales;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultLocale()
+    public function getDefaultLocale(): string
     {
         return $this->defaultLocale;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRequiredLocales()
+    public function getRequiredLocales(): array
     {
         return $this->requiredLocales;
     }

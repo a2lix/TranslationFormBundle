@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -25,7 +27,7 @@ class TranslationsTypeSimpleTest extends TypeTestCase
     protected $defaultLocale = 'en';
     protected $requiredLocales = ['en', 'fr'];
 
-    public function testEmptyForm()
+    public function testEmptyForm(): void
     {
         $form = $this->factory->createBuilder(FormType::class, new Product())
             ->add('url')
@@ -47,7 +49,7 @@ class TranslationsTypeSimpleTest extends TypeTestCase
         $this->assertEquals(['title', 'description'], array_keys($translationsForm['de']->all()), 'Fields should matches ProductTranslation fields');
     }
 
-    public function testCreationForm()
+    public function testCreationForm(): Product
     {
         $form = $this->factory->createBuilder(FormType::class, new Product())
             ->add('url')
@@ -102,7 +104,7 @@ class TranslationsTypeSimpleTest extends TypeTestCase
     /**
      * @depends testCreationForm
      */
-    public function testEditionForm($product)
+    public function testEditionForm($product): void
     {
         $product->getTranslations()['en']->setDescription('desc ennnnnnn');
         $product->getTranslations()['fr']->setTitle('title frrrrrr');
@@ -143,7 +145,7 @@ class TranslationsTypeSimpleTest extends TypeTestCase
         }
     }
 
-    protected function getExtensions()
+    protected function getExtensions(): array
     {
         $translationsType = $this->getConfiguredTranslationsType($this->locales, $this->defaultLocale, $this->requiredLocales);
         $autoFormType = $this->getConfiguredAutoFormType();

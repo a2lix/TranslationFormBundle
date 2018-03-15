@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -20,28 +22,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslatedEntityType extends AbstractType
 {
-    /** @var RequestStack */
     private $requestStack;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        // BC for SF < 2.7
-        $optionProperty = 'choice_label';
-        if (in_array('property', $resolver->getDefinedOptions())) {
-            $optionProperty = 'property';
-        }
-
         $resolver->setDefaults([
             'translation_path' => 'translations',
             'translation_property' => null,
@@ -50,7 +39,7 @@ class TranslatedEntityType extends AbstractType
                     ->select('e, t')
                     ->join('e.translations', 't');
             },
-            $optionProperty => function (Options $options) {
+            'choice_label' => function (Options $options) {
                 if (null === ($request = $this->requestStack->getCurrentRequest())) {
                     throw new \RuntimeExceptionn('Error while getting request');
                 }
@@ -60,18 +49,12 @@ class TranslatedEntityType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
+    public function getParent(): string
     {
         return EntityType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'a2lix_translatedEntity';
     }

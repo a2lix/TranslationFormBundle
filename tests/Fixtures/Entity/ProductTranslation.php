@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -16,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="product_translations", uniqueConstraints={
- *    @ORM\UniqueConstraint(name="lookup_unique_idx", columns={"locale", "object_id"})
+ *     @ORM\UniqueConstraint(name="lookup_unique_idx", columns={"locale", "object_id"})
  * })
  */
 class ProductTranslation
@@ -49,53 +51,53 @@ class ProductTranslation
      */
     protected $description;
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    public function setLocale($locale)
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
 
         return $this;
     }
 
-    public function getTranslatable()
+    public function getTranslatable(): Product
     {
         return $this->translatable;
     }
 
-    public function setTranslatable($translatable)
+    public function setTranslatable(Product $translatable): self
     {
         $this->translatable = $translatable;
 
         return $this;
     }
 
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle($title)
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

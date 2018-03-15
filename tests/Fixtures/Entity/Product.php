@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -12,6 +14,7 @@
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -57,53 +60,53 @@ class Product
         $this->translations = new ArrayCollection();
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle($title)
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    public function setUrl($url)
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
-    public function addTranslation(ProductTranslation $translation)
+    public function addTranslation(ProductTranslation $translation): self
     {
         if (!$this->translations->contains($translation)) {
             $translation->setTranslatable($this);
@@ -113,21 +116,19 @@ class Product
         return $this;
     }
 
-    public function removeTranslation(ProductTranslation $translation)
+    public function removeTranslation(ProductTranslation $translation): self
     {
-        if ($this->translations->contains($translation)) {
-            $this->translations->removeElement($translation);
-        }
+        $this->translations->removeElement($translation);
 
         return $this;
     }
 
-    public function getMedias()
+    public function getMedias(): Collection
     {
         return $this->medias;
     }
 
-    public function addMedia(MediaLocalize $media)
+    public function addMedia(MediaLocalize $media): self
     {
         if (!$this->medias->contains($media)) {
             $media->setProduct($this);
@@ -137,11 +138,9 @@ class Product
         return $this;
     }
 
-    public function removeMedia(Media $media)
+    public function removeMedia(MediaLocalize $media): self
     {
-        if ($this->medias->contains($media)) {
-            $this->medias->removeElement($media);
-        }
+        $this->medias->removeElement($media);
 
         return $this;
     }

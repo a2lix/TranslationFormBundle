@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -26,7 +28,7 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
     protected $defaultLocale = 'en';
     protected $requiredLocales = ['en', 'fr'];
 
-    public function testEmptyForm()
+    public function testEmptyForm(): void
     {
         $form = $this->factory->createBuilder(FormType::class, new Product())
             ->add('url')
@@ -50,7 +52,7 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
         $this->assertEquals(['url', 'description'], array_keys($mediasForm['de']->all()), 'Fields should matches MediaLocalizeType fields');
     }
 
-    public function testCreationForm()
+    public function testCreationForm(): Product
     {
         $form = $this->factory->createBuilder(FormType::class, new Product())
             ->add('url')
@@ -107,7 +109,7 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
     /**
      * @depends testCreationForm
      */
-    public function testEditionForm($product)
+    public function testEditionForm(Product $product): void
     {
         $product->getMedias()['en']->setUrl('http://ennnnn');
         $product->getMedias()['fr']->setDescription('desc frrrrrr');
@@ -150,7 +152,7 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
         }
     }
 
-    protected function getExtensions()
+    protected function getExtensions(): array
     {
         $translationsFormsType = $this->getConfiguredTranslationsFormsType($this->locales, $this->defaultLocale, $this->requiredLocales);
         $autoFormType = $this->getConfiguredAutoFormType();

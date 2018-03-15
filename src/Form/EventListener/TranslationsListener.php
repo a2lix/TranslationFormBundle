@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -19,21 +21,14 @@ use Symfony\Component\Form\FormInterface;
 
 class TranslationsListener implements EventSubscriberInterface
 {
-    /** @var FormManipulatorInterface */
     private $formManipulator;
 
-    /**
-     * @param FormManipulatorInterface $formManipulator
-     */
     public function __construct(FormManipulatorInterface $formManipulator)
     {
         $this->formManipulator = $formManipulator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FormEvents::PRE_SET_DATA => 'preSetData',
@@ -41,10 +36,7 @@ class TranslationsListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param FormEvent $event
-     */
-    public function preSetData(FormEvent $event)
+    public function preSetData(FormEvent $event): void
     {
         $form = $event->getForm();
         $formOptions = $form->getConfig()->getOptions();
@@ -53,22 +45,21 @@ class TranslationsListener implements EventSubscriberInterface
         $translationClass = $this->getTranslationClass($form->getParent());
 
         foreach ($formOptions['locales'] as $locale) {
-            if (isset($fieldsOptions[$locale])) {
-                $form->add($locale, 'A2lix\AutoFormBundle\Form\Type\AutoFormType', [
-                    'data_class' => $translationClass,
-                    'required' => in_array($locale, $formOptions['required_locales'], true),
-                    'block_name' => ('field' === $formOptions['theming_granularity']) ? 'locale' : null,
-                    'fields' => $fieldsOptions[$locale],
-                    'excluded_fields' => $formOptions['excluded_fields'],
-                ]);
+            if (!isset($fieldsOptions[$locale])) {
+                continue;
             }
+
+            $form->add($locale, 'A2lix\AutoFormBundle\Form\Type\AutoFormType', [
+                'data_class' => $translationClass,
+                'required' => in_array($locale, $formOptions['required_locales'], true),
+                'block_name' => ('field' === $formOptions['theming_granularity']) ? 'locale' : null,
+                'fields' => $fieldsOptions[$locale],
+                'excluded_fields' => $formOptions['excluded_fields'],
+            ]);
         }
     }
 
-    /**
-     * @param FormEvent $event
-     */
-    public function submit(FormEvent $event)
+    public function submit(FormEvent $event): void
     {
         $data = $event->getData();
 
@@ -76,19 +67,14 @@ class TranslationsListener implements EventSubscriberInterface
             // Remove useless Translation object
             if (!$translation) {
                 $data->removeElement($translation);
-            } else {
-                $translation->setLocale($locale);
+                continue;
             }
+
+            $translation->setLocale($locale);
         }
     }
 
-    /**
-     * @param FormInterface $form
-     * @param array         $formOptions
-     *
-     * @return array
-     */
-    public function getFieldsOptions(FormInterface $form, array $formOptions)
+    public function getFieldsOptions(FormInterface $form, array $formOptions): array
     {
         $fieldsOptions = [];
 
@@ -118,12 +104,7 @@ class TranslationsListener implements EventSubscriberInterface
         return $fieldsOptions;
     }
 
-    /**
-     * @param FormInterface $form
-     *
-     * @return string
-     */
-    private function getTranslationClass(FormInterface $form)
+    private function getTranslationClass(FormInterface $form): string
     {
         do {
             $translatableClass = $form->getConfig()->getDataClass();

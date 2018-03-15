@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -11,13 +13,14 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Form;
 
+use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\MediaLocalize;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MediaLocalizeType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('url')
@@ -25,10 +28,10 @@ class MediaLocalizeType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => 'A2lix\TranslationFormBundle\Tests\Fixtures\Entity\MediaLocalize',
+            'data_class' => MediaLocalize::class,
         ]);
     }
 }

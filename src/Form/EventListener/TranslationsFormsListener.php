@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -17,10 +19,7 @@ use Symfony\Component\Form\FormEvents;
 
 class TranslationsFormsListener implements EventSubscriberInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FormEvents::PRE_SET_DATA => 'preSetData',
@@ -28,10 +27,7 @@ class TranslationsFormsListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param FormEvent $event
-     */
-    public function preSetData(FormEvent $event)
+    public function preSetData(FormEvent $event): void
     {
         $form = $event->getForm();
         $formOptions = $form->getConfig()->getOptions();
@@ -45,10 +41,7 @@ class TranslationsFormsListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param FormEvent $event
-     */
-    public function submit(FormEvent $event)
+    public function submit(FormEvent $event): void
     {
         $data = $event->getData();
 
@@ -56,9 +49,10 @@ class TranslationsFormsListener implements EventSubscriberInterface
             // Remove useless Translation object
             if (!$translation) {
                 $data->removeElement($translation);
-            } else {
-                $translation->setLocale($locale);
+                continue;
             }
+
+            $translation->setLocale($locale);
         }
     }
 }

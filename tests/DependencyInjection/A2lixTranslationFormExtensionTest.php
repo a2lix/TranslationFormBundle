@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -16,7 +18,7 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 
 class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
 {
-    public function testAfterLoadingParametersAreSet()
+    public function testAfterLoadingParametersAreSet(): void
     {
         $this->load();
         $this->assertContainerBuilderHasParameter('a2lix_translation_form.locale_provider', 'default');
@@ -25,18 +27,18 @@ class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('a2lix_translation_form.default_locale', 'es');
         $this->assertContainerBuilderHasParameter(
             'a2lix_translation_form.templating',
-            'A2lixTranslationFormBundle::default.html.twig'
+            '@A2lixTranslationForm/default.html.twig'
         );
     }
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return [
             new A2lixTranslationFormExtension(),
         ];
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return [
             'locales' => ['es', 'en'],

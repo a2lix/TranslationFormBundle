@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -25,7 +27,7 @@ class TranslationsFormsTypeAdvancedTest extends TypeTestCase
     protected $defaultLocale = 'en';
     protected $requiredLocales = ['en', 'fr'];
 
-    public function testEmptyFormOverrideLocales()
+    public function testEmptyFormOverrideLocales(): void
     {
         $overrideLocales = ['en', 'fr', 'es'];
         $overrideRequiredLocales = ['en', 'es'];
@@ -54,7 +56,7 @@ class TranslationsFormsTypeAdvancedTest extends TypeTestCase
         $this->assertEquals(['url', 'description'], array_keys($mediasForm['es']->all()), 'Fields should matches MediaLocalizeType fields');
     }
 
-    protected function getExtensions()
+    protected function getExtensions(): array
     {
         $translationsFormsType = $this->getConfiguredTranslationsFormsType($this->locales, $this->defaultLocale, $this->requiredLocales);
         $autoFormType = $this->getConfiguredAutoFormType();

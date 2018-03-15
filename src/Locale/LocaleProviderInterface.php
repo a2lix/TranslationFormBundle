@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TranslationFormBundle package.
  *
@@ -13,24 +15,9 @@ namespace A2lix\TranslationFormBundle\Locale;
 
 interface LocaleProviderInterface
 {
-    /**
-     * Get array of locales.
-     *
-     * @return array
-     */
-    public function getLocales();
+    public function getLocales(): array;
 
-    /**
-     * Get default locale.
-     *
-     * @return string
-     */
-    public function getDefaultLocale();
+    public function getDefaultLocale(): string;
 
-    /**
-     * Get required locales.
-     *
-     * @return array
-     */
-    public function getRequiredLocales();
+    public function getRequiredLocales(): array;
 }
