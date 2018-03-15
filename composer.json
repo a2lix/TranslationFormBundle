@@ -43,7 +43,6 @@
         "friendsofphp/php-cs-fixer": "^2.10",
         "knplabs/doctrine-behaviors": "^1.4",
         "matthiasnoback/symfony-dependency-injection-test": "^2.0",
-        "symfony/doctrine-bridge": "~3.4|~4.0",
         "symfony/phpunit-bridge": "^4.0",
         "symfony/validator": "~3.4|~4.0"
     },

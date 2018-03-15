@@ -1,4 +1,0 @@
-services:
-  composernormalize: true
-  phpcsfixer: true
-  xmllint: true

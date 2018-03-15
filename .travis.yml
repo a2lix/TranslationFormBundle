@@ -46,9 +46,11 @@ install:
     # To be removed when this issue will be resolved: https://github.com/composer/composer/issues/5355
     - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
-    - ./vendor/bin/simple-phpunit install
+    # Force most recent version of PHPUnit
+    - SYMFONY_PHPUNIT_VERSION=6.5 ./vendor/bin/simple-phpunit install
 
 script:
     - composer validate --strict --no-check-lock
-    - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
+    # Force most recent version of PHPUnit
+    - SYMFONY_PHPUNIT_VERSION=6.5 ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
     - if [[ "$CHECK_PHP_SYNTAX" == "true" ]]; then php ./vendor/bin/php-cs-fixer fix --no-interaction --dry-run --diff -v; fi;
