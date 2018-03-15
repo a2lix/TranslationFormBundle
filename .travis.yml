@@ -1,16 +1,4 @@
-branches:
-  only:
-    - master
-    - 2.x
-
 language: php
-
-php:
-  - '5.6'
-  - '7.0'
-  - '7.1'
-  - '7.2'
-  - nightly
 
 sudo: false
 dist: trusty
@@ -18,42 +6,49 @@ dist: trusty
 cache:
   directories:
     - $HOME/.composer/cache/files
+    - $HOME/symfony-bridge/.phpunit
 
 env:
   global:
-    - PATH="$HOME/.local/bin:$PATH"
-    - SYMFONY_DEPRECATIONS_HELPER=weak
+    - CHECK_PHP_SYNTAX="false"
+    - COVERAGE="false"
+    - PHPUNIT_FLAGS="-v"
+    - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
 
 matrix:
-  fast_finish: true
-  include:
-    - php: '5.6'
-      env: COMPOSER_FLAGS="--prefer-lowest"
-    - php: '7.2'
-      env: SYMFONY=2.8.*
-    - php: '7.2'
-      env: SYMFONY=3.4.*
-    - php: '7.2'
-      env: SYMFONY='dev-master as 4.1.x-dev'
-    - php: '7.2'
-      env: SYMFONY_DEPRECATIONS_HELPER=0
-  allow_failures:
-    - php: nightly
-    - env: SYMFONY_DEPRECATIONS_HELPER=0
-    - env: SYMFONY='dev-master as 4.1.x-dev'
+    fast_finish: true
+    include:
+          # Minimum supported dependencies with the latest and oldest PHP version
+        - php: 7.1
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+        - php: 7.2
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+
+          # Test the latest stable release
+        - php: 7.1
+        - php: 7.2
+          env: CHECK_PHP_SYNTAX="true"
+
+          # Latest commit to master
+        - php: 7.2
+          env: STABILITY="dev"
+
+    allow_failures:
+          # dev-master is allowed to fail.
+        - env: STABILITY="dev"
 
 before_install:
-  - echo memory_limit = -1 >> $HOME/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
-  - if [ $SYMFONY != "" ]; then composer require symfony/symfony:$SYMFONY --no-update; fi;
+    - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
+    - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
+    - if ! [ -v "$DEPENDENCIES" ]; then composer require --no-update ${DEPENDENCIES}; fi;
 
 install:
-  - mkdir --parents $HOME/bin
-  - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar --output-document=$HOME/bin/coveralls
-  - chmod u+x $HOME/bin/coveralls
-  - composer update --prefer-dist --no-interaction --prefer-stable $COMPOSER_FLAGS
+    # To be removed when this issue will be resolved: https://github.com/composer/composer/issues/5355
+    - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
+    - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
+    - ./vendor/bin/simple-phpunit install
 
 script:
-  - SYMFONY_PHPUNIT_VERSION=5.7 vendor/bin/simple-phpunit --coverage-clover build/logs/clover.xml
-
-after_script:
-  - coveralls -v
+    - composer validate --strict --no-check-lock
+    - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
+    - if [[ "$CHECK_PHP_SYNTAX" == "true" ]]; then php ./vendor/bin/php-cs-fixer fix --no-interaction --dry-run --diff -v; fi;
