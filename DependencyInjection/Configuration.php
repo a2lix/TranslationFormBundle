@@ -47,7 +47,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->prototype('scalar')->end()
                 ->end()
-                ->scalarNode('templating')->defaultValue('A2lixTranslationFormBundle::default.html.twig')->end()
+                ->scalarNode('templating')->defaultValue('@A2lixTranslationForm/default.html.twig')->end()
             ->end()
         ;
 
