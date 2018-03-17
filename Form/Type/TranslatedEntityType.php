@@ -14,6 +14,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -26,10 +27,17 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class TranslatedEntityType extends AbstractType
 {
     private $request;
+    private $requestStack;
 
+    // BC for SF 2.3
     public function setRequest(Request $request = null)
     {
         $this->request = $request;
+    }
+
+    public function setRequestStack(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -52,11 +60,7 @@ class TranslatedEntityType extends AbstractType
                     ->join('e.translations', 't');
             },
             $optionProperty => function (Options $options) {
-                if (null === $this->request) {
-                    throw new \Exception('Error while getting request');
-                }
-
-                return $options['translation_path'].'['.$this->request->getLocale().'].'.$options['translation_property'];
+                return $options['translation_path'].'['.$this->getLocale().'].'.$options['translation_property'];
             },
         ]);
     }
@@ -84,5 +88,18 @@ class TranslatedEntityType extends AbstractType
     public function getBlockPrefix()
     {
         return 'a2lix_translatedEntity';
+    }
+
+    private function getLocale()
+    {
+        if ($this->requestStack) {
+            return $this->requestStack->getCurrentRequest()->getLocale();
+        }
+
+        if ($this->request) {
+            return $this->request->getLocale();
+        }
+
+        throw new \Exception('Error while getting request');
     }
 }

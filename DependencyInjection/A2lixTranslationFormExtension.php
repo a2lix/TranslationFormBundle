@@ -14,7 +14,9 @@ namespace A2lix\TranslationFormBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -44,5 +46,16 @@ class A2lixTranslationFormExtension extends Extension
         $container->setParameter('a2lix_translation_form.templating', $config['templating']);
 
         $container->setAlias('a2lix_translation_form.manager_registry', $config['manager_registry']);
+
+        $translatedEntityType = $container->getDefinition('a2lix_translation_form.default.type.translatedEntity');
+
+        // BC for SF 2.3
+        if (class_exists('Symfony\Component\HttpFoundation\RequestStack')) {
+            $translatedEntityType->addMethodCall('setRequestStack', [new Reference('request_stack')]);
+        } else {
+            $translatedEntityType->addMethodCall('setRequest', [
+                new Reference('request', ContainerInterface::NULL_ON_INVALID_REFERENCE, false),
+            ]);
+        }
     }
 }
