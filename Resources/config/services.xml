@@ -47,9 +47,11 @@
             <tag name="form.type" alias="a2lix_translationsLocalesSelector"/>
         </service>
         <service id="a2lix_translation_form.default.type.translatedEntity" class="%a2lix_translation_form.default.type.translatedEntity.class%">
-            <call method="setRequest">
-                <argument type="service" id="request" on-invalid="null"/>
+            <!-- Uncomment this when dropping support for SF 2.3
+            <call method="setRequestStack">
+                <argument type="service" id="request_stack"/>
             </call>
+            -->
             <tag name="form.type" alias="a2lix_translatedEntity"/>
         </service>
     </services>
