@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.4.1](https://github.com/a2lix/TranslationFormBundle/compare/2.4.0...2.4.1) - 2018-03-18
+### Fixed
+- Remove call to `setRequest` on the xml configuration fixes scope widening
+
 ## [2.4.0](https://github.com/a2lix/TranslationFormBundle/compare/2.3.0...2.4.0) - 2018-03-17
 ### Fixed
 - Scope widening and missing request on certain Symfony versions
