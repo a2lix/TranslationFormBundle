@@ -15,6 +15,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -48,7 +49,7 @@ class TranslationsType extends AbstractType
         $resolver->setDefaults([
             'by_reference' => false,
             'empty_data' => function (FormInterface $form) {
-                return new \Doctrine\Common\Collections\ArrayCollection();
+                return new ArrayCollection();
             },
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),

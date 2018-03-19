@@ -79,12 +79,12 @@ abstract class TypeTestCase extends BaseTypeTestCase
 
     protected function getConfiguredAutoFormType(): AutoFormType
     {
-        $AutoFormListener = new AutoFormListener($this->getDefaultFormManipulator());
+        $autoFormListener = new AutoFormListener($this->getDefaultFormManipulator());
 
-        return new AutoFormType($AutoFormListener);
+        return new AutoFormType($autoFormListener);
     }
 
-    protected function getConfiguredTranslationsType($locales, $defaultLocale, $requiredLocales): TranslationsType
+    protected function getConfiguredTranslationsType(array $locales, string $defaultLocale, array $requiredLocales): TranslationsType
     {
         $translationsListener = new TranslationsListener($this->getDefaultFormManipulator());
         $localProvider = new DefaultProvider($locales, $defaultLocale, $requiredLocales);
@@ -92,7 +92,7 @@ abstract class TypeTestCase extends BaseTypeTestCase
         return new TranslationsType($translationsListener, $localProvider);
     }
 
-    protected function getConfiguredTranslationsFormsType($locales, $defaultLocale, $requiredLocales): TranslationsFormsType
+    protected function getConfiguredTranslationsFormsType(array $locales, string $defaultLocale, array $requiredLocales): TranslationsFormsType
     {
         $translationsFormsListener = new TranslationsFormsListener($this->getDefaultFormManipulator());
         $localProvider = new DefaultProvider($locales, $defaultLocale, $requiredLocales);

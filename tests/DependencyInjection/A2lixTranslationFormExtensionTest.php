@@ -27,7 +27,7 @@ class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('a2lix_translation_form.default_locale', 'es');
         $this->assertContainerBuilderHasParameter(
             'a2lix_translation_form.templating',
-            '@A2lixTranslationForm/default.html.twig'
+            '@A2lixTranslationForm/bootstrap_4_layout.html.twig'
         );
     }
 

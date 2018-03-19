@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace A2lix\TranslationFormBundle\Form\EventListener;
 
 use A2lix\AutoFormBundle\Form\Manipulator\FormManipulatorInterface;
+use A2lix\AutoFormBundle\Form\Type\AutoFormType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -39,17 +40,21 @@ class TranslationsListener implements EventSubscriberInterface
     public function preSetData(FormEvent $event): void
     {
         $form = $event->getForm();
-        $formOptions = $form->getConfig()->getOptions();
 
+        if (null === $formParent = $form->getParent()) {
+            throw new \RuntimeException('Parent form missing');
+        }
+
+        $formOptions = $form->getConfig()->getOptions();
         $fieldsOptions = $this->getFieldsOptions($form, $formOptions);
-        $translationClass = $this->getTranslationClass($form->getParent());
+        $translationClass = $this->getTranslationClass($formParent);
 
         foreach ($formOptions['locales'] as $locale) {
             if (!isset($fieldsOptions[$locale])) {
                 continue;
             }
 
-            $form->add($locale, 'A2lix\AutoFormBundle\Form\Type\AutoFormType', [
+            $form->add($locale, AutoFormType::class, [
                 'data_class' => $translationClass,
                 'required' => in_array($locale, $formOptions['required_locales'], true),
                 'block_name' => ('field' === $formOptions['theming_granularity']) ? 'locale' : null,
@@ -108,7 +113,7 @@ class TranslationsListener implements EventSubscriberInterface
     {
         do {
             $translatableClass = $form->getConfig()->getDataClass();
-        } while ((null === $translatableClass) && $form->getConfig()->getVirtual() && ($form = $form->getParent()));
+        } while ((null === $translatableClass) && $form->getConfig()->getInheritData() && (null !== $form = $form->getParent()));
 
         // Knp
         if (method_exists($translatableClass, 'getTranslationEntityClass')) {

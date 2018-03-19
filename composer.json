@@ -28,7 +28,7 @@
     ],
     "require": {
         "php": "^7.1.3",
-        "a2lix/auto-form-bundle": "dev-feature/refresh",
+        "a2lix/auto-form-bundle": "@beta",
         "symfony/config": "~3.4|~4.0",
         "symfony/dependency-injection": "~3.4|~4.0",
         "symfony/doctrine-bridge": "~3.4|~4.0",
@@ -63,11 +63,5 @@
         "branch-alias": {
             "dev-master": "3.x-dev"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/webda2l/AutoFormBundle.git"
-        }
-    ]
+    }
 }

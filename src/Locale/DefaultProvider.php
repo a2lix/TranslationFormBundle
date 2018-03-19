@@ -19,7 +19,7 @@ class DefaultProvider implements LocaleProviderInterface
     protected $defaultLocale;
     protected $requiredLocales;
 
-    public function __construct(array $locales, $defaultLocale, array $requiredLocales = [])
+    public function __construct(array $locales, string $defaultLocale, array $requiredLocales = [])
     {
         if (!in_array($defaultLocale, $locales, true)) {
             if (count($locales)) {

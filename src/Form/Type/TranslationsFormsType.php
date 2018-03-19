@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
+use A2lix\AutoFormBundle\Form\Type\AutoFormType;
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener;
 use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -49,7 +51,7 @@ class TranslationsFormsType extends AbstractType
         $resolver->setDefaults([
             'by_reference' => false,
             'empty_data' => function (FormInterface $form) {
-                return new \Doctrine\Common\Collections\ArrayCollection();
+                return new ArrayCollection();
             },
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
@@ -60,7 +62,7 @@ class TranslationsFormsType extends AbstractType
 
         $resolver->setNormalizer('form_options', function (Options $options, $value) {
             // Check mandatory data_class option when AutoFormType use
-            if (is_a($options['form_type'], '\A2lix\AutoFormBundle\Form\Type\AutoFormType', true) && !isset($value['data_class'])) {
+            if (($options['form_type'] instanceof AutoFormType) && !isset($value['data_class'])) {
                 throw new \RuntimeException(sprintf('Missing "data_class" option under "form_options" of TranslationsFormsType. Required when "form_type" use "AutoFormType".'));
             }
 
