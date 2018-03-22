@@ -26,18 +26,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsFormsType extends AbstractType
 {
-    private $translationsListener;
+    /** @var TranslationsFormsListener */
+    private $translationsFormsListener;
+    /** @var LocaleProviderInterface */
     private $localeProvider;
 
-    public function __construct(TranslationsFormsListener $translationsListener, LocaleProviderInterface $localeProvider)
+    public function __construct(TranslationsFormsListener $translationsFormsListener, LocaleProviderInterface $localeProvider)
     {
-        $this->translationsListener = $translationsListener;
+        $this->translationsFormsListener = $translationsFormsListener;
         $this->localeProvider = $localeProvider;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->addEventSubscriber($this->translationsListener);
+        $builder->addEventSubscriber($this->translationsFormsListener);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void

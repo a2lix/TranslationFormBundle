@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace A2lix\TranslationFormBundle\Tests\Form;
 
 use A2lix\AutoFormBundle\Form\EventListener\AutoFormListener;
-use A2lix\AutoFormBundle\Form\Manipulator\DefaultManipulator;
+use A2lix\AutoFormBundle\Form\Manipulator\DoctrineORMManipulator;
 use A2lix\AutoFormBundle\Form\Type\AutoFormType;
-use A2lix\AutoFormBundle\ObjectInfo\DoctrineInfo;
+use A2lix\AutoFormBundle\ObjectInfo\DoctrineORMInfo;
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener;
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class TypeTestCase extends BaseTypeTestCase
 {
-    protected $defaultFormManipulator;
+    protected $doctrineORMManipulator;
 
     protected function setUp(): void
     {
@@ -64,29 +64,29 @@ abstract class TypeTestCase extends BaseTypeTestCase
         $this->builder = new FormBuilder(null, null, $this->dispatcher, $this->factory);
     }
 
-    protected function getDefaultFormManipulator(): DefaultManipulator
+    protected function getDoctrineORMFormManipulator(): DoctrineORMManipulator
     {
-        if (null !== $this->defaultFormManipulator) {
-            return $this->defaultFormManipulator;
+        if (null !== $this->doctrineORMManipulator) {
+            return $this->doctrineORMManipulator;
         }
 
         $config = Setup::createAnnotationMetadataConfiguration([__DIR__.'/../Fixtures/Entity'], true, null, null, false);
         $entityManager = EntityManager::create(['driver' => 'pdo_sqlite'], $config);
-        $doctrineInfo = new DoctrineInfo($entityManager->getMetadataFactory());
+        $doctrineORMInfo = new DoctrineORMInfo($entityManager->getMetadataFactory());
 
-        return $this->defaultFormManipulator = new DefaultManipulator($doctrineInfo, ['id', 'locale', 'translatable']);
+        return $this->doctrineORMManipulator = new DoctrineORMManipulator($doctrineORMInfo, ['id', 'locale', 'translatable']);
     }
 
     protected function getConfiguredAutoFormType(): AutoFormType
     {
-        $autoFormListener = new AutoFormListener($this->getDefaultFormManipulator());
+        $autoFormListener = new AutoFormListener($this->getDoctrineORMFormManipulator());
 
         return new AutoFormType($autoFormListener);
     }
 
     protected function getConfiguredTranslationsType(array $locales, string $defaultLocale, array $requiredLocales): TranslationsType
     {
-        $translationsListener = new TranslationsListener($this->getDefaultFormManipulator());
+        $translationsListener = new TranslationsListener($this->getDoctrineORMFormManipulator());
         $localProvider = new DefaultProvider($locales, $defaultLocale, $requiredLocales);
 
         return new TranslationsType($translationsListener, $localProvider);
@@ -94,7 +94,7 @@ abstract class TypeTestCase extends BaseTypeTestCase
 
     protected function getConfiguredTranslationsFormsType(array $locales, string $defaultLocale, array $requiredLocales): TranslationsFormsType
     {
-        $translationsFormsListener = new TranslationsFormsListener($this->getDefaultFormManipulator());
+        $translationsFormsListener = new TranslationsFormsListener();
         $localProvider = new DefaultProvider($locales, $defaultLocale, $requiredLocales);
 
         return new TranslationsFormsType($translationsFormsListener, $localProvider);

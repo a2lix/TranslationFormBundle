@@ -155,11 +155,9 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
     protected function getExtensions(): array
     {
         $translationsFormsType = $this->getConfiguredTranslationsFormsType($this->locales, $this->defaultLocale, $this->requiredLocales);
-        $autoFormType = $this->getConfiguredAutoFormType();
 
         return [new PreloadedExtension([
             $translationsFormsType,
-            $autoFormType,
         ], [])];
     }
 }

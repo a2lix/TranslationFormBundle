@@ -24,7 +24,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsType extends AbstractType
 {
+    /** @var TranslationsListener */
     private $translationsListener;
+    /** @var LocaleProviderInterface */
     private $localeProvider;
 
     public function __construct(TranslationsListener $translationsListener, LocaleProviderInterface $localeProvider)

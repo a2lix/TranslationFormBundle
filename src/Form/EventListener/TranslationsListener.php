@@ -22,6 +22,7 @@ use Symfony\Component\Form\FormInterface;
 
 class TranslationsListener implements EventSubscriberInterface
 {
+    /** @var FormManipulatorInterface */
     private $formManipulator;
 
     public function __construct(FormManipulatorInterface $formManipulator)

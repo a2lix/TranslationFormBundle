@@ -22,6 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslatedEntityType extends AbstractType
 {
+    /** @var RequestStack */
     private $requestStack;
 
     public function __construct(RequestStack $requestStack)
@@ -41,7 +42,7 @@ class TranslatedEntityType extends AbstractType
             },
             'choice_label' => function (Options $options) {
                 if (null === ($request = $this->requestStack->getCurrentRequest())) {
-                    throw new \RuntimeExceptionn('Error while getting request');
+                    throw new \RuntimeException('Error while getting request');
                 }
 
                 return $options['translation_path'].'['.$request->getLocale().'].'.$options['translation_property'];

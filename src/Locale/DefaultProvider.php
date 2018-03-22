@@ -15,8 +15,11 @@ namespace A2lix\TranslationFormBundle\Locale;
 
 class DefaultProvider implements LocaleProviderInterface
 {
+    /** @var array */
     protected $locales;
+    /** @var string */
     protected $defaultLocale;
+    /** @var array */
     protected $requiredLocales;
 
     public function __construct(array $locales, string $defaultLocale, array $requiredLocales = [])

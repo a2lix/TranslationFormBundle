@@ -15,13 +15,20 @@
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
 
+    <filter>
+        <whitelist>
+            <directory>src/</directory>
+            <exclude>
+                <directory>src/Resources</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="Bundle Test Suite">
             <directory>tests/</directory>
-            <exclude>tests/fixtures</exclude>
+            <exclude>tests/Fixtures</exclude>
             <exclude>tests/tmp</exclude>
         </testsuite>
     </testsuites>
 </phpunit>
-
-
