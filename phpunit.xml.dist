@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.1/phpunit.xsd"
+         backupGlobals="false"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
-         syntaxCheck="false"
          bootstrap="vendor/autoload.php"
 >
-    <testsuites>
-        <testsuite name="TranslationFormBundle Test Suite">
-            <directory suffix="Test.php">./Tests/</directory>
-        </testsuite>
-    </testsuites>
+    <php>
+        <ini name="error_reporting" value="-1" />
+    </php>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
@@ -23,18 +17,18 @@
 
     <filter>
         <whitelist>
-            <directory>./</directory>
+            <directory>src/</directory>
             <exclude>
-                <directory>./Tests/</directory>
-                <directory>./Resources/</directory>
-                <directory>./vendor/</directory>
-                <directory>./coverage/</directory>
+                <directory>src/Resources</directory>
             </exclude>
         </whitelist>
     </filter>
 
-    <php>
-        <ini name="precision" value="8"/>
-    </php>
-
+    <testsuites>
+        <testsuite name="Bundle Test Suite">
+            <directory>tests/</directory>
+            <exclude>tests/Fixtures</exclude>
+            <exclude>tests/tmp</exclude>
+        </testsuite>
+    </testsuites>
 </phpunit>

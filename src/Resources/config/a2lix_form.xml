@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Locale Providers -->
+        <service id="A2lix\TranslationFormBundle\Locale\DefaultProvider"></service>
+
+        <!-- Form Listeners -->
+        <service id="A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener">
+            <argument type="service" id="a2lix_auto_form.manipulator.default"/>
+        </service>
+
+        <service id="A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener"></service>
+
+        <!-- Form Types -->
+        <service id="A2lix\TranslationFormBundle\Form\Type\TranslationsType">
+            <argument type="service" id="A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener"/>
+            <argument type="service" id="a2lix_translation_form.locale_provider.default"/>
+
+            <tag name="form.type"/>
+        </service>
+
+        <service id="A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType">
+            <argument type="service" id="A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener"/>
+            <argument type="service" id="a2lix_translation_form.locale_provider.default"/>
+
+            <tag name="form.type"/>
+        </service>
+
+        <service id="A2lix\TranslationFormBundle\Form\Type\TranslationsLocalesSelectorType">
+            <argument type="service" id="a2lix_translation_form.locale_provider.default"/>
+
+            <tag name="form.type"/>
+        </service>
+
+        <service id="A2lix\TranslationFormBundle\Form\Type\TranslatedEntityType">
+            <argument type="service" id="request_stack"/>
+
+            <tag name="form.type"/>
+        </service>
+    </services>
+</container>
