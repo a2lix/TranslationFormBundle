@@ -109,6 +109,7 @@ class TranslationForm implements TranslationFormInterface
     public function guessMissingFieldOptions($guesser, $class, $property, $options)
     {
         if (!isset($options['field_type']) && ($typeGuess = $guesser->guessType($class, $property))) {
+            $options += $typeGuess->getOptions();
             $options['field_type'] = $typeGuess->getType();
         }
 
