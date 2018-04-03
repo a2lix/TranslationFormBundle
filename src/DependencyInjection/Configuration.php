@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\DependencyInjection;
 
+use A2lix\TranslationFormBundle\DependencyInjection\Compiler\LocaleProviderPass;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -25,7 +26,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('locale_provider')->defaultValue('default')->end()
+                ->scalarNode('locale_provider')->defaultValue(LocaleProviderPass::DEFAULT_LOCALE_PROVIDER_KEY)->end()
                 ->scalarNode('default_locale')->defaultNull()->end()
                 ->arrayNode('locales')
                     ->beforeNormalization()

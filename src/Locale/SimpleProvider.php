@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\Locale;
 
-class DefaultProvider implements LocaleProviderInterface
+class SimpleProvider implements LocaleProviderInterface
 {
     /** @var array */
     protected $locales;
