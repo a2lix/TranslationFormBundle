@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\Tests\Locale;
 
-use A2lix\TranslationFormBundle\Locale\DefaultProvider;
+use A2lix\TranslationFormBundle\Locale\SimpleProvider;
+use PHPUnit\Framework\TestCase;
 
-class DefaultProviderTest extends \PHPUnit\Framework\TestCase
+class SimpleProviderTest extends TestCase
 {
     protected $locales;
     protected $defaultLocale;
@@ -28,13 +29,13 @@ class DefaultProviderTest extends \PHPUnit\Framework\TestCase
         $this->defaultLocale = 'en';
         $this->requiredLocales = ['es', 'en'];
 
-        $this->provider = new DefaultProvider($this->locales, $this->defaultLocale, $this->requiredLocales);
+        $this->provider = new SimpleProvider($this->locales, $this->defaultLocale, $this->requiredLocales);
     }
 
     public function testDefaultLocaleIsInLocales(): void
     {
         // Get mock, without the constructor being called
-        $mock = $this->getMockBuilder(DefaultProvider::class)
+        $mock = $this->getMockBuilder(SimpleProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -44,7 +45,7 @@ class DefaultProviderTest extends \PHPUnit\Framework\TestCase
             .' Perhaps you need to add it to your `a2lix_translation_form.locales` bundle configuration?');
 
         // Now call the constructor
-        $reflectedClass = new \ReflectionClass(DefaultProvider::class);
+        $reflectedClass = new \ReflectionClass(SimpleProvider::class);
         $constructor = $reflectedClass->getConstructor();
         $constructor->invoke($mock, ['es', 'en'], 'de', []);
     }
@@ -52,7 +53,7 @@ class DefaultProviderTest extends \PHPUnit\Framework\TestCase
     public function testRequiredLocaleAreInLocales(): void
     {
         // Get mock, without the constructor being called
-        $mock = $this->getMockBuilder(DefaultProvider::class)
+        $mock = $this->getMockBuilder(SimpleProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -61,7 +62,7 @@ class DefaultProviderTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Required locales should be contained in locales');
 
         // Now call the constructor
-        $reflectedClass = new \ReflectionClass(DefaultProvider::class);
+        $reflectedClass = new \ReflectionClass(SimpleProvider::class);
         $constructor = $reflectedClass->getConstructor();
         $constructor->invoke($mock, ['es', 'en'], 'en', ['en', 'pt']);
     }

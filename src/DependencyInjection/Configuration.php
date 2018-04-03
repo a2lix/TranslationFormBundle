@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\DependencyInjection;
 
+use A2lix\TranslationFormBundle\DependencyInjection\Compiler\LocaleProviderPass;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -25,8 +26,14 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('locale_provider')->defaultValue('default')->end()
-                ->scalarNode('default_locale')->defaultNull()->end()
+                ->scalarNode('locale_provider')
+                    ->defaultValue(LocaleProviderPass::DEFAULT_LOCALE_PROVIDER_KEY)
+                    ->info('Set your own LocaleProvider service identifier if required')
+                ->end()
+                ->scalarNode('default_locale')
+                    ->defaultNull()
+                    ->info('Set your own default locale if different from the SymfonyFramework locale. eg: en')
+                ->end()
                 ->arrayNode('locales')
                     ->beforeNormalization()
                         ->ifString()
@@ -36,6 +43,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->requiresAtLeastOneElement()
                     ->prototype('scalar')->end()
+                    ->info('Set the list of locales to manage (default locale included). eg: [en, fr, de, es]')
                 ->end()
                 ->arrayNode('required_locales')
                     ->beforeNormalization()
@@ -45,8 +53,12 @@ class Configuration implements ConfigurationInterface
                         })
                     ->end()
                     ->prototype('scalar')->end()
+                    ->info('Set the list of required locales to manage. eg: [en]')
                 ->end()
-                ->scalarNode('templating')->defaultValue('@A2lixTranslationForm/bootstrap_4_layout.html.twig')->end()
+                ->scalarNode('templating')
+                    ->defaultValue('@A2lixTranslationForm/bootstrap_4_layout.html.twig')
+                    ->info('Set your own template path if required')
+                ->end()
             ->end()
         ;
 

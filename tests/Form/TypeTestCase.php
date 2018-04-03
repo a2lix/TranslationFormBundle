@@ -21,7 +21,7 @@ use A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener;
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
-use A2lix\TranslationFormBundle\Locale\DefaultProvider;
+use A2lix\TranslationFormBundle\Locale\SimpleProvider;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -87,7 +87,7 @@ abstract class TypeTestCase extends BaseTypeTestCase
     protected function getConfiguredTranslationsType(array $locales, string $defaultLocale, array $requiredLocales): TranslationsType
     {
         $translationsListener = new TranslationsListener($this->getDoctrineORMFormManipulator());
-        $localProvider = new DefaultProvider($locales, $defaultLocale, $requiredLocales);
+        $localProvider = new SimpleProvider($locales, $defaultLocale, $requiredLocales);
 
         return new TranslationsType($translationsListener, $localProvider);
     }
@@ -95,7 +95,7 @@ abstract class TypeTestCase extends BaseTypeTestCase
     protected function getConfiguredTranslationsFormsType(array $locales, string $defaultLocale, array $requiredLocales): TranslationsFormsType
     {
         $translationsFormsListener = new TranslationsFormsListener();
-        $localProvider = new DefaultProvider($locales, $defaultLocale, $requiredLocales);
+        $localProvider = new SimpleProvider($locales, $defaultLocale, $requiredLocales);
 
         return new TranslationsFormsType($translationsFormsListener, $localProvider);
     }

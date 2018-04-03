@@ -47,7 +47,7 @@ class TranslationsFormsListener implements EventSubscriberInterface
 
         foreach ($data as $locale => $translation) {
             // Remove useless Translation object
-            if (!$translation) {
+            if (empty($translation)) {
                 $data->removeElement($translation);
                 continue;
             }
