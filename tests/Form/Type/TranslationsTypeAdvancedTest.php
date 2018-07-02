@@ -15,7 +15,6 @@ namespace A2lix\TranslationFormBundle\Tests\Form\Type;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Product;
-use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\ProductTranslation;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
