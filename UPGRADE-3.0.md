@@ -76,3 +76,16 @@ You also have to register this compiler pass in your Kernel.
 
 See [How to Work with Compiler Passes](https://symfony.com/doc/current/service_container/compiler_passes.html)
 in Symfony docs for more details.
+
+### 5. Bootstrap 4
+Translations form template provided with v3 of this bundle requires Bootstrap v4. If you are using Bootstrap v3
+and cannot upgrade at the moment, you should consider using custom template.
+In particular this is the case when you're using TranslationFormBundle with SonataAdmin, which ships with
+Bootstrap v3.
+
+You can copy `default.html.twig` template from `2.x` branch into your app or create your own template
+and configure translation form to use it:
+```yaml
+a2lix_translation_form:
+  templating: "Translation/bootstrap_3_layout.html.twig"
+```
