@@ -12,7 +12,7 @@ If using Symfony 4
 
 return [
     // ...
-    Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
+    A2lix\AutoFormBundle\A2lixAutoFormBundle::class => ['all' => true],
     // ...
 ];
 ```
