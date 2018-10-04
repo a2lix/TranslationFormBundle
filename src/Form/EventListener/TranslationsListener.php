@@ -71,7 +71,9 @@ class TranslationsListener implements EventSubscriberInterface
 
         foreach ($data as $locale => $translation) {
             // Remove useless Translation object
-            if (empty($translation)) {
+            if ((method_exists($translation, 'isEmpty') && $translation->isEmpty()) // Knp
+                || empty($translation) // Default
+            ) {
                 $data->removeElement($translation);
                 continue;
             }
