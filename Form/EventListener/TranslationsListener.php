@@ -54,7 +54,7 @@ class TranslationsListener implements EventSubscriberInterface
                         [
                             'data_class' => $translationClass,
                             'fields' => $fieldsOptions[$locale],
-                            'required' => in_array($locale, $formOptions['required_locales']),
+                            'required' => \in_array($locale, $formOptions['required_locales']),
                         ]
                     );
                 }

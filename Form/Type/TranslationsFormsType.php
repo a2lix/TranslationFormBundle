@@ -59,7 +59,7 @@ class TranslationsFormsType extends AbstractType
         foreach ($options['locales'] as $locale) {
             if (isset($formsOptions[$locale])) {
                 $builder->add($locale, $options['form_type'],
-                    $formsOptions[$locale] + ['required' => in_array($locale, $options['required_locales'])]
+                    $formsOptions[$locale] + ['required' => \in_array($locale, $options['required_locales'])]
                 );
             }
         }

@@ -146,7 +146,7 @@ class TranslationForm implements TranslationFormInterface
             $metadataClass = $manager->getMetadataFactory()->getMetadataFor($translationClass);
 
             foreach ($metadataClass->fieldMappings as $fieldMapping) {
-                if (!in_array($fieldMapping['fieldName'], ['id', 'locale']) && !in_array($fieldMapping['fieldName'], $exclude)) {
+                if (!\in_array($fieldMapping['fieldName'], ['id', 'locale']) && !\in_array($fieldMapping['fieldName'], $exclude)) {
                     $fields[] = $fieldMapping['fieldName'];
                 }
             }
