@@ -47,7 +47,7 @@ class TranslatedEntityType extends AbstractType
     {
         // BC for SF < 2.7
         $optionProperty = 'choice_label';
-        if (in_array('property', $resolver->getDefinedOptions())) {
+        if (\in_array('property', $resolver->getDefinedOptions())) {
             $optionProperty = 'property';
         }
 

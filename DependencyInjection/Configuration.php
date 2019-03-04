@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('a2lix_translation_form');
-        
+
         // Keep compatibility with symfony/config < 4.2
         if (!method_exists($treeBuilder, 'getRootNode')) {
             $rootNode = $treeBuilder->root('a2lix_translation_form');

@@ -24,7 +24,7 @@ class TemplatingPass implements CompilerPassInterface
         if (false !== ($template = $container->getParameter('a2lix_translation_form.templating'))) {
             $resources = $container->getParameter('twig.form.resources');
 
-            if (!in_array($template, $resources)) {
+            if (!\in_array($template, $resources)) {
                 $resources[] = $template;
                 $container->setParameter('twig.form.resources', $resources);
             }
