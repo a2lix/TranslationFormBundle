@@ -31,8 +31,7 @@ Example:
 
             <div id="{{ translationsFields.vars.id }}_a2lix_translations-fields" class="tab-pane {% if app.request.locale == locale %}show active{% endif %} {% if not form.vars.valid %}sonata-ba-field-error{% endif %}" role="tabpanel">
             {% for translationsField in translationsFields if translationsField.vars.name in fieldsNames %}
-                {{ form_errors(translationsFields) }}
-                {{ form_widget(translationsFields) }}
+                {{ form_row(translationsField) }}
             {% endfor %}
             </div>
         {% endfor %}
