@@ -58,6 +58,7 @@ class TranslationsFormsType extends AbstractType
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
+            'form_type' => null,
             'form_options' => [],
         ]);
 
