@@ -30,7 +30,7 @@ Example:
             {% set locale = translationsFields.vars.name %}
 
             <div id="{{ translationsFields.vars.id }}_a2lix_translations-fields" class="tab-pane {% if app.request.locale == locale %}show active{% endif %} {% if not form.vars.valid %}sonata-ba-field-error{% endif %}" role="tabpanel">
-            {% for translationsField in translationsFields if translationsField.vars.name in fieldsNames %}
+            {% for translationsField in translationsFields|filter(translationsField => translationsField.vars.name in fieldsNames) %}
                 {{ form_row(translationsField) }}
             {% endfor %}
             </div>
