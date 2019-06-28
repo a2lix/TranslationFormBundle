@@ -35,7 +35,7 @@ class TranslationsFormsListener implements EventSubscriberInterface
         foreach ($formOptions['locales'] as $locale) {
             $form->add($locale, $formOptions['form_type'],
                 $formOptions['form_options'] + [
-                    'required' => in_array($locale, $formOptions['required_locales'], true),
+                    'required' => \in_array($locale, $formOptions['required_locales'], true),
                 ]
             );
         }

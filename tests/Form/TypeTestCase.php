@@ -44,7 +44,7 @@ abstract class TypeTestCase extends BaseTypeTestCase
         $validator = $this->getMockBuilder(ValidatorInterface::class)
                      ->disableOriginalConstructor()
                      ->getMock();
-        $validator->method('validate')->will($this->returnValue(new ConstraintViolationList()));
+        $validator->method('validate')->willReturn(new ConstraintViolationList());
 
         $this->factory = Forms::createFormFactoryBuilder()
             ->addExtensions($this->getExtensions())
