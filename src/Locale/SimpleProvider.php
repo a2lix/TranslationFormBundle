@@ -24,8 +24,8 @@ class SimpleProvider implements LocaleProviderInterface
 
     public function __construct(array $locales, string $defaultLocale, array $requiredLocales = [])
     {
-        if (!in_array($defaultLocale, $locales, true)) {
-            if (count($locales)) {
+        if (!\in_array($defaultLocale, $locales, true)) {
+            if (\count($locales)) {
                 throw new \InvalidArgumentException(sprintf('Default locale `%s` not found within the configured locales `[%s]`. Perhaps you need to add it to your `a2lix_translation_form.locales` bundle configuration?', $defaultLocale, implode(',', $locales)));
             }
 

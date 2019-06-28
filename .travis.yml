@@ -1,7 +1,6 @@
 language: php
 
 sudo: false
-dist: trusty
 
 cache:
   directories:
@@ -19,21 +18,25 @@ matrix:
   fast_finish: true
   include:
     # Minimum supported dependencies with the latest and oldest PHP version
-    - php: 7.1
-      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
     - php: 7.2
-      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
+    - php: 7.3
+      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
 
     # Test the latest stable release
-    - php: 7.1
     - php: 7.2
+    - php: 7.3
       env: CHECK_PHP_SYNTAX="true"
 
-    # Latest commit to master
+    #   # Test LTS versions. This makes sure we do not use Symfony packages with version greater
+    #   # than 2 or 3 respectively. Read more at https://github.com/symfony/lts
+    # - php: 7.2
+    #   env: DEPENDENCIES="symfony/lts:^2"
+    # - php: 7.2
+    #   env: DEPENDENCIES="symfony/lts:^3"
+
+      # Latest commit to master
     - php: 7.2
-      env: STABILITY="dev"
-      
-    - php: 7.3
       env: STABILITY="dev"
 
   allow_failures:
@@ -46,14 +49,12 @@ before_install:
   - if ! [ -v "$DEPENDENCIES" ]; then composer require --no-update ${DEPENDENCIES}; fi;
 
 install:
-  # To be removed when this issue will be resolved: https://github.com/composer/composer/issues/5355
-  - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --prefer-dist --no-interaction --prefer-stable --quiet; fi
   - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
   # Force most recent version of PHPUnit
-  - SYMFONY_PHPUNIT_VERSION=6.5 ./vendor/bin/simple-phpunit install
+  - ./vendor/bin/simple-phpunit install
 
 script:
   - composer validate --strict --no-check-lock
   # Force most recent version of PHPUnit
-  - SYMFONY_PHPUNIT_VERSION=6.5 ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
+  - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
   - if [[ "$CHECK_PHP_SYNTAX" == "true" ]]; then php ./vendor/bin/php-cs-fixer fix --no-interaction --dry-run --diff -v; fi;
