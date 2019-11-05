@@ -27,6 +27,7 @@ matrix:
     - php: 7.2
     - php: 7.3
       env: CHECK_PHP_SYNTAX="true"
+    - php: 7.4snapshot
 
     #   # Test LTS versions. This makes sure we do not use Symfony packages with version greater
     #   # than 2 or 3 respectively. Read more at https://github.com/symfony/lts
