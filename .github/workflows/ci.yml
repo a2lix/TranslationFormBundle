@@ -30,7 +30,7 @@ jobs:
             - name: Validate Composer
               run: composer validate
             - name: Install highest dependencies with Composer
-              run: composer install --no-progress --no-suggest --ignore-platform-reqs --ansi
+              run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
             - name: Disable PHP memory limit
               run: echo 'memory_limit=-1' >> /usr/local/etc/php/php.ini
             - name: Analyze
@@ -69,10 +69,10 @@ jobs:
                     composer-
             - name: Install lowest dependencies with Composer
               if: matrix.dependencies == 'lowest'
-              run: composer install --no-progress --no-suggest --prefer-lowest --ignore-platform-reqs --ansi
+              run: composer update --no-progress --no-suggest --prefer-stable --prefer-lowest --ignore-platform-reqs --ansi
             - name: Install highest dependencies with Composer
               if: matrix.dependencies == 'highest'
-              run: composer install --no-progress --no-suggest --ignore-platform-reqs --ansi
+              run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
             - name: Run tests with PHPUnit
               run: vendor/bin/phpunit --colors=always
 
@@ -107,7 +107,7 @@ jobs:
                     composer-php${{ matrix.php }}-highest-
                     composer-
             - name: Install highest dependencies with Composer
-              run: composer install --no-progress --no-suggest --ignore-platform-reqs --ansi
+              run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
             - name: Run coverage with PHPUnit
               run: vendor/bin/phpunit --coverage-clover ./clover.xml --colors=always
             - name: Send code coverage report to Codecov.io
