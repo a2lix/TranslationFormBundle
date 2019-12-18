@@ -42,7 +42,7 @@
         "edgedesign/phpqa": "^1.23",
         "friendsofphp/php-cs-fixer": "^2.15",
         "knplabs/doctrine-behaviors": "^1.6",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.3",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "phpstan/phpstan": "^0.11.19",
         "sensiolabs/security-checker": "^6.0",
         "symfony/phpunit-bridge": "^4.3|^5.0",
