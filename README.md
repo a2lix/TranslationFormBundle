@@ -13,7 +13,7 @@ Translate your doctrine objects easily with some helps
 | Branch | Tools |
 | --- | --- |
 | 2.x | [![Build Status][v2_ci_badge]][v2_ci_link] [![Coverage Status][v2_coverage_badge]][v2_coverage_link] |
-| 3.x (master) | [![Build Status][v3_ci_badge]][v2_ci_link] [![Coverage Status][v3_coverage_badge]][v3_coverage_link] [![SensioLabsInsight][v3_sensioinsight_badge]][v3_sensioinsight_link] |
+| 3.x (master) | [![Build Status][v3_ci_badge]][v3_ci_link] [![Coverage Status][v3_coverage_badge]][v3_coverage_link] [![SensioLabsInsight][v3_sensioinsight_badge]][v3_sensioinsight_link] |
 
 ## Documentation
 
