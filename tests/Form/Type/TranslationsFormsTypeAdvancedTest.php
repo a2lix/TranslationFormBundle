@@ -21,7 +21,11 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\PreloadedExtension;
 
-class TranslationsFormsTypeAdvancedTest extends TypeTestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class TranslationsFormsTypeAdvancedTest extends TypeTestCase
 {
     protected $locales = ['en', 'fr', 'de'];
     protected $defaultLocale = 'en';
@@ -40,7 +44,8 @@ class TranslationsFormsTypeAdvancedTest extends TypeTestCase
                 'required_locales' => $overrideRequiredLocales,
             ])
             ->add('save', SubmitType::class)
-            ->getForm();
+            ->getForm()
+        ;
 
         $mediasForm = $form->get('medias')->all();
         $mediasLocales = array_keys($mediasForm);
@@ -48,12 +53,12 @@ class TranslationsFormsTypeAdvancedTest extends TypeTestCase
             return $form->isRequired();
         }));
 
-        $this->assertEquals($overrideLocales, $mediasLocales, 'Locales should be same as config');
-        $this->assertEquals($overrideRequiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
+        static::assertEquals($overrideLocales, $mediasLocales, 'Locales should be same as config');
+        static::assertEquals($overrideRequiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
 
-        $this->assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
-        $this->assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
-        $this->assertEquals(['url', 'description'], array_keys($mediasForm['es']->all()), 'Fields should matches MediaLocalizeType fields');
+        static::assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
+        static::assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
+        static::assertEquals(['url', 'description'], array_keys($mediasForm['es']->all()), 'Fields should matches MediaLocalizeType fields');
     }
 
     protected function getExtensions(): array

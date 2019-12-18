@@ -42,8 +42,9 @@ abstract class TypeTestCase extends BaseTypeTestCase
         parent::setUp();
 
         $validator = $this->getMockBuilder(ValidatorInterface::class)
-                     ->disableOriginalConstructor()
-                     ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
         $validator->method('validate')->willReturn(new ConstraintViolationList());
 
         $this->factory = Forms::createFormFactoryBuilder()
@@ -53,14 +54,16 @@ abstract class TypeTestCase extends BaseTypeTestCase
             )
             ->addTypeGuesser(
                 $this->getMockBuilder(ValidatorTypeGuesser::class)
-                     ->disableOriginalConstructor()
-                     ->getMock()
+                    ->disableOriginalConstructor()
+                    ->getMock()
             )
-            ->getFormFactory();
+            ->getFormFactory()
+        ;
 
         $this->dispatcher = $this->getMockBuilder(EventDispatcherInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
         $this->builder = new FormBuilder(null, null, $this->dispatcher, $this->factory);
     }
 

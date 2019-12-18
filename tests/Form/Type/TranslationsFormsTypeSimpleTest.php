@@ -22,7 +22,11 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\PreloadedExtension;
 
-class TranslationsFormsTypeSimpleTest extends TypeTestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class TranslationsFormsTypeSimpleTest extends TypeTestCase
 {
     protected $locales = ['en', 'fr', 'de'];
     protected $defaultLocale = 'en';
@@ -36,7 +40,8 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
                 'form_type' => MediaLocalizeType::class,
             ])
             ->add('save', SubmitType::class)
-            ->getForm();
+            ->getForm()
+        ;
 
         $mediasForm = $form->get('medias')->all();
         $mediasLocales = array_keys($mediasForm);
@@ -44,12 +49,12 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
             return $form->isRequired();
         }));
 
-        $this->assertEquals($this->locales, $mediasLocales, 'Locales should be same as config');
-        $this->assertEquals($this->requiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
+        static::assertEquals($this->locales, $mediasLocales, 'Locales should be same as config');
+        static::assertEquals($this->requiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
 
-        $this->assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
-        $this->assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
-        $this->assertEquals(['url', 'description'], array_keys($mediasForm['de']->all()), 'Fields should matches MediaLocalizeType fields');
+        static::assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
+        static::assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
+        static::assertEquals(['url', 'description'], array_keys($mediasForm['de']->all()), 'Fields should matches MediaLocalizeType fields');
     }
 
     public function testCreationForm(): Product
@@ -60,26 +65,31 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
                 'form_type' => MediaLocalizeType::class,
             ])
             ->add('save', SubmitType::class)
-            ->getForm();
+            ->getForm()
+        ;
 
         $mediaEn = new MediaLocalize();
         $mediaEn->setLocale('en')
-                ->setUrl('http://en')
-                ->setDescription('desc en');
+            ->setUrl('http://en')
+            ->setDescription('desc en')
+        ;
         $mediaFr = new MediaLocalize();
         $mediaFr->setLocale('fr')
-                ->setUrl('http://fr')
-                ->setDescription('desc fr');
+            ->setUrl('http://fr')
+            ->setDescription('desc fr')
+        ;
         $mediaDe = new MediaLocalize();
         $mediaDe->setLocale('de')
-                ->setUrl('http://de')
-                ->setDescription('desc de');
+            ->setUrl('http://de')
+            ->setDescription('desc de')
+        ;
 
         $product = new Product();
         $product->setUrl('a2lix.fr')
-                ->addMedia($mediaEn)
-                ->addMedia($mediaFr)
-                ->addMedia($mediaDe);
+            ->addMedia($mediaEn)
+            ->addMedia($mediaFr)
+            ->addMedia($mediaDe)
+        ;
 
         $formData = [
             'url' => 'a2lix.fr',
@@ -100,8 +110,8 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
         ];
 
         $form->submit($formData);
-        $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($product, $form->getData());
+        static::assertTrue($form->isSynchronized());
+        static::assertEquals($product, $form->getData());
 
         return $product;
     }
@@ -138,17 +148,18 @@ class TranslationsFormsTypeSimpleTest extends TypeTestCase
                 'form_type' => MediaLocalizeType::class,
             ])
             ->add('save', SubmitType::class)
-            ->getForm();
+            ->getForm()
+        ;
 
         $form->submit($formData);
-        $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($product, $form->getData());
+        static::assertTrue($form->isSynchronized());
+        static::assertEquals($product, $form->getData());
 
         $view = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {
-            $this->assertArrayHasKey($key, $children);
+            static::assertArrayHasKey($key, $children);
         }
     }
 
