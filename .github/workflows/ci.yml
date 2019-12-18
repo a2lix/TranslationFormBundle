@@ -4,6 +4,9 @@ on: ["push", "pull_request"]
 
 env:
     COMPOSER_ALLOW_SUPERUSER: '1'
+#    SYMFONY_PHPUNIT_VERSION: 8.5
+    SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
+    SYMFONY_DEPRECATIONS_HELPER: max[self]=0
 
 jobs:
     analyze:
@@ -23,7 +26,7 @@ jobs:
               uses: actions/cache@v1
               with:
                 path: ~/.composer/cache
-                key: composer-php${{ matrix.php }}-highest-${{ github.sha }}
+                key: composer-php${{ matrix.php }}-highest-
                 restore-keys: |
                    composer-php${{ matrix.php }}-highest-
                    composer-
@@ -63,7 +66,7 @@ jobs:
               uses: actions/cache@v1
               with:
                 path: ~/.composer/cache
-                key: composer-php${{ matrix.php }}-${{ matrix.dependencies }}-${{ github.sha }}
+                key: composer-php${{ matrix.php }}-${{ matrix.dependencies }}-
                 restore-keys: |
                     composer-php${{ matrix.php }}-${{ matrix.dependencies }}-
                     composer-
@@ -74,7 +77,7 @@ jobs:
               if: matrix.dependencies == 'highest'
               run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
             - name: Run tests with PHPUnit
-              run: vendor/bin/phpunit --colors=always
+              run: vendor/bin/simple-phpunit --colors=always
 
     phpunit-coverage:
         name: PHPUnit coverage (PHP ${{ matrix.php }})
@@ -102,14 +105,14 @@ jobs:
               uses: actions/cache@v1
               with:
                 path: ~/.composer/cache
-                key: composer-php${{ matrix.php }}-highest-${{ github.sha }}
+                key: composer-php${{ matrix.php }}-highest-
                 restore-keys: |
                     composer-php${{ matrix.php }}-highest-
                     composer-
             - name: Install highest dependencies with Composer
               run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
             - name: Run coverage with PHPUnit
-              run: vendor/bin/phpunit --coverage-clover ./clover.xml --colors=always
+              run: vendor/bin/simple-phpunit --coverage-clover ./clover.xml --colors=always
             - name: Send code coverage report to Codecov.io
               env:
                 CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
