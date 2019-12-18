@@ -60,6 +60,8 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v1
+            - name: Install system packages
+              run: apk add unzip
             - name: Install Composer
               run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
             - name: Cache Composer dependencies
@@ -79,8 +81,8 @@ jobs:
             - name: Run tests with PHPUnit
               run: vendor/bin/simple-phpunit --colors=always
 
-    phpunit-coverage:
-        name: PHPUnit coverage (PHP ${{ matrix.php }})
+    coverage:
+        name: Coverage (PHP ${{ matrix.php }})
         runs-on: ubuntu-latest
         container:
             image: php:${{ matrix.php }}-alpine
@@ -114,7 +116,7 @@ jobs:
             - name: Run coverage with PHPUnit
               run: vendor/bin/simple-phpunit --coverage-clover ./clover.xml --colors=always
             - name: Send code coverage report to Codecov.io
-              uses: codecov/codecov-action@v1
+              uses: codecov/codecov-action@v1.0.5
               with:
                 token: ${{ secrets.CODECOV_TOKEN }}
                 file: ./clover.xml
