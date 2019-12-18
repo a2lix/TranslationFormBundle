@@ -18,7 +18,6 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 
 /**
  * @internal
- * @coversNothing
  */
 final class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
 {

@@ -23,7 +23,6 @@ use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @internal
- * @coversNothing
  */
 final class TranslationsFormsTypeAdvancedTest extends TypeTestCase
 {
