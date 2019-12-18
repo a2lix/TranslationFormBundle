@@ -102,7 +102,7 @@ class TranslationsListener implements EventSubscriberInterface
             unset($fieldConfig['locale_options']);
 
             foreach ($formOptions['locales'] as $locale) {
-                $localeFieldOptions = isset($localesFieldOptions[$locale]) ? $localesFieldOptions[$locale] : [];
+                $localeFieldOptions = $localesFieldOptions[$locale] ?? [];
                 if (!isset($localeFieldOptions['display']) || (true === $localeFieldOptions['display'])) {
                     $fieldsOptions[$locale][$fieldName] = $localeFieldOptions + $fieldConfig;
                 }

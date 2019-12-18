@@ -23,9 +23,15 @@ Check out the documentation on the [official website](http://a2lix.fr/bundles/tr
 
 * `0.x` & `1.x` are old versions not maintained anymore.
 * `2.x` is a stable version with low requirements (PHP5.4+/7+, Symfony2.3+/3.0+/4.0+). It is compatible with [Gedmo](https://github.com/Atlantic18/DoctrineExtensions/blob/master/doc/translatable.md), [KnpLabs](https://github.com/KnpLabs/DoctrineBehaviors#translatable), [A2lix](https://github.com/a2lix/I18nDoctrineBundle) and [Prezent](https://github.com/Prezent/doctrine-translatable-bundle)
-* `3.x` is the new and rethink version that uses [AutoFormBundle](https://github.com/a2lix/AutoFormBundle) and has higher requirements (PHP7.1+, Symfony3.4+/4+). It is compatible with [KnpLabs](https://github.com/KnpLabs/DoctrineBehaviors#translatable), [A2lix](https://github.com/a2lix/I18nDoctrineBundle) and [Prezent](https://github.com/Prezent/doctrine-translatable-bundle)
+* `3.x` is the new and rethink version that uses [AutoFormBundle](https://github.com/a2lix/AutoFormBundle) and has higher requirements (PHP7.2+, Symfony3.4+/4+/5+). It is compatible with [KnpLabs](https://github.com/KnpLabs/DoctrineBehaviors#translatable), [A2lix](https://github.com/a2lix/I18nDoctrineBundle) and [Prezent](https://github.com/Prezent/doctrine-translatable-bundle)
 
 For general support and questions, and if you think you found a bug or you have a feature idea to propose, feel free to open an issue **after looking** at the [contributing guide](CONTRIBUTING.md).
+
+## Contribution help
+
+docker run --rm --interactive --tty --volume $PWD:/app --user $(id -u):$(id -g) composer install --ignore-platform-reqs
+docker run --rm --interactive --tty --volume $PWD:/app --user $(id -u):$(id -g) composer run-script phpunit
+docker run --rm --interactive --tty --volume $PWD:/app --user $(id -u):$(id -g) composer run-script cs-fixer
 
 ## License
 

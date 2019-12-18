@@ -16,7 +16,11 @@ namespace A2lix\TranslationFormBundle\Tests\DependencyInjection;
 use A2lix\TranslationFormBundle\DependencyInjection\A2lixTranslationFormExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 
-class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class A2lixTranslationFormExtensionTest extends AbstractExtensionTestCase
 {
     public function testAfterLoadingParametersAreSet(): void
     {

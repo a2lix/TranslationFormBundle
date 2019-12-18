@@ -20,7 +20,11 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\PreloadedExtension;
 
-class TranslationsTypeAdvancedTest extends TypeTestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class TranslationsTypeAdvancedTest extends TypeTestCase
 {
     protected $locales = ['en', 'fr', 'de'];
     protected $defaultLocale = 'en';
@@ -38,7 +42,8 @@ class TranslationsTypeAdvancedTest extends TypeTestCase
                 'required_locales' => $overrideRequiredLocales,
             ])
             ->add('save', SubmitType::class)
-            ->getForm();
+            ->getForm()
+        ;
 
         $translationsForm = $form->get('translations')->all();
         $translationsLocales = array_keys($translationsForm);
@@ -46,12 +51,12 @@ class TranslationsTypeAdvancedTest extends TypeTestCase
             return $form->isRequired();
         }));
 
-        $this->assertEquals($overrideLocales, $translationsLocales, 'Locales should be same as config');
-        $this->assertEquals($overrideRequiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
+        static::assertEquals($overrideLocales, $translationsLocales, 'Locales should be same as config');
+        static::assertEquals($overrideRequiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
 
-        $this->assertEquals(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
-        $this->assertEquals(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
-        $this->assertEquals(['title', 'description'], array_keys($translationsForm['es']->all()), 'Fields should matches ProductTranslation fields');
+        static::assertEquals(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
+        static::assertEquals(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
+        static::assertEquals(['title', 'description'], array_keys($translationsForm['es']->all()), 'Fields should matches ProductTranslation fields');
     }
 
     public function testEmptyFormOverrideFields(): void
@@ -62,12 +67,13 @@ class TranslationsTypeAdvancedTest extends TypeTestCase
                 'excluded_fields' => ['description'],
             ])
             ->add('save', SubmitType::class)
-            ->getForm();
+            ->getForm()
+        ;
 
         $translationsForm = $form->get('translations')->all();
-        $this->assertEquals(['title'], array_keys($translationsForm['en']->all()), 'Fields should not contains description');
-        $this->assertEquals(['title'], array_keys($translationsForm['fr']->all()), 'Fields should not contains description');
-        $this->assertEquals(['title'], array_keys($translationsForm['de']->all()), 'Fields should not contains description');
+        static::assertEquals(['title'], array_keys($translationsForm['en']->all()), 'Fields should not contains description');
+        static::assertEquals(['title'], array_keys($translationsForm['fr']->all()), 'Fields should not contains description');
+        static::assertEquals(['title'], array_keys($translationsForm['de']->all()), 'Fields should not contains description');
     }
 
     protected function getExtensions(): array

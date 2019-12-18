@@ -1,0 +1,13 @@
+phpqa:
+    tools:
+        - php-cs-fixer:0
+        - phpunit:0
+        - psalm:0
+        - security-checker:0
+    output: cli
+
+php-cs-fixer:
+    config: .php_cs.dist
+
+psalm:
+    config: psalm.xml

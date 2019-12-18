@@ -6,7 +6,7 @@ UPGRADE FROM 2.x to 3.x
 ### 1. New bundle requirements
 ```A2lix\AutoFormBundle\A2lixAutoFormBundle``` is required as an additional Bundle in your AppKernel.
 
-If using Symfony 4
+If using Symfony 4+
 ```php
 // config/bundles.php
 

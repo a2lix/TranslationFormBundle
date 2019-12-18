@@ -37,7 +37,8 @@ class TranslatedEntityType extends AbstractType
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('e')
                     ->select('e, t')
-                    ->join('e.translations', 't');
+                    ->join('e.translations', 't')
+                ;
             },
             'choice_label' => function (Options $options) {
                 if (null === ($request = $this->requestStack->getCurrentRequest())) {
