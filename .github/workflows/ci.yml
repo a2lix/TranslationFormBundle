@@ -4,7 +4,7 @@ on: ["push", "pull_request"]
 
 env:
     COMPOSER_ALLOW_SUPERUSER: '1'
-#    SYMFONY_PHPUNIT_VERSION: 8.5
+    SYMFONY_PHPUNIT_VERSION: 8.5
     SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
     SYMFONY_DEPRECATIONS_HELPER: max[self]=0
 
@@ -116,4 +116,4 @@ jobs:
             - name: Send code coverage report to Codecov.io
               env:
                 CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-              run: bash <(curl -s https://codecov.io/bash)
+              run: bash <(curl -s https://codecov.io/bash)>
