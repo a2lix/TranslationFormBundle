@@ -1,0 +1,114 @@
+name: CI
+
+on: ["push", "pull_request"]
+
+env:
+    COMPOSER_ALLOW_SUPERUSER: '1'
+
+jobs:
+    analyze:
+        name: Analyze
+        runs-on: ubuntu-latest
+        container:
+            image: php:7.4-alpine
+            options: >-
+              --tmpfs /tmp:exec
+              --tmpfs /var/tmp:exec
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v1
+            - name: Install Composer
+              run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
+            - name: Cache Composer dependencies
+              uses: actions/cache@v1
+              with:
+                path: ~/.composer/cache
+                key: composer-php${{ matrix.php }}-highest-${{ github.sha }}
+                restore-keys: |
+                   composer-php${{ matrix.php }}-highest-
+                   composer-
+            - name: Composer install
+              run: composer install --no-progress --no-suggest --ignore-platform-reqs --ansi
+            - name: Disable PHP memory limit
+              run: echo 'memory_limit=-1' >> /usr/local/etc/php/php.ini
+            - name: Analyze
+              run: vendor/bin/phpqa --execution no-parallel --progress-delay=-1 --ansi
+
+    phpunit:
+        name: PHPUnit (PHP ${{ matrix.php }} Deps ${{ matrix.dependencies }})
+        runs-on: ubuntu-latest
+        container:
+            image: php:${{ matrix.php }}-alpine
+            options: >-
+              --tmpfs /tmp:exec
+              --tmpfs /var/tmp:exec
+        strategy:
+            matrix:
+                php:
+                    - '7.2'
+                    - '7.3'
+                    - '7.4'
+                dependencies:
+                    - lowest
+                    - highest
+            fail-fast: false
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v1
+            - name: Install Composer
+               run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
+            - name: Cache Composer dependencies
+              uses: actions/cache@v1
+              with:
+                path: ~/.composer/cache
+                key: composer-php${{ matrix.php }}-${{ matrix.dependencies }}-${{ github.sha }}
+                restore-keys: |
+                    composer-php${{ matrix.php }}-${{ matrix.dependencies }}-
+                    composer-
+            - name: Install lowest dependencies with Composer
+              if: matrix.dependencies == 'lowest'
+              run: composer install --no-progress --no-suggest --prefer-lowest --ignore-platform-reqs --ansi
+            - name: Install highest dependencies with Composer
+              if: matrix.dependencies == 'highest'
+              run: composer install --no-progress --no-suggest --ignore-platform-reqs --ansi
+            - name: Run tests with PHPUnit
+              run: vendor/bin/phpunit --colors=always
+
+    phpunit-coverage:
+        name: PHPUnit coverage (PHP ${{ matrix.php }})
+        runs-on: ubuntu-latest
+        container:
+            image: php:${{ matrix.php }}-alpine
+            options: >-
+              --tmpfs /tmp:exec
+              --tmpfs /var/tmp:exec
+        strategy:
+            matrix:
+                php:
+                    - '7.4'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v1
+            - name: Install pcov PHP extension
+              run: |
+                apk add $PHPIZE_DEPS
+                pecl install pcov
+                docker-php-ext-enable pcov
+            - name: Install Composer
+              run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
+            - name: Cache Composer dependencies
+              uses: actions/cache@v1
+              with:
+                path: ~/.composer/cache
+                key: composer-php${{ matrix.php }}-highest-${{ github.sha }}
+                restore-keys: |
+                    composer-php${{ matrix.php }}-highest-
+                    composer-
+            - name: Install highest dependencies with Composer
+              run: composer install --no-progress --no-suggest --ignore-platform-reqs --ansi
+            - name: Run coverage with PHPUnit
+              run: vendor/bin/phpunit --coverage-clover ./clover.xml --colors=always
+            - name: Send code coverage report to Codecov.io
+              env:
+                CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+              run: bash <(curl -s https://codecov.io/bash)
