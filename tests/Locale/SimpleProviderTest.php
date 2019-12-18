@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- * @coversNothing
  */
 final class SimpleProviderTest extends TestCase
 {
