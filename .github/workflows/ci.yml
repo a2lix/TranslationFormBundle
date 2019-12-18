@@ -112,6 +112,8 @@ jobs:
             - name: Install highest dependencies with Composer
               run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
             - name: Run coverage with PHPUnit
-              run: vendor/bin/simple-phpunit --coverage-clover ./clover.xml --colors=always
+              run: vendor/bin/simple-phpunit --coverage-clover ./coverage.xml --colors=always
             - name: Send code coverage report to Codecov.io
-              run: curl -s https://codecov.io/bash | bash -s -- -t ${{ secrets.CODECOV_TOKEN }} -f ./clover.xml
+              uses: codecov/codecov-action@v1.0.3
+              with:
+                token: ${{ secrets.CODECOV_TOKEN }}
