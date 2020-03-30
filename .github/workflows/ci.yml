@@ -19,7 +19,7 @@ jobs:
               --tmpfs /var/tmp:exec
         steps:
             - name: Checkout
-              uses: actions/checkout@v1
+              uses: actions/checkout@v2
             - name: Install Composer
               run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
             - name: Cache Composer dependencies
@@ -32,8 +32,12 @@ jobs:
                    composer-
             - name: Validate Composer
               run: composer validate
+            - name: Install xsl PHP extension
+              run: |
+                apk add $PHPIZE_DEPS
+                docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
-              run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
+              run: composer update --no-progress --no-suggest --ansi
             - name: Disable PHP memory limit
               run: echo 'memory_limit=-1' >> /usr/local/etc/php/php.ini
             - name: Analyze
@@ -59,7 +63,7 @@ jobs:
             fail-fast: false
         steps:
             - name: Checkout
-              uses: actions/checkout@v1
+              uses: actions/checkout@v2
             - name: Install Composer
               run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
             - name: Cache Composer dependencies
@@ -70,12 +74,16 @@ jobs:
                 restore-keys: |
                     composer-php${{ matrix.php }}-${{ matrix.dependencies }}-
                     composer-
+            - name: Install xsl PHP extension
+              run: |
+                apk add $PHPIZE_DEPS
+                docker-php-ext-install xsl
             - name: Install lowest dependencies with Composer
               if: matrix.dependencies == 'lowest'
-              run: composer update --no-progress --no-suggest --prefer-stable --prefer-lowest --ignore-platform-reqs --ansi
+              run: composer update --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi
             - name: Install highest dependencies with Composer
               if: matrix.dependencies == 'highest'
-              run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
+              run: composer update --no-progress --no-suggest --ansi
             - name: Run tests with PHPUnit
               run: vendor/bin/simple-phpunit --colors=always
 
@@ -93,7 +101,7 @@ jobs:
                     - '7.4'
         steps:
             - name: Checkout
-              uses: actions/checkout@v1
+              uses: actions/checkout@v2
             - name: Install pcov PHP extension
               run: |
                 apk add $PHPIZE_DEPS
@@ -109,8 +117,12 @@ jobs:
                 restore-keys: |
                     composer-php${{ matrix.php }}-highest-
                     composer-
+            - name: Install xsl PHP extension
+              run: |
+                apk add $PHPIZE_DEPS
+                docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
-              run: composer update --no-progress --no-suggest --ignore-platform-reqs --ansi
+              run: composer update --no-progress --no-suggest --ansi
             - name: Run coverage with PHPUnit
               run: vendor/bin/simple-phpunit --coverage-clover ./coverage.xml --colors=always
             - name: Send code coverage report to Codecov.io
