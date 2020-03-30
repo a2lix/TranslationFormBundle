@@ -34,7 +34,7 @@ jobs:
               run: composer validate
             - name: Install xsl PHP extension
               run: |
-                apk add $PHPIZE_DEPS
+                apk add $PHPIZE_DEPS libxslt-dev
                 docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
               run: composer update --no-progress --no-suggest --ansi
@@ -76,7 +76,7 @@ jobs:
                     composer-
             - name: Install xsl PHP extension
               run: |
-                apk add $PHPIZE_DEPS
+                apk add $PHPIZE_DEPS libxslt-dev
                 docker-php-ext-install xsl
             - name: Install lowest dependencies with Composer
               if: matrix.dependencies == 'lowest'
@@ -119,7 +119,7 @@ jobs:
                     composer-
             - name: Install xsl PHP extension
               run: |
-                apk add $PHPIZE_DEPS
+                apk add $PHPIZE_DEPS libxslt-dev
                 docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
               run: composer update --no-progress --no-suggest --ansi
