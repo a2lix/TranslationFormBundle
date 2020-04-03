@@ -1,0 +1,38 @@
+{#
+Example:
+{% import "@A2lixTranslationForm/macros_bootstrap_3.html.twig" as a2lixTranslations %}
+{{ a2lixTranslations.partialTranslations(editForm.translations, ['title','description']) }}
+{{ a2lixTranslations.partialTranslations(editForm.translations, ['url']) }}
+#}
+
+{% macro partialTranslations(form, fieldsNames) %}
+    {{ form_errors(form) }}
+
+    <div class="a2lix_translations">
+        <ul class="a2lix_translationsLocales nav nav-tabs" role="tablist">
+            {% for translationsFields in form %}
+                {% set locale = translationsFields.vars.name %}
+
+                <li{% if app.request.locale == locale %} class="active"{% endif %}>
+                    <a href="#{{ translationsFields.vars.id }}_a2lix_translations-fields" data-toggle="tab" role="tab">
+                        {{ translationsFields.vars.label|default(locale|humanize)|trans }}
+                        {% if form.vars.default_locale == locale %}{{ '[Default]'|trans }}{% endif %}
+                        {% if translationsFields.vars.required %}*{% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="a2lix_translationsFields tab-content">
+            {% for translationsFields in form %}
+                {% set locale = translationsFields.vars.name %}
+
+                <div id="{{ translationsFields.vars.id }}_a2lix_translations-fields" class="tab-pane {% if app.request.locale == locale %}active{% endif %} {% if not form.vars.valid %}sonata-ba-field-error{% endif %}" role="tabpanel">
+                    {% for translationsField in translationsFields|filter(translationsField => translationsField.vars.name in fieldsNames) %}
+                        {{ form_row(translationsField) }}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}
