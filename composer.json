@@ -1,5 +1,5 @@
 {
-    "name": "a2lix/translation-form-bundle",
+    "name": "jul6art/translation-form-bundle",
     "type": "symfony-bundle",
     "description": "Translate your doctrine objects easily with some helps",
     "keywords": [
@@ -26,8 +26,8 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
-        "a2lix/auto-form-bundle": "^0.2|^0.3",
+        "php": ">=7.2 || ^8.0",
+        "jul6art/auto-form-bundle": "^0.4",
         "symfony/config": "^3.4.30|^4.3|^5.0",
         "symfony/dependency-injection": "^3.4.30|^4.3|^5.0",
         "symfony/doctrine-bridge": "^3.4.30|^4.3|^5.0",
