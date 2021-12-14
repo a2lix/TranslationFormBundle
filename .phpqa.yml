@@ -7,7 +7,7 @@ phpqa:
     output: cli
 
 php-cs-fixer:
-    config: .php_cs.dist
+    config: .php-cs-fixer.dist.php
 
 psalm:
     config: psalm.xml
