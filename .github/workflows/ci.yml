@@ -63,6 +63,10 @@ jobs:
                 include:
                     - php: '7.2'
                       phpunit-version: 8.5
+                    - php: '7.3'
+                      phpunit-version: 9.5
+                    - php: '7.4'
+                      phpunit-version: 9.5
             fail-fast: false
         steps:
             - name: Checkout
