@@ -4,7 +4,7 @@ on: ["push", "pull_request"]
 
 env:
     COMPOSER_ALLOW_SUPERUSER: '1'
-    SYMFONY_PHPUNIT_VERSION: 8.5
+    SYMFONY_PHPUNIT_VERSION: 9.5
     SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
     SYMFONY_DEPRECATIONS_HELPER: max[self]=0
 
@@ -37,7 +37,7 @@ jobs:
                 apk add $PHPIZE_DEPS libxslt-dev
                 docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
-              run: composer update --no-progress --no-suggest --ansi
+              run: composer update --no-progress --ansi
             - name: Disable PHP memory limit
               run: echo 'memory_limit=-1' >> /usr/local/etc/php/php.ini
             - name: Analyze
@@ -60,6 +60,13 @@ jobs:
                 dependencies:
                     - lowest
                     - highest
+                include:
+                    - php: '7.2'
+                      phpunit-version: 8.5
+                    - php: '7.3'
+                      phpunit-version: 9.5
+                    - php: '7.4'
+                      phpunit-version: 9.5
             fail-fast: false
         steps:
             - name: Checkout
@@ -80,11 +87,13 @@ jobs:
                 docker-php-ext-install xsl
             - name: Install lowest dependencies with Composer
               if: matrix.dependencies == 'lowest'
-              run: composer update --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi
+              run: composer update --no-progress --prefer-stable --prefer-lowest --ansi
             - name: Install highest dependencies with Composer
               if: matrix.dependencies == 'highest'
-              run: composer update --no-progress --no-suggest --ansi
+              run: composer update --no-progress --ansi
             - name: Run tests with PHPUnit
+              env:
+                SYMFONY_PHPUNIT_VERSION: ${{ matrix.phpunit-version }}
               run: vendor/bin/simple-phpunit --colors=always
 
     coverage:
@@ -122,7 +131,7 @@ jobs:
                 apk add $PHPIZE_DEPS libxslt-dev
                 docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
-              run: composer update --no-progress --no-suggest --ansi
+              run: composer update --no-progress --ansi
             - name: Run coverage with PHPUnit
               run: vendor/bin/simple-phpunit --coverage-clover ./coverage.xml --colors=always
             - name: Send code coverage report to Codecov.io

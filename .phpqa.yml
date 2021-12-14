@@ -3,11 +3,13 @@ phpqa:
         - php-cs-fixer:0
         - phpunit:0
         - psalm
-        - security-checker:0
     output: cli
 
+phpunit:
+    binary: ./vendor/bin/simple-phpunit
+
 php-cs-fixer:
-    config: .php_cs.dist
+    config: .php-cs-fixer.dist.php
 
 psalm:
     config: psalm.xml

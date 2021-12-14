@@ -66,7 +66,7 @@ class TranslationsFormsType extends AbstractType
         $resolver->setNormalizer('form_options', function (Options $options, $value): array {
             // Check mandatory data_class option when AutoFormType use
             if (($options['form_type'] instanceof AutoFormType) && !isset($value['data_class'])) {
-                throw new \RuntimeException(sprintf('Missing "data_class" option under "form_options" of TranslationsFormsType. Required when "form_type" use "AutoFormType".'));
+                throw new \RuntimeException('Missing "data_class" option under "form_options" of TranslationsFormsType. Required when "form_type" use "AutoFormType".');
             }
 
             return $value;

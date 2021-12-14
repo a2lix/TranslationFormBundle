@@ -9,7 +9,7 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 HEADER;
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@DoctrineAnnotation' => true,
@@ -34,7 +34,7 @@ return PhpCsFixer\Config::create()
         'php_unit_test_class_requires_covers' => false,
     ])
     ->setFinder(
-        PhpCsFixer\Finder::create()
+        (new PhpCsFixer\Finder())
         ->exclude(['vendor'])
         ->in(['src', 'tests'])
     )
