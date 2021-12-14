@@ -83,7 +83,7 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
                 'locale_labels' => [
                     'fr' => 'Français',
                     'en' => 'English',
-                ]
+                ],
             ])
             ->add('save', SubmitType::class)
             ->getForm()
@@ -92,7 +92,7 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
         $translationsForm = $form->get('translations')->all();
         static::assertEquals('English', $translationsForm['en']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
         static::assertEquals('Français', $translationsForm['fr']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
-        static::assertEquals(null, $translationsForm['de']->getConfig()->getOptions()['label'], 'Label should default to null');
+        static::assertNull($translationsForm['de']->getConfig()->getOptions()['label'], 'Label should default to null');
     }
 
     protected function getExtensions(): array
