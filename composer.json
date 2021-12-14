@@ -62,7 +62,7 @@
             "psalm"
         ],
         "phpunit": [
-            "SYMFONY_DEPRECATIONS_HELPER=max[self]=0 SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 simple-phpunit"
+            "SYMFONY_DEPRECATIONS_HELPER=max[self]=0 SYMFONY_PHPUNIT_VERSION=9.5 SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 simple-phpunit"
         ]
     },
     "config": {
