@@ -44,7 +44,6 @@
         "knplabs/doctrine-behaviors": "^1.6",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "phpstan/phpstan": "^1.2.0",
-        "sensiolabs/security-checker": "^6.0",
         "symfony/cache": "^5.4",
         "symfony/phpunit-bridge": "^6.0",
         "symfony/validator": "^3.4.30|^4.3|^5.0",

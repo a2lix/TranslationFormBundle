@@ -3,7 +3,6 @@ phpqa:
         - php-cs-fixer:0
         - phpunit:0
         - psalm
-        - security-checker:0
     output: cli
 
 php-cs-fixer:
