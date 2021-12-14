@@ -53,6 +53,7 @@ class TranslationsType extends AbstractType
             'empty_data' => function (FormInterface $form) {
                 return new ArrayCollection();
             },
+            'locale_labels' => null,
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
