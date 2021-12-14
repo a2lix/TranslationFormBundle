@@ -46,5 +46,3 @@ This package is available under the [MIT license](LICENSE).
 [v3_ci_link]: https://github.com/a2lix/TranslationFormBundle/actions?query=workflow%3ACI
 [v3_coverage_badge]: https://codecov.io/gh/a2lix/TranslationFormBundle/branch/master/graph/badge.svg
 [v3_coverage_link]: https://codecov.io/gh/a2lix/TranslationFormBundle/branch/master
-[v3_sensioinsight_badge]: https://insight.sensiolabs.com/projects/64aee70e-7b00-406f-8648-f7ea66e29f80/mini.png
-[v3_sensioinsight_link]: https://insight.sensiolabs.com/projects/64aee70e-7b00-406f-8648-f7ea66e29f80
