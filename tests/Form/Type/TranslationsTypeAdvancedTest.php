@@ -75,6 +75,26 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
         static::assertEquals(['title'], array_keys($translationsForm['de']->all()), 'Fields should not contains description');
     }
 
+    public function testLabels(): void
+    {
+        $form = $this->factory->createBuilder(FormType::class, new Product())
+            ->add('url')
+            ->add('translations', TranslationsType::class, [
+                'locale_labels' => [
+                    'fr' => 'Français',
+                    'en' => 'English',
+                ],
+            ])
+            ->add('save', SubmitType::class)
+            ->getForm()
+        ;
+
+        $translationsForm = $form->get('translations')->all();
+        static::assertEquals('English', $translationsForm['en']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
+        static::assertEquals('Français', $translationsForm['fr']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
+        static::assertNull($translationsForm['de']->getConfig()->getOptions()['label'], 'Label should default to null');
+    }
+
     protected function getExtensions(): array
     {
         $translationsType = $this->getConfiguredTranslationsType($this->locales, $this->defaultLocale, $this->requiredLocales);

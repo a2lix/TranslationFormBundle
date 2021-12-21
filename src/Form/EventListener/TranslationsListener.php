@@ -57,6 +57,7 @@ class TranslationsListener implements EventSubscriberInterface
 
             $form->add($locale, AutoFormType::class, [
                 'data_class' => $translationClass,
+                'label' => $formOptions['locale_labels'][$locale] ?? null,
                 'required' => \in_array($locale, $formOptions['required_locales'], true),
                 'block_name' => ('field' === $formOptions['theming_granularity']) ? 'locale' : null,
                 'fields' => $fieldsOptions[$locale],
