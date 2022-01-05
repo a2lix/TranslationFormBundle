@@ -1,7 +1,7 @@
 {
     "name": "a2lix/translation-form-bundle",
     "type": "symfony-bundle",
-    "description": "Translate your doctrine objects easily with some helps",
+    "description": "Translate your doctrine objects easily with some helpers",
     "keywords": [
         "symfony",
         "doctrine2",
@@ -39,10 +39,10 @@
     },
     "require-dev": {
         "doctrine/orm": "^2.7",
-        "edgedesign/phpqa": "^1.23",
+        "edgedesign/phpqa": "^1.25",
         "friendsofphp/php-cs-fixer": "^3.4.0",
-        "knplabs/doctrine-behaviors": "^1.6",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.0",
+        "knplabs/doctrine-behaviors": "^2.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.3",
         "phpstan/phpstan": "^1.2.0",
         "symfony/cache": "^5.4",
         "symfony/phpunit-bridge": "^6.0",

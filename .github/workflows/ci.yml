@@ -57,6 +57,8 @@ jobs:
                     - '7.2'
                     - '7.3'
                     - '7.4'
+                    - '8.0'
+                    - '8.1'
                 dependencies:
                     - lowest
                     - highest
@@ -66,6 +68,10 @@ jobs:
                     - php: '7.3'
                       phpunit-version: 9.5
                     - php: '7.4'
+                      phpunit-version: 9.5
+                    - php: '8.0'
+                      phpunit-version: 9.5
+                    - php: '8.1'
                       phpunit-version: 9.5
             fail-fast: false
         steps:
