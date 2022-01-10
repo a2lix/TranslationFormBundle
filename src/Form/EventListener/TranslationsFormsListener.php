@@ -43,11 +43,14 @@ class TranslationsFormsListener implements EventSubscriberInterface
 
     public function submit(FormEvent $event): void
     {
+        $form = $event->getForm();
+        $formOptions = $form->getConfig()->getOptions();
+
         $data = $event->getData();
 
         foreach ($data as $locale => $translation) {
             // Remove useless Translation object
-            if ((method_exists($translation, 'isEmpty') && $translation->isEmpty()) // Knp
+            if ((method_exists($translation, 'isEmpty') && $translation->isEmpty() && !\in_array($locale, $formOptions['required_locales'], true)) // Knp
                 || empty($translation) // Default
             ) {
                 $data->removeElement($translation);
