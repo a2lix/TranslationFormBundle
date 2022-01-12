@@ -4,3 +4,5 @@ psalm-phpqa.xml
 .phpunit.result.cache
 composer.lock
 vendor/*
+
+.DS_Store
