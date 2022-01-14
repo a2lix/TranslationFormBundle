@@ -27,7 +27,7 @@
     ],
     "require": {
         "php": ">=7.2",
-        "a2lix/auto-form-bundle": "^0.2|^0.3",
+        "a2lix/auto-form-bundle": "^0.2|^0.3|^0.4",
         "symfony/config": "^3.4.30|^4.3|^5.0|^6.0",
         "symfony/dependency-injection": "^3.4.30|^4.3|^5.0|^6.0",
         "symfony/doctrine-bridge": "^3.4.30|^4.3|^5.0|^6.0",
