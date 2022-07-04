@@ -50,7 +50,7 @@ class Product
     protected $medias;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="object", indexBy="locale", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="translatable", indexBy="locale", cascade={"all"}, orphanRemoval=true)
      */
     protected $translations;
 
