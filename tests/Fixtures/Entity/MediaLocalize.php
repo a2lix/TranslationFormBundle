@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 
 /**
  * @ORM\Entity
  */
 class MediaLocalize
 {
+    use TranslationTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

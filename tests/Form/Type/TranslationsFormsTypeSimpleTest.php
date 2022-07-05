@@ -162,6 +162,98 @@ final class TranslationsFormsTypeSimpleTest extends TypeTestCase
         }
     }
 
+    public function testEmptyTranslation(): void
+    {
+        $form = $this->factory->createBuilder(FormType::class, new Product())
+            ->add('url')
+            ->add('medias', TranslationsFormsType::class, [
+                'form_type' => MediaLocalizeType::class,
+            ])
+            ->add('save', SubmitType::class)
+            ->getForm()
+        ;
+
+        $mediaEn = new MediaLocalize();
+        $mediaEn->setLocale('en')
+            ->setUrl('http://en')
+            ->setDescription('desc en')
+        ;
+        $mediaFr = new MediaLocalize();
+        $mediaFr->setLocale('fr')
+            ->setUrl('http://fr')
+            ->setDescription('desc fr')
+        ;
+
+        $product = new Product();
+        $product->setUrl('a2lix.fr')
+            ->addMedia($mediaEn)
+            ->addMedia($mediaFr)
+        ;
+
+        $formData = [
+            'url' => 'a2lix.fr',
+            'medias' => [
+                'en' => [
+                    'url' => 'http://en',
+                    'description' => 'desc en',
+                ],
+                'fr' => [
+                    'url' => 'http://fr',
+                    'description' => 'desc fr',
+                ],
+                'de' => [
+                    'url' => '',
+                    'description' => '',
+                ],
+            ],
+        ];
+
+        $form->submit($formData);
+        static::assertTrue($form->isSynchronized());
+        static::assertEquals($product, $form->getData());
+    }
+
+    public function testEmptyAndRequiredTranslation(): void
+    {
+        $form = $this->factory->createBuilder(FormType::class, new Product())
+            ->add('url')
+            ->add('medias', TranslationsFormsType::class, [
+                'form_type' => MediaLocalizeType::class,
+            ])
+            ->add('save', SubmitType::class)
+            ->getForm()
+        ;
+
+        $mediaEn = new MediaLocalize();
+        $mediaEn->setLocale('en');
+
+        $mediaFr = new MediaLocalize();
+        $mediaFr->setLocale('fr')
+            ->setUrl('http://fr')
+            ->setDescription('desc fr')
+        ;
+
+        $product = new Product();
+        $product->setUrl('a2lix.fr')
+            ->addMedia($mediaEn)
+            ->addMedia($mediaFr)
+        ;
+
+        $formData = [
+            'url' => 'a2lix.fr',
+            'medias' => [
+                'fr' => [
+                    'url' => 'http://fr',
+                    'description' => 'desc fr',
+                ],
+            ],
+        ];
+
+        $form->submit($formData);
+        static::assertTrue($form->isSynchronized());
+        static::assertEquals($product, $form->getData());
+    }
+
     protected function getExtensions(): array
     {
         $translationsFormsType = $this->getConfiguredTranslationsFormsType($this->locales, $this->defaultLocale, $this->requiredLocales);
