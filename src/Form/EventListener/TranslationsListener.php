@@ -48,7 +48,7 @@ class TranslationsListener implements EventSubscriberInterface
 
         $formOptions = $form->getConfig()->getOptions();
         $fieldsOptions = $this->getFieldsOptions($form, $formOptions);
-        $translationClass = $this->getTranslationClass($formParent);
+        $translationClass = (!array_key_exists('mapped', $formOptions) || false !== $formOptions['mapped']) ? $this->getTranslationClass($formParent) : null;
 
         foreach ($formOptions['locales'] as $locale) {
             if (!isset($fieldsOptions[$locale])) {
@@ -72,6 +72,10 @@ class TranslationsListener implements EventSubscriberInterface
         $formOptions = $form->getConfig()->getOptions();
 
         $data = $event->getData();
+
+        if (array_key_exists('mapped', $formOptions) && false === $formOptions['mapped']) {
+            return;
+        }
 
         foreach ($data as $locale => $translation) {
             // Remove useless Translation object
