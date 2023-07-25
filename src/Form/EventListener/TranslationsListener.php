@@ -42,12 +42,13 @@ class TranslationsListener implements EventSubscriberInterface
     {
         $form = $event->getForm();
 
-        if (null === $formParent = $form->getParent()) {
+        $formOptions = $form->getConfig()->getOptions();
+        $fieldsOptions = $this->getFieldsOptions($form, $formOptions);
+
+        if ((!array_key_exists('mapped', $formOptions) || false !== $formOptions['mapped']) && null === $formParent = $form->getParent()) {
             throw new \RuntimeException('Parent form missing');
         }
 
-        $formOptions = $form->getConfig()->getOptions();
-        $fieldsOptions = $this->getFieldsOptions($form, $formOptions);
         $translationClass = (!array_key_exists('mapped', $formOptions) || false !== $formOptions['mapped']) ? $this->getTranslationClass($formParent) : null;
 
         foreach ($formOptions['locales'] as $locale) {
