@@ -80,10 +80,6 @@ jobs:
                 key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}-${{ hashFiles('**/composer.lock') }}
                 restore-keys: |
                   ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}
-            - name: Install xsl PHP extension
-              run: |
-                apk add $PHPIZE_DEPS libxslt-dev
-                docker-php-ext-install xsl
             - name: Install lowest dependencies with Composer
               if: matrix.dependencies == 'lowest'
               run: composer update --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi
@@ -92,7 +88,7 @@ jobs:
               run: composer update --no-progress --no-suggest --ansi
             - name: Run tests with PHPUnit
               env:
-                SYMFONY_PHPUNIT_VERSION: ${{ matrix.phpunit-version }}
+                SYMFONY_MAX_PHPUNIT_VERSION: ${{ matrix.phpunit-version }}
               run: vendor/bin/simple-phpunit --colors=always
 
     coverage:
