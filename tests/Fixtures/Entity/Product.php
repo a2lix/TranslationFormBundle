@@ -17,42 +17,28 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class Product
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(nullable=true)
-     */
-    protected $title;
+    #[ORM\Column(nullable: true)]
+    private ?string $title;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $description;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description;
 
-    /**
-     * @ORM\Column(nullable=true)
-     */
-    protected $url;
+    #[ORM\Column(nullable: true)]
+    private ?string $url;
 
-    /**
-     * @ORM\OneToMany(targetEntity="MediaLocalize", mappedBy="product", indexBy="locale", cascade={"all"}, orphanRemoval=true)
-     */
-    protected $medias;
+    #[ORM\OneToMany(targetEntity: MediaLocalize::class, mappedBy: 'product', indexBy: 'locale', cascade: ['all'], orphanRemoval: true)]
+    private ArrayCollection $medias;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProductTranslation", mappedBy="object", indexBy="locale", cascade={"all"}, orphanRemoval=true)
-     */
-    protected $translations;
+    #[ORM\OneToMany(targetEntity: ProductTranslation::class, mappedBy: 'object', indexBy: 'locale', cascade: ['all'], orphanRemoval: true)]
+    private ArrayCollection $translations;
 
     public function __construct()
     {

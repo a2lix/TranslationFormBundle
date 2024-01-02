@@ -15,41 +15,28 @@ namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="product_translations", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="lookup_unique_idx", columns={"locale", "object_id"})
- * })
- */
+#[ORM\Table(name: 'product_translations')]
+#[ORM\UniqueConstraint(name: 'lookup_unique_idx', columns: ['locale', 'object_id'])]
+#[ORM\Entity]
 class ProductTranslation
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(length=10)
-     */
-    protected $locale;
+    #[ORM\Column(length: 10)]
+    private ?string $locale;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="translations")
-     * @ORM\JoinColumn(name="translatable_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     */
-    protected $translatable;
+    #[ORM\Column(nullable: true)]
+    private ?string $title;
 
-    /**
-     * @ORM\Column(nullable=true)
-     */
-    protected $title;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $description;
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'translations')]
+    #[ORM\JoinColumn(name: 'translatable_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    private Product $translatable;
 
     public function getId(): ?int
     {
@@ -64,18 +51,6 @@ class ProductTranslation
     public function setLocale(string $locale): self
     {
         $this->locale = $locale;
-
-        return $this;
-    }
-
-    public function getTranslatable(): Product
-    {
-        return $this->translatable;
-    }
-
-    public function setTranslatable(Product $translatable): self
-    {
-        $this->translatable = $translatable;
 
         return $this;
     }
@@ -100,6 +75,18 @@ class ProductTranslation
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getTranslatable(): Product
+    {
+        return $this->translatable;
+    }
+
+    public function setTranslatable(Product $translatable): self
+    {
+        $this->translatable = $translatable;
 
         return $this;
     }

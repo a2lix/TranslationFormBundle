@@ -48,16 +48,14 @@ final class TranslationsFormsTypeAdvancedTest extends TypeTestCase
 
         $mediasForm = $form->get('medias')->all();
         $mediasLocales = array_keys($mediasForm);
-        $mediasRequiredLocales = array_keys(array_filter($mediasForm, function ($form) {
-            return $form->isRequired();
-        }));
+        $mediasRequiredLocales = array_keys(array_filter($mediasForm, static fn ($form) => $form->isRequired()));
 
-        static::assertEquals($overrideLocales, $mediasLocales, 'Locales should be same as config');
-        static::assertEquals($overrideRequiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
+        self::assertEquals($overrideLocales, $mediasLocales, 'Locales should be same as config');
+        self::assertEquals($overrideRequiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
 
-        static::assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
-        static::assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
-        static::assertEquals(['url', 'description'], array_keys($mediasForm['es']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertEquals(['url', 'description'], array_keys($mediasForm['es']->all()), 'Fields should matches MediaLocalizeType fields');
     }
 
     protected function getExtensions(): array

@@ -33,7 +33,9 @@ class TranslationsFormsListener implements EventSubscriberInterface
         $formOptions = $form->getConfig()->getOptions();
 
         foreach ($formOptions['locales'] as $locale) {
-            $form->add($locale, $formOptions['form_type'],
+            $form->add(
+                $locale,
+                $formOptions['form_type'],
                 $formOptions['form_options'] + [
                     'required' => \in_array($locale, $formOptions['required_locales'], true),
                 ]
@@ -54,6 +56,7 @@ class TranslationsFormsListener implements EventSubscriberInterface
                 || empty($translation) // Default
             ) {
                 $data->removeElement($translation);
+
                 continue;
             }
 

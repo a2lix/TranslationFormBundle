@@ -37,9 +37,7 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('locales')
             ->beforeNormalization()
             ->ifString()
-            ->then(function ($v) {
-                return preg_split('/\s*,\s*/', $v);
-            })
+            ->then(static fn ($v) => preg_split('/\s*,\s*/', (string) $v))
             ->end()
             ->requiresAtLeastOneElement()
             ->prototype('scalar')->end()
@@ -48,9 +46,7 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('required_locales')
             ->beforeNormalization()
             ->ifString()
-            ->then(function ($v) {
-                return preg_split('/\s*,\s*/', $v);
-            })
+            ->then(static fn ($v) => preg_split('/\s*,\s*/', (string) $v))
             ->end()
             ->prototype('scalar')->end()
             ->info('Set the list of required locales to manage. eg: [en]')

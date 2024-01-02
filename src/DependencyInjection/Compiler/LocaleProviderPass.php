@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class LocaleProviderPass implements CompilerPassInterface
 {
-    public const DEFAULT_LOCALE_PROVIDER_KEY = 'default';
+    final public const DEFAULT_LOCALE_PROVIDER_KEY = 'default';
 
     public function process(ContainerBuilder $container): void
     {

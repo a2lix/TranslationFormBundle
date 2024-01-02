@@ -26,16 +26,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsFormsType extends AbstractType
 {
-    /** @var TranslationsFormsListener */
-    private $translationsFormsListener;
-    /** @var LocaleProviderInterface */
-    private $localeProvider;
-
-    public function __construct(TranslationsFormsListener $translationsFormsListener, LocaleProviderInterface $localeProvider)
-    {
-        $this->translationsFormsListener = $translationsFormsListener;
-        $this->localeProvider = $localeProvider;
-    }
+    public function __construct(
+        private readonly TranslationsFormsListener $translationsFormsListener,
+        private readonly LocaleProviderInterface $localeProvider,
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -52,9 +46,7 @@ class TranslationsFormsType extends AbstractType
     {
         $resolver->setDefaults([
             'by_reference' => false,
-            'empty_data' => function (FormInterface $form) {
-                return new ArrayCollection();
-            },
+            'empty_data' => static fn (FormInterface $form) => new ArrayCollection(),
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
@@ -63,7 +55,7 @@ class TranslationsFormsType extends AbstractType
 
         $resolver->setRequired('form_type');
 
-        $resolver->setNormalizer('form_options', function (Options $options, $value): array {
+        $resolver->setNormalizer('form_options', static function (Options $options, $value): array {
             // Check mandatory data_class option when AutoFormType use
             if (($options['form_type'] instanceof AutoFormType) && !isset($value['data_class'])) {
                 throw new \RuntimeException('Missing "data_class" option under "form_options" of TranslationsFormsType. Required when "form_type" use "AutoFormType".');

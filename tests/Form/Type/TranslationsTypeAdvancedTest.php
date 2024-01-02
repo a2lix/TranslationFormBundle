@@ -46,16 +46,14 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
 
         $translationsForm = $form->get('translations')->all();
         $translationsLocales = array_keys($translationsForm);
-        $translationsRequiredLocales = array_keys(array_filter($translationsForm, function ($form) {
-            return $form->isRequired();
-        }));
+        $translationsRequiredLocales = array_keys(array_filter($translationsForm, static fn ($form) => $form->isRequired()));
 
-        static::assertEquals($overrideLocales, $translationsLocales, 'Locales should be same as config');
-        static::assertEquals($overrideRequiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
+        self::assertEquals($overrideLocales, $translationsLocales, 'Locales should be same as config');
+        self::assertEquals($overrideRequiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
 
-        static::assertEquals(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
-        static::assertEquals(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
-        static::assertEquals(['title', 'description'], array_keys($translationsForm['es']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertEquals(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertEquals(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertEquals(['title', 'description'], array_keys($translationsForm['es']->all()), 'Fields should matches ProductTranslation fields');
     }
 
     public function testEmptyFormOverrideFields(): void
@@ -70,9 +68,9 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
         ;
 
         $translationsForm = $form->get('translations')->all();
-        static::assertEquals(['title'], array_keys($translationsForm['en']->all()), 'Fields should not contains description');
-        static::assertEquals(['title'], array_keys($translationsForm['fr']->all()), 'Fields should not contains description');
-        static::assertEquals(['title'], array_keys($translationsForm['de']->all()), 'Fields should not contains description');
+        self::assertEquals(['title'], array_keys($translationsForm['en']->all()), 'Fields should not contains description');
+        self::assertEquals(['title'], array_keys($translationsForm['fr']->all()), 'Fields should not contains description');
+        self::assertEquals(['title'], array_keys($translationsForm['de']->all()), 'Fields should not contains description');
     }
 
     public function testLabels(): void
@@ -90,9 +88,9 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
         ;
 
         $translationsForm = $form->get('translations')->all();
-        static::assertEquals('English', $translationsForm['en']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
-        static::assertEquals('Français', $translationsForm['fr']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
-        static::assertNull($translationsForm['de']->getConfig()->getOptions()['label'], 'Label should default to null');
+        self::assertEquals('English', $translationsForm['en']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
+        self::assertEquals('Français', $translationsForm['fr']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
+        self::assertNull($translationsForm['de']->getConfig()->getOptions()['label'], 'Label should default to null');
     }
 
     protected function getExtensions(): array

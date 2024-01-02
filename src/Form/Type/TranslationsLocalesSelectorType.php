@@ -22,13 +22,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsLocalesSelectorType extends AbstractType
 {
-    /** @var LocaleProviderInterface */
-    private $localeProvider;
-
-    public function __construct(LocaleProviderInterface $localeProvider)
-    {
-        $this->localeProvider = $localeProvider;
-    }
+    public function __construct(
+        private readonly LocaleProviderInterface $localeProvider,
+    ) {}
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {

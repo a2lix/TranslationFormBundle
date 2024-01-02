@@ -22,13 +22,9 @@ use Symfony\Component\Form\FormInterface;
 
 class TranslationsListener implements EventSubscriberInterface
 {
-    /** @var FormManipulatorInterface */
-    private $formManipulator;
-
-    public function __construct(FormManipulatorInterface $formManipulator)
-    {
-        $this->formManipulator = $formManipulator;
-    }
+    public function __construct(
+        private readonly FormManipulatorInterface $formManipulator,
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -79,6 +75,7 @@ class TranslationsListener implements EventSubscriberInterface
                 || empty($translation) // Default
             ) {
                 $data->removeElement($translation);
+
                 continue;
             }
 

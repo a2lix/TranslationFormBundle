@@ -24,16 +24,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsType extends AbstractType
 {
-    /** @var TranslationsListener */
-    private $translationsListener;
-    /** @var LocaleProviderInterface */
-    private $localeProvider;
-
-    public function __construct(TranslationsListener $translationsListener, LocaleProviderInterface $localeProvider)
-    {
-        $this->translationsListener = $translationsListener;
-        $this->localeProvider = $localeProvider;
-    }
+    public function __construct(
+        private readonly TranslationsListener $translationsListener,
+        private readonly LocaleProviderInterface $localeProvider,
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -50,9 +44,7 @@ class TranslationsType extends AbstractType
     {
         $resolver->setDefaults([
             'by_reference' => false,
-            'empty_data' => function (FormInterface $form) {
-                return new ArrayCollection();
-            },
+            'empty_data' => static fn (FormInterface $form) => new ArrayCollection(),
             'locale_labels' => null,
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
