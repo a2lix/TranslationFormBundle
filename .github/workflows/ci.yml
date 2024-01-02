@@ -33,16 +33,12 @@ jobs:
                   ${{ runner.os }}-composer-8.3-highest
             - name: Validate Composer
               run: composer validate
-            - name: Install xsl PHP extension
-              run: |
-                apk add $PHPIZE_DEPS libxslt-dev
-                docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
               run: composer update --no-progress --no-suggest --ansi
             - name: Disable PHP memory limit
               run: echo 'memory_limit=-1' >> /usr/local/etc/php/php.ini
-            - name: Analyze
-              run: vendor/bin/phpqa --execution no-parallel --progress-delay=-1 --ansi
+            - name: Run CS-Fixer
+              run: vendor/bin/php-cs-fixer fix --dry-run --diff --format=checkstyle
 
     phpunit:
         name: PHPUnit (PHP ${{ matrix.php }} Deps ${{ matrix.dependencies }})
@@ -90,7 +86,7 @@ jobs:
                 docker-php-ext-install xsl
             - name: Install lowest dependencies with Composer
               if: matrix.dependencies == 'lowest'
-              run: composer update --no-progress --prefer-stable --prefer-lowest --ansi
+              run: composer update --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi
             - name: Install highest dependencies with Composer
               if: matrix.dependencies == 'highest'
               run: composer update --no-progress --no-suggest --ansi
@@ -127,12 +123,8 @@ jobs:
                 key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.lock') }}
                 restore-keys: |
                   ${{ runner.os }}-composer-8.3-highest
-            - name: Install xsl PHP extension
-              run: |
-                apk add $PHPIZE_DEPS libxslt-dev
-                docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
-              run: composer update --no-progress --ansi
+              run: composer update --no-progress --no-suggest --ansi
             - name: Run coverage with PHPUnit
               run: vendor/bin/simple-phpunit --coverage-clover ./coverage.xml --colors=always
             - name: Send code coverage report to Codecov.io
