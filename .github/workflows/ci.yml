@@ -4,7 +4,6 @@ on: ["push", "pull_request"]
 
 env:
     COMPOSER_ALLOW_SUPERUSER: '1'
-    SYMFONY_PHPUNIT_VERSION: 9.6
     SYMFONY_DEPRECATIONS_HELPER: max[self]=0
 
 jobs:
@@ -28,7 +27,7 @@ jobs:
             - uses: actions/cache@v3
               with:
                 path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.lock') }}
+                key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.json') }}
                 restore-keys: |
                   ${{ runner.os }}-composer-8.3-highest
             - name: Validate Composer
@@ -59,11 +58,11 @@ jobs:
                     - 'highest'
                 include:
                     - php: '8.1'
-                      phpunit-version: 9.6
+                      phpunit-version: 10
                     - php: '8.2'
-                      phpunit-version: 9.6
+                      phpunit-version: 10
                     - php: '8.3'
-                      phpunit-version: 9.6
+                      phpunit-version: 10
             fail-fast: false
         steps:
             - name: Checkout
@@ -77,7 +76,7 @@ jobs:
             - uses: actions/cache@v3
               with:
                 path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}-${{ hashFiles('**/composer.lock') }}
+                key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
                 restore-keys: |
                   ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}
             - name: Install lowest dependencies with Composer
@@ -116,7 +115,7 @@ jobs:
             - uses: actions/cache@v3
               with:
                 path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.lock') }}
+                key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.json') }}
                 restore-keys: |
                   ${{ runner.os }}-composer-8.3-highest
             - name: Install highest dependencies with Composer
