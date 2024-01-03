@@ -34,7 +34,7 @@ docker run --rm --interactive --tty --volume $PWD:/app --user $(id -u):$(id -g) 
 
 This package is available under the [MIT license](LICENSE).
 
-[v3_ci_badge]: https://github.com/a2lix/TranslationFormBundle/workflows/CI/badge.svg
-[v3_ci_link]: https://github.com/a2lix/TranslationFormBundle/actions?query=workflow%3ACI
+[v3_ci_badge]: https://github.com/a2lix/TranslationFormBundle/actions/workflows/ci.yml/badge.svg
+[v3_ci_link]: https://github.com/a2lix/TranslationFormBundle/actions/workflows/ci.yml
 [v3_coverage_badge]: https://codecov.io/gh/a2lix/TranslationFormBundle/branch/master/graph/badge.svg
 [v3_coverage_link]: https://codecov.io/gh/a2lix/TranslationFormBundle/branch/master
