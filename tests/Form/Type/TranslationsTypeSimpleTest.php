@@ -110,10 +110,8 @@ final class TranslationsTypeSimpleTest extends TypeTestCase
 
     /**
      * @depends testCreationForm
-     *
-     * @param mixed $product
      */
-    public function testEditionForm($product): void
+    public function testEditionForm(Product $product): void
     {
         $product->getTranslations()['en']->setDescription('desc ennnnnnn');
         $product->getTranslations()['fr']->setTitle('title frrrrrr');

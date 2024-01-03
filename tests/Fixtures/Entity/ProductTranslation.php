@@ -26,13 +26,13 @@ class ProductTranslation
     private ?int $id = null;
 
     #[ORM\Column(length: 10)]
-    private ?string $locale;
+    private ?string $locale = null;
 
     #[ORM\Column(nullable: true)]
-    private ?string $title;
+    private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description;
+    private ?string $description = null;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'translations')]
     #[ORM\JoinColumn(name: 'translatable_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]

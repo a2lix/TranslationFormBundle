@@ -24,16 +24,16 @@ class MediaLocalize
     private ?int $id = null;
 
     #[ORM\Column(length: 10)]
-    private ?string $locale;
+    private ?string $locale = null;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'medias')]
     private Product $product;
 
     #[ORM\Column(nullable: true)]
-    private ?string $url;
+    private ?string $url = null;
 
     #[ORM\Column(nullable: true)]
-    private ?string $description;
+    private ?string $description = null;
 
     public function getId(): ?int
     {

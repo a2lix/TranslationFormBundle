@@ -26,13 +26,13 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?string $title;
+    private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description;
+    private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    private ?string $url;
+    private ?string $url = null;
 
     #[ORM\OneToMany(targetEntity: MediaLocalize::class, mappedBy: 'product', indexBy: 'locale', cascade: ['all'], orphanRemoval: true)]
     private ArrayCollection $medias;
