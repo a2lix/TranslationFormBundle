@@ -15,37 +15,25 @@ namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class MediaLocalize
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(length=10)
-     */
-    protected $locale;
+    #[ORM\Column(length: 10)]
+    private ?string $locale = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="medias")
-     */
-    protected $product;
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'medias')]
+    private Product $product;
 
-    /**
-     * @ORM\Column(nullable=true)
-     */
-    protected $url;
+    #[ORM\Column(nullable: true)]
+    private ?string $url = null;
 
-    /**
-     * @ORM\Column(nullable=true)
-     */
-    protected $description;
+    #[ORM\Column(nullable: true)]
+    private ?string $description = null;
 
     public function getId(): ?int
     {

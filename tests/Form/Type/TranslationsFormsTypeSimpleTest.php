@@ -44,16 +44,14 @@ final class TranslationsFormsTypeSimpleTest extends TypeTestCase
 
         $mediasForm = $form->get('medias')->all();
         $mediasLocales = array_keys($mediasForm);
-        $mediasRequiredLocales = array_keys(array_filter($mediasForm, function ($form) {
-            return $form->isRequired();
-        }));
+        $mediasRequiredLocales = array_keys(array_filter($mediasForm, static fn ($form) => $form->isRequired()));
 
-        static::assertEquals($this->locales, $mediasLocales, 'Locales should be same as config');
-        static::assertEquals($this->requiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
+        self::assertEquals($this->locales, $mediasLocales, 'Locales should be same as config');
+        self::assertEquals($this->requiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
 
-        static::assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
-        static::assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
-        static::assertEquals(['url', 'description'], array_keys($mediasForm['de']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertEquals(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertEquals(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertEquals(['url', 'description'], array_keys($mediasForm['de']->all()), 'Fields should matches MediaLocalizeType fields');
     }
 
     public function testCreationForm(): Product
@@ -109,8 +107,8 @@ final class TranslationsFormsTypeSimpleTest extends TypeTestCase
         ];
 
         $form->submit($formData);
-        static::assertTrue($form->isSynchronized());
-        static::assertEquals($product, $form->getData());
+        self::assertTrue($form->isSynchronized());
+        self::assertEquals($product, $form->getData());
 
         return $product;
     }
@@ -151,14 +149,14 @@ final class TranslationsFormsTypeSimpleTest extends TypeTestCase
         ;
 
         $form->submit($formData);
-        static::assertTrue($form->isSynchronized());
-        static::assertEquals($product, $form->getData());
+        self::assertTrue($form->isSynchronized());
+        self::assertEquals($product, $form->getData());
 
         $view = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {
-            static::assertArrayHasKey($key, $children);
+            self::assertArrayHasKey($key, $children);
         }
     }
 

@@ -4,8 +4,6 @@ on: ["push", "pull_request"]
 
 env:
     COMPOSER_ALLOW_SUPERUSER: '1'
-    SYMFONY_PHPUNIT_VERSION: 9.5
-    SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
     SYMFONY_DEPRECATIONS_HELPER: max[self]=0
 
 jobs:
@@ -13,35 +11,33 @@ jobs:
         name: Analyze
         runs-on: ubuntu-latest
         container:
-            image: php:7.4-alpine
+            image: php:8.3-alpine
             options: >-
               --tmpfs /tmp:exec
               --tmpfs /var/tmp:exec
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Install Composer
               run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
-            - name: Cache Composer dependencies
-              uses: actions/cache@v1
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: |
+                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            - uses: actions/cache@v3
               with:
-                path: ~/.composer/cache
-                key: composer-php${{ matrix.php }}-highest-
+                path: ${{ steps.composer-cache.outputs.dir }}
+                key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.json') }}
                 restore-keys: |
-                   composer-php${{ matrix.php }}-highest-
-                   composer-
+                  ${{ runner.os }}-composer-8.3-highest
             - name: Validate Composer
               run: composer validate
-            - name: Install xsl PHP extension
-              run: |
-                apk add $PHPIZE_DEPS libxslt-dev
-                docker-php-ext-install xsl
             - name: Install highest dependencies with Composer
-              run: composer update --no-progress --ansi
+              run: composer update --no-progress --no-suggest --ansi
             - name: Disable PHP memory limit
               run: echo 'memory_limit=-1' >> /usr/local/etc/php/php.ini
-            - name: Analyze
-              run: vendor/bin/phpqa --execution no-parallel --progress-delay=-1 --ansi
+            - name: Run CS-Fixer
+              run: vendor/bin/php-cs-fixer fix --dry-run --diff --format=checkstyle
 
     phpunit:
         name: PHPUnit (PHP ${{ matrix.php }} Deps ${{ matrix.dependencies }})
@@ -54,69 +50,57 @@ jobs:
         strategy:
             matrix:
                 php:
-                    - '7.2'
-                    - '7.3'
-                    - '7.4'
-                    - '8.0'
                     - '8.1'
+                    - '8.2'
+                    - '8.3'
                 dependencies:
-                    - lowest
-                    - highest
+                    - 'lowest'
+                    - 'highest'
                 include:
-                    - php: '7.2'
-                      phpunit-version: 8.5
-                    - php: '7.3'
-                      phpunit-version: 9.5
-                    - php: '7.4'
-                      phpunit-version: 9.5
-                    - php: '8.0'
-                      phpunit-version: 9.5
                     - php: '8.1'
-                      phpunit-version: 9.5
+                      phpunit-version: 10
+                    - php: '8.2'
+                      phpunit-version: 10
+                    - php: '8.3'
+                      phpunit-version: 10
             fail-fast: false
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Install Composer
               run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
-            - name: Cache Composer dependencies
-              uses: actions/cache@v1
-              with:
-                path: ~/.composer/cache
-                key: composer-php${{ matrix.php }}-${{ matrix.dependencies }}-
-                restore-keys: |
-                    composer-php${{ matrix.php }}-${{ matrix.dependencies }}-
-                    composer-
-            - name: Install xsl PHP extension
+            - name: Get Composer Cache Directory
+              id: composer-cache
               run: |
-                apk add $PHPIZE_DEPS libxslt-dev
-                docker-php-ext-install xsl
+                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            - uses: actions/cache@v3
+              with:
+                path: ${{ steps.composer-cache.outputs.dir }}
+                key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
+                restore-keys: |
+                  ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}
             - name: Install lowest dependencies with Composer
               if: matrix.dependencies == 'lowest'
-              run: composer update --no-progress --prefer-stable --prefer-lowest --ansi
+              run: composer update --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi
             - name: Install highest dependencies with Composer
               if: matrix.dependencies == 'highest'
-              run: composer update --no-progress --ansi
+              run: composer update --no-progress --no-suggest --ansi
             - name: Run tests with PHPUnit
               env:
-                SYMFONY_PHPUNIT_VERSION: ${{ matrix.phpunit-version }}
+                SYMFONY_MAX_PHPUNIT_VERSION: ${{ matrix.phpunit-version }}
               run: vendor/bin/simple-phpunit --colors=always
 
     coverage:
-        name: Coverage (PHP ${{ matrix.php }})
+        name: Coverage (PHP 8.3)
         runs-on: ubuntu-latest
         container:
-            image: php:${{ matrix.php }}-alpine
+            image: php:8.3-alpine
             options: >-
               --tmpfs /tmp:exec
               --tmpfs /var/tmp:exec
-        strategy:
-            matrix:
-                php:
-                    - '7.4'
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Install pcov PHP extension
               run: |
                 apk add $PHPIZE_DEPS
@@ -124,23 +108,21 @@ jobs:
                 docker-php-ext-enable pcov
             - name: Install Composer
               run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
-            - name: Cache Composer dependencies
-              uses: actions/cache@v1
-              with:
-                path: ~/.composer/cache
-                key: composer-php${{ matrix.php }}-highest-
-                restore-keys: |
-                    composer-php${{ matrix.php }}-highest-
-                    composer-
-            - name: Install xsl PHP extension
+            - name: Get Composer Cache Directory
+              id: composer-cache
               run: |
-                apk add $PHPIZE_DEPS libxslt-dev
-                docker-php-ext-install xsl
+                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            - uses: actions/cache@v3
+              with:
+                path: ${{ steps.composer-cache.outputs.dir }}
+                key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.json') }}
+                restore-keys: |
+                  ${{ runner.os }}-composer-8.3-highest
             - name: Install highest dependencies with Composer
-              run: composer update --no-progress --ansi
+              run: composer update --no-progress --no-suggest --ansi
             - name: Run coverage with PHPUnit
               run: vendor/bin/simple-phpunit --coverage-clover ./coverage.xml --colors=always
             - name: Send code coverage report to Codecov.io
-              uses: codecov/codecov-action@v1.0.3      # 1.0.4+ uncompatible alpine :/
+              uses: codecov/codecov-action@v3
               with:
                 token: ${{ secrets.CODECOV_TOKEN }}

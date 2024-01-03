@@ -77,14 +77,14 @@ final class SimpleProviderTest extends TestCase
         $expected = $this->provider->getLocales();
         $locales = $this->locales;
 
-        static::assertSame(array_diff($expected, $locales), array_diff($locales, $expected));
+        self::assertSame(array_diff($expected, $locales), array_diff($locales, $expected));
     }
 
     public function testGetDefaultLocale(): void
     {
         $expected = $this->provider->getDefaultLocale();
 
-        static::assertSame($this->defaultLocale, $expected);
+        self::assertSame($this->defaultLocale, $expected);
     }
 
     public function getRequiredLocales(): void
@@ -92,6 +92,6 @@ final class SimpleProviderTest extends TestCase
         $expected = $this->provider->getDefaultLocale();
         $requiredLocales = $this->requiredLocales;
 
-        static::assertSame(array_diff($expected, $requiredLocales), array_diff($requiredLocales, $expected));
+        self::assertSame(array_diff($expected, $requiredLocales), array_diff($requiredLocales, $expected));
     }
 }

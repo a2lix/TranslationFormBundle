@@ -22,24 +22,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslatedEntityType extends AbstractType
 {
-    /** @var RequestStack */
-    private $requestStack;
-
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
+    public function __construct(
+        private readonly RequestStack $requestStack,
+    ) {}
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'translation_path' => 'translations',
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('e')
-                    ->select('e, t')
-                    ->join('e.translations', 't')
-                ;
-            },
+            'query_builder' => static fn (EntityRepository $er) => $er->createQueryBuilder('e')
+                ->select('e, t')
+                ->join('e.translations', 't'),
             'choice_label' => function (Options $options) {
                 if (null === ($request = $this->requestStack->getCurrentRequest())) {
                     throw new \RuntimeException('Error while getting request');
