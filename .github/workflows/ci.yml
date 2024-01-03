@@ -55,8 +55,8 @@ jobs:
                     - '8.2'
                     - '8.3'
                 dependencies:
-                    - lowest
-                    - highest
+                    - 'lowest'
+                    - 'highest'
                 include:
                     - php: '8.1'
                       phpunit-version: 9.6
