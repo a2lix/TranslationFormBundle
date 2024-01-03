@@ -44,7 +44,6 @@
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.18",
         "matthiasnoback/symfony-dependency-injection-test": "^5.0",
         "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^9.6",
         "rector/rector": "^0.18",
         "symfony/cache": "^5.4.30|^6.3.10|^7.0",
         "symfony/phpunit-bridge": "^5.4.30|^6.3.10|^7.0",
