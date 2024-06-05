@@ -58,6 +58,7 @@ class TranslationsListener implements EventSubscriberInterface
                 'block_name' => ('field' === $formOptions['theming_granularity']) ? 'locale' : null,
                 'fields' => $fieldsOptions[$locale],
                 'excluded_fields' => $formOptions['excluded_fields'],
+                'included_fields' => $formOptions['included_fields'],
             ]);
         }
     }
