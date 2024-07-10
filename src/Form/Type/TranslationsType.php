@@ -52,6 +52,7 @@ class TranslationsType extends AbstractType
             'theming_granularity' => 'field',
             'fields' => [],
             'excluded_fields' => [],
+            'included_fields' => [],
         ]);
 
         $resolver->setAllowedValues('theming_granularity', ['field', 'locale_field']);

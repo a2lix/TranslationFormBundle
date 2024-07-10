@@ -37,6 +37,9 @@
         "symfony/http-kernel": "^5.4.30|^6.3|^7.0",
         "symfony/options-resolver": "^5.4.30|^6.3|^7.0"
     },
+    "conflict": {
+        "a2lix/auto-form-bundle": "<0.4.8"
+    },
     "require-dev": {
         "doctrine/orm": "^2.15",
         "friendsofphp/php-cs-fixer": "^3.45",
