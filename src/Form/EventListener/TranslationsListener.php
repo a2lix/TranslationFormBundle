@@ -26,6 +26,7 @@ class TranslationsListener implements EventSubscriberInterface
         private readonly FormManipulatorInterface $formManipulator,
     ) {}
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

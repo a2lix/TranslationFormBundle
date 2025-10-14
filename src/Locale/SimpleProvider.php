@@ -37,16 +37,19 @@ class SimpleProvider implements LocaleProviderInterface
         $this->requiredLocales = $requiredLocales;
     }
 
+    #[\Override]
     public function getLocales(): array
     {
         return $this->locales;
     }
 
+    #[\Override]
     public function getDefaultLocale(): string
     {
         return $this->defaultLocale;
     }
 
+    #[\Override]
     public function getRequiredLocales(): array
     {
         return $this->requiredLocales;

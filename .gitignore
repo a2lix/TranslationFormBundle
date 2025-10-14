@@ -1,8 +1,5 @@
-.php_cs.cache
 .php-cs-fixer.cache
-psalm-phpqa.xml
-.phpunit.result.cache
+.phpunit.cache
 composer.lock
 vendor/*
-
-.DS_Store
+dump.html

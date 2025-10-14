@@ -1,128 +1,83 @@
 name: CI
 
-on: ["push", "pull_request"]
-
-env:
-    COMPOSER_ALLOW_SUPERUSER: '1'
-    SYMFONY_DEPRECATIONS_HELPER: max[self]=0
+on:
+  push:
+    branches: [ "3.x" ]
+  pull_request:
+    branches: [ "3.x" ]
 
 jobs:
-    analyze:
-        name: Analyze
-        runs-on: ubuntu-latest
-        container:
-            image: php:8.3-alpine
-            options: >-
-              --tmpfs /tmp:exec
-              --tmpfs /var/tmp:exec
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - name: Install Composer
-              run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
-            - name: Get Composer Cache Directory
-              id: composer-cache
-              run: |
-                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-            - uses: actions/cache@v3
-              with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.json') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-8.3-highest
-            - name: Validate Composer
-              run: composer validate
-            - name: Install highest dependencies with Composer
-              run: composer update --no-progress --no-suggest --ansi
-            - name: Disable PHP memory limit
-              run: echo 'memory_limit=-1' >> /usr/local/etc/php/php.ini
-            - name: Run CS-Fixer
-              run: vendor/bin/php-cs-fixer fix --dry-run --diff --format=checkstyle
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-    phpunit:
-        name: PHPUnit (PHP ${{ matrix.php }} Deps ${{ matrix.dependencies }})
-        runs-on: ubuntu-latest
-        container:
-            image: php:${{ matrix.php }}-alpine
-            options: >-
-              --tmpfs /tmp:exec
-              --tmpfs /var/tmp:exec
-        strategy:
-            matrix:
-                php:
-                    - '8.1'
-                    - '8.2'
-                    - '8.3'
-                dependencies:
-                    - 'lowest'
-                    - 'highest'
-                include:
-                    - php: '8.1'
-                      phpunit-version: 10
-                    - php: '8.2'
-                      phpunit-version: 10
-                    - php: '8.3'
-                      phpunit-version: 10
-            fail-fast: false
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - name: Install Composer
-              run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
-            - name: Get Composer Cache Directory
-              id: composer-cache
-              run: |
-                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-            - uses: actions/cache@v3
-              with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.dependencies }}
-            - name: Install lowest dependencies with Composer
-              if: matrix.dependencies == 'lowest'
-              run: composer update --no-progress --no-suggest --prefer-stable --prefer-lowest --ansi
-            - name: Install highest dependencies with Composer
-              if: matrix.dependencies == 'highest'
-              run: composer update --no-progress --no-suggest --ansi
-            - name: Run tests with PHPUnit
-              env:
-                SYMFONY_MAX_PHPUNIT_VERSION: ${{ matrix.phpunit-version }}
-              run: vendor/bin/simple-phpunit --colors=always
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
 
-    coverage:
-        name: Coverage (PHP 8.3)
-        runs-on: ubuntu-latest
-        container:
-            image: php:8.3-alpine
-            options: >-
-              --tmpfs /tmp:exec
-              --tmpfs /var/tmp:exec
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - name: Install pcov PHP extension
-              run: |
-                apk add $PHPIZE_DEPS
-                pecl install pcov
-                docker-php-ext-enable pcov
-            - name: Install Composer
-              run: wget -qO - https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
-            - name: Get Composer Cache Directory
-              id: composer-cache
-              run: |
-                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-            - uses: actions/cache@v3
-              with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-8.3-highest-${{ hashFiles('**/composer.json') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-8.3-highest
-            - name: Install highest dependencies with Composer
-              run: composer update --no-progress --no-suggest --ansi
-            - name: Run coverage with PHPUnit
-              run: vendor/bin/simple-phpunit --coverage-clover ./coverage.xml --colors=always
-            - name: Send code coverage report to Codecov.io
-              uses: codecov/codecov-action@v3
-              with:
-                token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            vendor
+            ~/.composer/cache
+          key: ${{ runner.os }}-php-8.4-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-8.4-
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run php-cs-fixer (dry run)
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --verbose
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4']
+        symfony: ['6.4.*', '7.3.*', '7.4.*', '8.0.*']
+
+    name: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            vendor
+            ~/.composer/cache
+          key: ${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Update dependencies for Symfony ${{ matrix.symfony }}
+        run: |
+          composer require "symfony/config:${{ matrix.symfony }}" "symfony/dependency-injection:${{ matrix.symfony }}" "symfony/doctrine-bridge:${{ matrix.symfony }}" "symfony/form:${{ matrix.symfony }}" --no-update
+          composer update --prefer-dist --no-progress --optimize-autoloader
+
+      - name: Run psalm
+        run: vendor/bin/psalm
+
+      - name: Run phpunit
+        run: vendor/bin/phpunit
+
+      - name: Check for outdated dependencies
+        run: composer outdated

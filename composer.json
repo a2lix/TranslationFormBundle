@@ -28,27 +28,24 @@
     "require": {
         "php": "^8.1",
         "a2lix/auto-form-bundle": "^0.4",
-        "symfony/config": "^5.4.30|^6.3|^7.0",
-        "symfony/dependency-injection": "^5.4.30|^6.3|^7.0",
-        "symfony/doctrine-bridge": "^5.4.30|^6.3|^7.0",
-        "symfony/event-dispatcher": "^5.4.30|^6.3|^7.0",
-        "symfony/form": "^5.4.30|^6.3|^7.0",
-        "symfony/http-foundation": "^5.4.30|^6.3|^7.0",
-        "symfony/http-kernel": "^5.4.30|^6.3|^7.0",
-        "symfony/options-resolver": "^5.4.30|^6.3|^7.0"
+        "symfony/config": "^6.4|^7.3",
+        "symfony/dependency-injection": "^6.4|^7.3",
+        "symfony/doctrine-bridge": "^6.4|^7.3",
+        "symfony/event-dispatcher": "^6.4|^7.3",
+        "symfony/form": "^6.4|^7.3",
+        "symfony/http-foundation": "^6.4|^7.3",
+        "symfony/http-kernel": "^6.4|^7.3",
+        "symfony/options-resolver": "^6.4|^7.3"
     },
     "require-dev": {
-        "doctrine/orm": "^2.15",
+        "doctrine/orm": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.45",
-        "knplabs/doctrine-behaviors": "^2.3",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.18",
-        "matthiasnoback/symfony-dependency-injection-test": "^5.0",
-        "phpstan/phpstan": "^1.10",
-        "rector/rector": "^0.18",
-        "symfony/cache": "^5.4.30|^6.3|^7.0",
-        "symfony/phpunit-bridge": "^5.4.30|^6.3|^7.0",
-        "symfony/validator": "^5.4.30|^6.3|^7.0",
-        "vimeo/psalm": "^5.18"
+        "rector/rector": "^2.2",
+        "symfony/cache": "^6.4|^7.3",
+        "symfony/phpunit-bridge": "^6.4|^7.3",
+        "symfony/validator": "^6.4|^7.3",
+        "vimeo/psalm": "^6.1"
     },
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",
@@ -62,7 +59,7 @@
             "psalm"
         ],
         "phpunit": [
-            "SYMFONY_DEPRECATIONS_HELPER=max[self]=0 simple-phpunit"
+            "phpunit"
         ]
     },
     "config": {

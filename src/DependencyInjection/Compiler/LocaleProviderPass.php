@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\DependencyInjection\Compiler;
 
+use A2lix\TranslationFormBundle\Locale\SimpleProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -20,8 +21,10 @@ class LocaleProviderPass implements CompilerPassInterface
 {
     final public const DEFAULT_LOCALE_PROVIDER_KEY = 'default';
 
+    #[\Override]
     public function process(ContainerBuilder $container): void
     {
+        /** @var string */
         $localeProvider = $container->getParameter('a2lix_translation_form.locale_provider');
 
         if (self::DEFAULT_LOCALE_PROVIDER_KEY !== $localeProvider) {
@@ -30,7 +33,7 @@ class LocaleProviderPass implements CompilerPassInterface
             return;
         }
 
-        $definition = $container->getDefinition('a2lix_translation_form.locale.simple_provider');
+        $definition = $container->register('a2lix_translation_form.locale.simple_provider', SimpleProvider::class);
         $definition->setArguments([
             $container->getParameter('a2lix_translation_form.locales'),
             $container->getParameter('a2lix_translation_form.default_locale'),

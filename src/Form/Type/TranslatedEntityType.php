@@ -26,6 +26,7 @@ class TranslatedEntityType extends AbstractType
         private readonly RequestStack $requestStack,
     ) {}
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -45,11 +46,13 @@ class TranslatedEntityType extends AbstractType
         $resolver->setRequired('translation_property');
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return EntityType::class;
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'a2lix_translatedEntity';

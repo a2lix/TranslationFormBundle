@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormEvents;
 
 class TranslationsFormsListener implements EventSubscriberInterface
 {
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

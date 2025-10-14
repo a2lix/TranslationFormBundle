@@ -31,17 +31,20 @@ class TranslationsFormsType extends AbstractType
         private readonly LocaleProviderInterface $localeProvider,
     ) {}
 
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventSubscriber($this->translationsFormsListener);
     }
 
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['default_locale'] = $options['default_locale'];
         $view->vars['required_locales'] = $options['required_locales'];
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -65,6 +68,7 @@ class TranslationsFormsType extends AbstractType
         });
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'a2lix_translationsForms';

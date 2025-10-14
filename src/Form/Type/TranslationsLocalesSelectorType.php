@@ -26,11 +26,13 @@ class TranslationsLocalesSelectorType extends AbstractType
         private readonly LocaleProviderInterface $localeProvider,
     ) {}
 
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['default_locale'] = $this->localeProvider->getDefaultLocale();
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -43,11 +45,13 @@ class TranslationsLocalesSelectorType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return ChoiceType::class;
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'a2lix_translationsLocalesSelector';
