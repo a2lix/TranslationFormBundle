@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -13,7 +11,6 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
@@ -25,14 +22,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class TranslationsType extends AbstractType
 {
     public function __construct(
-        private readonly TranslationsListener $translationsListener,
         private readonly LocaleProviderInterface $localeProvider,
     ) {}
 
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->addEventSubscriber($this->translationsListener);
+        // TODO
     }
 
     #[\Override]

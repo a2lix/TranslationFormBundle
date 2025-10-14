@@ -27,7 +27,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "a2lix/auto-form-bundle": "^0.4",
+        "a2lix/auto-form-bundle": "@beta",
         "symfony/config": "^6.4|^7.3",
         "symfony/dependency-injection": "^6.4|^7.3",
         "symfony/doctrine-bridge": "^6.4|^7.3",
@@ -41,10 +41,11 @@
         "doctrine/orm": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.45",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.18",
+        "phpunit/phpunit": "^12.3",
         "rector/rector": "^2.2",
         "symfony/cache": "^6.4|^7.3",
-        "symfony/phpunit-bridge": "^6.4|^7.3",
         "symfony/validator": "^6.4|^7.3",
+        "symfony/var-dumper": "^7.3",
         "vimeo/psalm": "^6.1"
     },
     "suggest": {

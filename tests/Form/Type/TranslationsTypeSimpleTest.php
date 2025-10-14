@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -19,10 +17,11 @@ use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\ProductTranslation;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 final class TranslationsTypeSimpleTest extends TypeTestCase
 {
@@ -43,12 +42,12 @@ final class TranslationsTypeSimpleTest extends TypeTestCase
         $translationsLocales = array_keys($translationsForm);
         $translationsRequiredLocales = array_keys(array_filter($translationsForm, static fn ($form) => $form->isRequired()));
 
-        self::assertEquals($this->locales, $translationsLocales, 'Locales should be same as config');
-        self::assertEquals($this->requiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
+        self::assertSame($this->locales, $translationsLocales, 'Locales should be same as config');
+        self::assertSame($this->requiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
 
-        self::assertEquals(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
-        self::assertEquals(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
-        self::assertEquals(['title', 'description'], array_keys($translationsForm['de']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertSame(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertSame(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertSame(['title', 'description'], array_keys($translationsForm['de']->all()), 'Fields should matches ProductTranslation fields');
     }
 
     public function testCreationForm(): Product
@@ -103,7 +102,7 @@ final class TranslationsTypeSimpleTest extends TypeTestCase
 
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
-        self::assertEquals($product, $form->getData());
+        self::assertSame($product, $form->getData());
 
         return $product;
     }
@@ -143,7 +142,7 @@ final class TranslationsTypeSimpleTest extends TypeTestCase
 
         $form->submit($formData);
         self::assertTrue($form->isSynchronized());
-        self::assertEquals($product, $form->getData());
+        self::assertSame($product, $form->getData());
 
         $view = $form->createView();
         $children = $view->children;
@@ -151,16 +150,5 @@ final class TranslationsTypeSimpleTest extends TypeTestCase
         foreach (array_keys($formData) as $key) {
             self::assertArrayHasKey($key, $children);
         }
-    }
-
-    protected function getExtensions(): array
-    {
-        $translationsType = $this->getConfiguredTranslationsType($this->locales, $this->defaultLocale, $this->requiredLocales);
-        $autoFormType = $this->getConfiguredAutoFormType();
-
-        return [new PreloadedExtension([
-            $translationsType,
-            $autoFormType,
-        ], [])];
     }
 }

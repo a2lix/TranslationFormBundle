@@ -1,7 +1,7 @@
 <?php
 
 $header = <<<'HEADER'
-This file is part of the AutoFormBundle package.
+This file is part of the TranslationFormBundle package.
 
 (c) David ALLIX <http://a2lix.fr>
 

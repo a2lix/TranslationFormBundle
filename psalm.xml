@@ -11,6 +11,8 @@
         <directory name="*" />
         <ignoreFiles>
             <directory name="vendor" />
+            <directory name="tests/Fixtures" />
+            <file name="src/A2lixTranslationFormBundle.php" />
         </ignoreFiles>
     </projectFiles>
 

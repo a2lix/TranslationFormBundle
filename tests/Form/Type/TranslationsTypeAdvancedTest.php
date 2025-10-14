@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -18,10 +16,11 @@ use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Product;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @internal
+ *
+ * @coversNothing
  */
 final class TranslationsTypeAdvancedTest extends TypeTestCase
 {
@@ -48,12 +47,12 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
         $translationsLocales = array_keys($translationsForm);
         $translationsRequiredLocales = array_keys(array_filter($translationsForm, static fn ($form) => $form->isRequired()));
 
-        self::assertEquals($overrideLocales, $translationsLocales, 'Locales should be same as config');
-        self::assertEquals($overrideRequiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
+        self::assertSame($overrideLocales, $translationsLocales, 'Locales should be same as config');
+        self::assertSame($overrideRequiredLocales, $translationsRequiredLocales, 'Required locales should be same as config');
 
-        self::assertEquals(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
-        self::assertEquals(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
-        self::assertEquals(['title', 'description'], array_keys($translationsForm['es']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertSame(['title', 'description'], array_keys($translationsForm['en']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertSame(['title', 'description'], array_keys($translationsForm['fr']->all()), 'Fields should matches ProductTranslation fields');
+        self::assertSame(['title', 'description'], array_keys($translationsForm['es']->all()), 'Fields should matches ProductTranslation fields');
     }
 
     public function testEmptyFormOverrideFields(): void
@@ -68,9 +67,9 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
         ;
 
         $translationsForm = $form->get('translations')->all();
-        self::assertEquals(['title'], array_keys($translationsForm['en']->all()), 'Fields should not contains description');
-        self::assertEquals(['title'], array_keys($translationsForm['fr']->all()), 'Fields should not contains description');
-        self::assertEquals(['title'], array_keys($translationsForm['de']->all()), 'Fields should not contains description');
+        self::assertSame(['title'], array_keys($translationsForm['en']->all()), 'Fields should not contains description');
+        self::assertSame(['title'], array_keys($translationsForm['fr']->all()), 'Fields should not contains description');
+        self::assertSame(['title'], array_keys($translationsForm['de']->all()), 'Fields should not contains description');
     }
 
     public function testLabels(): void
@@ -88,19 +87,8 @@ final class TranslationsTypeAdvancedTest extends TypeTestCase
         ;
 
         $translationsForm = $form->get('translations')->all();
-        self::assertEquals('English', $translationsForm['en']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
-        self::assertEquals('Français', $translationsForm['fr']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
+        self::assertSame('English', $translationsForm['en']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
+        self::assertSame('Français', $translationsForm['fr']->getConfig()->getOptions()['label'], 'Label should be explicitely set');
         self::assertNull($translationsForm['de']->getConfig()->getOptions()['label'], 'Label should default to null');
-    }
-
-    protected function getExtensions(): array
-    {
-        $translationsType = $this->getConfiguredTranslationsType($this->locales, $this->defaultLocale, $this->requiredLocales);
-        $autoFormType = $this->getConfiguredAutoFormType();
-
-        return [new PreloadedExtension([
-            $translationsType,
-            $autoFormType,
-        ], [])];
     }
 }

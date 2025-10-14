@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -19,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class LocaleProviderPass implements CompilerPassInterface
 {
-    final public const DEFAULT_LOCALE_PROVIDER_KEY = 'default';
+    final public const string DEFAULT_LOCALE_PROVIDER_KEY = 'default';
 
     #[\Override]
     public function process(ContainerBuilder $container): void

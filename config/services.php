@@ -22,28 +22,17 @@ use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 
 return static function (ContainerConfigurator $container): void {
     $container->services()
-
-    // Form Listeners
-        ->set('a2lix_translation_form.form.event_listener.translations_listener', TranslationsListener::class)
-        ->args([
-            '$formManipulator' => service('a2lix_auto_form.manipulator.default')
-        ])
-
-        ->set('a2lix_translation_form.form.event_listener.translations_form_listener', TranslationsFormsListener::class)
-
-    // Form Types
+        // Form Types
         ->set('a2lix_translation_form.form.type.translations_type', TranslationsType::class)
         ->args([
-            '$translationsListener' => service('a2lix_translation_form.form.event_listener.translations_listener'),
             '$localeProvider' => service('a2lix_translation_form.locale_provider.default')
-            ])
+        ])
         ->tag('form.type')
 
         ->set('a2lix_translation_form.form.type.translations_forms_type', TranslationsFormsType::class)
         ->args([
-            '$translationsFormsListener' => service('a2lix_translation_form.form.event_listener.translations_form_listener'),
             '$localeProvider' => service('a2lix_translation_form.locale_provider.default'),
-            ])
+        ])
         ->tag('form.type')
 
         ->set('a2lix_translation_form.form.type.translations_locales_selector_type', TranslationsLocalesSelectorType::class)
@@ -57,5 +46,5 @@ return static function (ContainerConfigurator $container): void {
             '$requestStack' => service('request_stack')
         ])
         ->tag('form.type')
-        ;
+    ;
 };

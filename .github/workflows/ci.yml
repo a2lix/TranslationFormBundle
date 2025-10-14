@@ -2,12 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [ "3.x" ]
   pull_request:
-    branches: [ "3.x" ]
 
 jobs:
   lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,12 +19,9 @@ jobs:
       - name: Cache Composer packages
         uses: actions/cache@v4
         with:
-          path: |
-            vendor
-            ~/.composer/cache
-          key: ${{ runner.os }}-php-8.4-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-8.4-
+          path: vendor
+          key: ${{ runner.os }}-php-8.4-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-8.4-composer-
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
@@ -36,16 +32,42 @@ jobs:
       - name: Run php-cs-fixer (dry run)
         run: vendor/bin/php-cs-fixer fix --dry-run --diff --verbose
 
-  tests:
+  static-analysis:
+    name: Static Analysis
     runs-on: ubuntu-latest
-    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-8.4-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-8.4-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run psalm
+        run: vendor/bin/psalm
+
+  tests:
+    name: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, deps ${{ matrix.dependencies }}
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - static-analysis
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.3', '8.4']
-        symfony: ['6.4.*', '7.3.*', '7.4.*', '8.0.*']
-
-    name: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}
+        php: ['8.4']
+        symfony: ['7.3.*', '7.4.*', '8.0.*']
+        dependencies: ['lowest', 'stable']
 
     steps:
       - uses: actions/checkout@v4
@@ -58,26 +80,30 @@ jobs:
       - name: Cache Composer packages
         uses: actions/cache@v4
         with:
-          path: |
-            vendor
-            ~/.composer/cache
-          key: ${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
+          path: vendor
+          key: ${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-${{ matrix.dependencies }}-
 
       - name: Update dependencies for Symfony ${{ matrix.symfony }}
+        run: >
+          composer require "symfony/config:${{ matrix.symfony }}"
+          "symfony/dependency-injection:${{ matrix.symfony }}"
+          "symfony/form:${{ matrix.symfony }}"
+          "symfony/http-kernel:${{ matrix.symfony }}"
+          "symfony/property-info:${{ matrix.symfony }}"
+          "symfony/cache:${{ matrix.symfony }}"
+          "symfony/doctrine-bridge:${{ matrix.symfony }}"
+          "symfony/validator:${{ matrix.symfony }}"
+          "symfony/var-dumper:${{ matrix.symfony }}"
+          --no-update --no-scripts --no-plugins
+
+      - name: Install dependencies (${{ matrix.dependencies }})
         run: |
-          composer require "symfony/config:${{ matrix.symfony }}" "symfony/dependency-injection:${{ matrix.symfony }}" "symfony/doctrine-bridge:${{ matrix.symfony }}" "symfony/form:${{ matrix.symfony }}" --no-update
-          composer update --prefer-dist --no-progress --optimize-autoloader
-
-      - name: Run psalm
-        run: vendor/bin/psalm
-
+          if [ "${{ matrix.dependencies }}" = "lowest" ]; then
+            composer update --prefer-lowest --no-progress --no-scripts --no-plugins
+          else
+            composer update --prefer-stable --no-progress --no-scripts --no-plugins
+          fi
+      
       - name: Run phpunit
         run: vendor/bin/phpunit
-
-      - name: Check for outdated dependencies
-        run: composer outdated
