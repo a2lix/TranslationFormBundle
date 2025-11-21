@@ -15,61 +15,50 @@ namespace A2lix\TranslationFormBundle;
 
 use A2lix\TranslationFormBundle\DependencyInjection\Compiler\LocaleProviderPass;
 use A2lix\TranslationFormBundle\DependencyInjection\Compiler\TemplatingPass;
+use A2lix\TranslationFormBundle\Locale\SimpleProvider;
+use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class A2lixTranslationFormBundle extends Bundle
+class A2lixTranslationFormBundle extends AbstractBundle
 {
     #[\Override]
     public function configure(DefinitionConfigurator $definition): void
     {
-        /** @psalm-suppress UndefinedMethod */
-        /** @psalm-suppress MixedMethodCall */
         $definition->rootNode()
-
-        // TODO
+            ->children()
+            ->scalarNode('locale_provider')
+            ->defaultValue('a2lix_translation_form.locale.simple_provider')
+            ->info('Set your own LocaleProvider service identifier if required')
+            ->end()
+            ->scalarNode('default_locale')
+            ->defaultNull()
+            ->info('Set your own default locale if different from the SymfonyFramework locale. eg: en')
+            ->end()
+            ->arrayNode('locales')
+            ->beforeNormalization()
+            ->ifString()
+            ->then(static fn ($v) => preg_split('/\s*,\s*/', (string) $v))
+            ->end()
+            ->requiresAtLeastOneElement()
+            ->prototype('scalar')->end()
+            ->info('Set the list of locales to manage (default locale included). eg: [en, fr, de, es]')
+            ->end()
+            ->arrayNode('required_locales')
+            ->beforeNormalization()
+            ->ifString()
+            ->then(static fn ($v) => preg_split('/\s*,\s*/', (string) $v))
+            ->end()
+            ->prototype('scalar')->end()
+            ->info('Set the list of required locales to manage. eg: [en]')
+            ->end()
+            ->scalarNode('templating')
+            ->defaultValue('@A2lixTranslationForm/bootstrap_4_layout.html.twig')
+            ->info('Set your own template path if required')
+            ->end()
+            ->end()
         ;
-
-
-        // $treeBuilder = new TreeBuilder('a2lix_translation_form');
-        // $rootNode = method_exists(TreeBuilder::class, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('a2lix_translation_form');
-
-        // $rootNode
-        //     ->children()
-        //     ->scalarNode('locale_provider')
-        //     ->defaultValue(LocaleProviderPass::DEFAULT_LOCALE_PROVIDER_KEY)
-        //     ->info('Set your own LocaleProvider service identifier if required')
-        //     ->end()
-        //     ->scalarNode('default_locale')
-        //     ->defaultNull()
-        //     ->info('Set your own default locale if different from the SymfonyFramework locale. eg: en')
-        //     ->end()
-        //     ->arrayNode('locales')
-        //     ->beforeNormalization()
-        //     ->ifString()
-        //     ->then(static fn ($v) => preg_split('/\s*,\s*/', (string) $v))
-        //     ->end()
-        //     ->requiresAtLeastOneElement()
-        //     ->prototype('scalar')->end()
-        //     ->info('Set the list of locales to manage (default locale included). eg: [en, fr, de, es]')
-        //     ->end()
-        //     ->arrayNode('required_locales')
-        //     ->beforeNormalization()
-        //     ->ifString()
-        //     ->then(static fn ($v) => preg_split('/\s*,\s*/', (string) $v))
-        //     ->end()
-        //     ->prototype('scalar')->end()
-        //     ->info('Set the list of required locales to manage. eg: [en]')
-        //     ->end()
-        //     ->scalarNode('templating')
-        //     ->defaultValue('@A2lixTranslationForm/bootstrap_4_layout.html.twig')
-        //     ->info('Set your own template path if required')
-        //     ->end()
-        //     ->end()
-        // ;
-
-        // return $treeBuilder;
     }
 
     #[\Override]
@@ -77,23 +66,28 @@ class A2lixTranslationFormBundle extends Bundle
     {
         $container->import('../config/services.php');
 
-        $container->services()
+        // Locale Provider
+        if ('a2lix_translation_form.locale.simple_provider' === $config['locale_provider']) {
+            $container->services()
+                ->get($config['locale_provider'])
+                ->args([
+                    '$locales' => $config['locales'],
+                    '$defaultLocale' => $config['default_locale'] ?? $builder->getParameter('kernel.default_locale'),
+                    '$requiredLocales' => $config['required_locales'],
+                ])
+                ->alias('a2lix_translation_form.locale_provider.default', $config['locale_provider'])
+            ;
+        } else {
+            $container->services()
+                ->remove('a2lix_translation_form.locale.simple_provider')
+                ->alias('a2lix_translation_form.locale_provider.default', $config['locale_provider'])
+            ;
+        }
 
-        // $container->setParameter('a2lix_translation_form.locale_provider', $config['locale_provider']);
-        // $container->setParameter('a2lix_translation_form.locales', $config['locales']);
-        // $container->setParameter('a2lix_translation_form.required_locales', $config['required_locales']);
-        // $container->setParameter('a2lix_translation_form.default_locale', $config['default_locale'] ?:
-        //     $container->getParameter('kernel.default_locale'));
-
-        // $container->setParameter('a2lix_translation_form.templating', $config['templating']);
-    }
-
-    #[\Override]
-    public function build(ContainerBuilder $container): void
-    {
-        parent::build($container);
-
-        $container->addCompilerPass(new TemplatingPass());
-        $container->addCompilerPass(new LocaleProviderPass());
+        // Twig Form Resources
+        $twigFormResources = $builder->getParameter('twig.form.resources') ?? [];
+        if (!\in_array($config['templating'], $twigFormResources, true)) {
+            $builder->setParameter('twig.form.resources', [...$twigFormResources, $config['templating']]);
+        }
     }
 }

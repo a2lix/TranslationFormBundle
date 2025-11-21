@@ -41,12 +41,17 @@
         "doctrine/orm": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.45",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.18",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^12.3",
         "rector/rector": "^2.2",
         "symfony/cache": "^6.4|^7.3",
+        "symfony/doctrine-bridge": "^7.3",
         "symfony/validator": "^6.4|^7.3",
-        "symfony/var-dumper": "^7.3",
-        "vimeo/psalm": "^6.1"
+        "symfony/var-dumper": "^7.3"
     },
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",
@@ -56,15 +61,19 @@
         "cs-fixer": [
             "php-cs-fixer fix --verbose"
         ],
-        "psalm": [
-            "psalm"
+        "phpstan": [
+            "phpstan analyse --memory-limit=2G"
         ],
         "phpunit": [
             "phpunit"
         ]
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "phpstan/extension-installer": true
+        }
     },
     "autoload": {
         "psr-4": { "A2lix\\TranslationFormBundle\\": "src/" }

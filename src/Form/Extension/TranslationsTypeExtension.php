@@ -19,7 +19,7 @@ class TranslationsTypeExtension extends AbstractTypeExtension
     #[\Override]
     public static function getExtendedTypes(): iterable
     {
-        return [AutoType::class];
+        return [];
     }
 
     // TODO

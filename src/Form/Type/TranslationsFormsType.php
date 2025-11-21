@@ -14,7 +14,10 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 use A2lix\AutoFormBundle\Form\Type\AutoType;
 use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use stdClass;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -30,7 +33,12 @@ class TranslationsFormsType extends AbstractType
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // TODO
+        foreach ($options['locales'] as $locale) {
+            $builder->add($locale, $options['form_type'], [
+                ...$options['form_options'],
+                'required' => \in_array($locale, $options['required_locales'], true),
+            ]);
+        }
     }
 
     #[\Override]
@@ -45,23 +53,17 @@ class TranslationsFormsType extends AbstractType
     {
         $resolver->setDefaults([
             'by_reference' => false,
-            'empty_data' => static fn (FormInterface $form) => new ArrayCollection(),
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
             'form_options' => [],
+            'prototype' => false,
+            // 'is_empty_callback' => function (FormInterface $form) {
+            //     return false;
+            // },
         ]);
 
         $resolver->setRequired('form_type');
-
-        $resolver->setNormalizer('form_options', static function (Options $options, array $value): array {
-            // Check mandatory data_class option when AutoFormType use
-            if (($options['form_type'] instanceof AutoType) && (null !== $value['data_class'])) {
-                throw new \RuntimeException('Missing "data_class" option under "form_options" of TranslationsFormsType. Required when "form_type" use "AutoFormType".');
-            }
-
-            return $value;
-        });
     }
 
     #[\Override]

@@ -37,7 +37,12 @@ class TranslatedEntityType extends AbstractType
                     throw new \RuntimeException('Error while getting request');
                 }
 
-                return $options['translation_path'].'['.$request->getLocale().'].'.$options['translation_property'];
+                return sprintf(
+                    '%s[%s].%s',
+                    $options['translation_path'],
+                    $request->getLocale(),
+                    $options['translation_property'],
+                );
             },
         ]);
 

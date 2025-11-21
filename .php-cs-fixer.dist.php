@@ -51,6 +51,7 @@ return (new PhpCsFixer\Config())
         'phpdoc_var_without_name' => true,
         'phpdoc_to_comment' => false,
         'single_line_throw' => true,
+        'string_implicit_backslashes' => false,   // Temporary?
         'statement_indentation' => true,
         'trailing_comma_in_multiline' => ['after_heredoc' => true, 'elements' => ['arrays', 'parameters']],
         'use_arrow_functions' => true,

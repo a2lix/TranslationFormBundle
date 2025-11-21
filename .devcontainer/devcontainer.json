@@ -8,10 +8,29 @@
       "extensions": [
         "bmewburn.vscode-intelephense-client",
         "xdebug.php-debug",
-        "getpsalm.psalm-vscode-plugin"
+        "SanderRonde.phpstan-vscode"
       ],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "intelephense.telemetry.enabled": false,
+        "workbench.colorCustomizations": {
+          "statusBar.background": "#ffa600d3",
+          "statusBar.noFolderBackground": "#ffa600d3",
+          "statusBar.debuggingBackground": "#ffa600d3",
+          "activityBar.activeBorder": "#ffa600d3",
+          "activityBarBadge.background": "#ffa600d3",
+          "badge.background": "#ffa600d3",
+          "focusBorder": "#ffa600d3",
+          "progressBar.background": "#ffa600d3",
+          "notificationCenter.border": "#ffa600d3",
+          "notificationsInfoIcon.foreground": "#ffa600d3",
+          "pickerGroup.border": "#ffa600d3",
+          "settings.modifiedItemIndicator": "#ffa600d3",
+          "panelTitle.activeBorder": "#ffa600d3",
+          "list.activeSelectionBackground": "#6e6e6e",
+          "list.inactiveSelectionBackground": "#6e6e6e",
+          "list.hoverBackground": "#6e6e6e",
+        },
       }
     }
   },

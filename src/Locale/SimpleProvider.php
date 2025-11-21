@@ -19,20 +19,16 @@ class SimpleProvider implements LocaleProviderInterface
         private array $requiredLocales = [],
     ) {
         if (!\in_array($defaultLocale, $locales, true)) {
-            if (\count($locales)) {
+            if ([] !== $locales) {
                 throw new \InvalidArgumentException(\sprintf('Default locale `%s` not found within the configured locales `[%s]`. Perhaps you need to add it to your `a2lix_translation_form.locales` bundle configuration?', $defaultLocale, implode(',', $locales)));
             }
 
             throw new \InvalidArgumentException(\sprintf('No locales were configured, but expected at least the default locale `%s`. Perhaps you need to add it to your `a2lix_translation_form.locales` bundle configuration?', $defaultLocale));
         }
 
-        if (array_diff($requiredLocales, $locales)) {
+        if ([] !== array_diff($requiredLocales, $locales)) {
             throw new \InvalidArgumentException('Required locales should be contained in locales');
         }
-
-        $this->locales = $locales;
-        $this->defaultLocale = $defaultLocale;
-        $this->requiredLocales = $requiredLocales;
     }
 
     #[\Override]

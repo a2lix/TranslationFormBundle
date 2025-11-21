@@ -11,8 +11,9 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
+use A2lix\AutoFormBundle\Form\Type\AutoType;
+use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -23,12 +24,13 @@ class TranslationsType extends AbstractType
 {
     public function __construct(
         private readonly LocaleProviderInterface $localeProvider,
+        private readonly TranslationsListener $translationsListener,
     ) {}
 
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // TODO
+        $builder->addEventSubscriber($this->translationsListener);
     }
 
     #[\Override]
@@ -43,14 +45,12 @@ class TranslationsType extends AbstractType
     {
         $resolver->setDefaults([
             'by_reference' => false,
-            'empty_data' => static fn (FormInterface $form) => new ArrayCollection(),
-            'locale_labels' => null,
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
+            //
+            'locale_labels' => null,
             'theming_granularity' => 'field',
-            'fields' => [],
-            'excluded_fields' => [],
         ]);
 
         $resolver->setAllowedValues('theming_granularity', ['field', 'locale_field']);
