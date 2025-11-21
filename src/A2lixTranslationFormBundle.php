@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -13,9 +11,6 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle;
 
-use A2lix\TranslationFormBundle\DependencyInjection\Compiler\LocaleProviderPass;
-use A2lix\TranslationFormBundle\DependencyInjection\Compiler\TemplatingPass;
-use A2lix\TranslationFormBundle\Locale\SimpleProvider;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

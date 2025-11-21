@@ -11,17 +11,11 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use A2lix\AutoFormBundle\Form\Type\AutoType;
 use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use stdClass;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsFormsType extends AbstractType

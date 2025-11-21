@@ -14,9 +14,9 @@ namespace A2lix\TranslationFormBundle\Locale;
 class SimpleProvider implements LocaleProviderInterface
 {
     public function __construct(
-        private array $locales,
-        private string $defaultLocale,
-        private array $requiredLocales = [],
+        private readonly array $locales,
+        private readonly string $defaultLocale,
+        private readonly array $requiredLocales = [],
     ) {
         if (!\in_array($defaultLocale, $locales, true)) {
             if ([] !== $locales) {

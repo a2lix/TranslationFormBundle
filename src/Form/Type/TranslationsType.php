@@ -11,7 +11,6 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use A2lix\AutoFormBundle\Form\Type\AutoType;
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
 use Symfony\Component\Form\AbstractType;
@@ -48,7 +47,7 @@ class TranslationsType extends AbstractType
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
-            //
+
             'locale_labels' => null,
             'theming_granularity' => 'field',
         ]);

@@ -11,7 +11,6 @@
 
 namespace A2lix\TranslationFormBundle\Form\Extension;
 
-use A2lix\AutoFormBundle\Form\Type\AutoType;
 use Symfony\Component\Form\AbstractTypeExtension;
 
 class TranslationsTypeExtension extends AbstractTypeExtension
