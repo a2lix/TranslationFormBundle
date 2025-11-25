@@ -1,0 +1,25 @@
+{% block a2lix_translations_widget %}
+    {{ form_errors(form) }}
+
+    <div class="a2lix_translations">
+    {% for translationsFields in form %}
+        {% set locale = translationsFields.vars.name %}
+
+        <details name="{{ form.vars.id }}" {% if app.request.locale == locale %}open{% endif %}>
+            <summary>
+                {{ translationsFields.vars.label|default(locale|humanize)|trans }}
+                {% if form.vars.default_locale == locale %}{{ '[Default]'|trans }}{% endif %}
+                {% if translationsFields.vars.required %}*{% endif %}
+            </summary>
+            <div>
+                {{ form_errors(translationsFields) }}
+                {{ form_widget(translationsFields) }}
+            </div>
+        </details>
+    {% endfor %}
+    </div>
+{% endblock %}
+
+{% block a2lix_translationsForms_widget %}
+    {{ block('a2lix_translations_widget') }}
+{% endblock %}

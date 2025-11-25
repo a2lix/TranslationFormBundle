@@ -25,6 +25,24 @@ class TranslationsFormsType extends AbstractType
     ) {}
 
     #[\Override]
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            // 'by_reference' => false,
+            'locales' => $this->localeProvider->getLocales(),
+            'default_locale' => $this->localeProvider->getDefaultLocale(),
+            'required_locales' => $this->localeProvider->getRequiredLocales(),
+            'form_options' => [],
+            'prototype' => false,
+            // 'is_empty_callback' => function (FormInterface $form) {
+            //     return false;
+            // },
+        ]);
+
+        $resolver->setRequired('form_type');
+    }
+
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($options['locales'] as $locale) {
@@ -40,24 +58,6 @@ class TranslationsFormsType extends AbstractType
     {
         $view->vars['default_locale'] = $options['default_locale'];
         $view->vars['required_locales'] = $options['required_locales'];
-    }
-
-    #[\Override]
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'by_reference' => false,
-            'locales' => $this->localeProvider->getLocales(),
-            'default_locale' => $this->localeProvider->getDefaultLocale(),
-            'required_locales' => $this->localeProvider->getRequiredLocales(),
-            'form_options' => [],
-            'prototype' => false,
-            // 'is_empty_callback' => function (FormInterface $form) {
-            //     return false;
-            // },
-        ]);
-
-        $resolver->setRequired('form_type');
     }
 
     #[\Override]

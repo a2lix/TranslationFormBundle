@@ -33,6 +33,14 @@ return static function (ContainerConfigurator $container): void {
         // Form Listeners
         ->set('a2lix_translation_form.form.event_listener.translations_listener', TranslationsListener::class)
 
+        // // Form Extensions
+        // ->set('a2lix_translation_form.form.extension.auto_type_translation_extension', AutoTypeTranslationExtension::class)
+        // ->args([
+        //     '$localeProvider' => service('a2lix_translation_form.locale_provider.default'),
+        //     '$translationsListener' => service('a2lix_translation_form.form.event_listener.translations_listener'),
+        // ])
+        // ->tag('form.type_extension')
+
         // Form Types
         ->set('a2lix_translation_form.form.type.translations_type', TranslationsType::class)
         ->args([

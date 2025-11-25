@@ -49,7 +49,7 @@ class A2lixTranslationFormBundle extends AbstractBundle
             ->info('Set the list of required locales to manage. eg: [en]')
             ->end()
             ->scalarNode('templating')
-            ->defaultValue('@A2lixTranslationForm/bootstrap_4_layout.html.twig')
+            ->defaultValue('@A2lixTranslationForm/native_layout.html.twig')
             ->info('Set your own template path if required')
             ->end()
             ->end()
@@ -62,7 +62,12 @@ class A2lixTranslationFormBundle extends AbstractBundle
         $container->import('../config/services.php');
 
         // Locale Provider
-        if ('a2lix_translation_form.locale.simple_provider' === $config['locale_provider']) {
+        if ('a2lix_translation_form.locale.simple_provider' !== $config['locale_provider']) {
+            $container->services()
+                ->remove('a2lix_translation_form.locale.simple_provider')
+                ->alias('a2lix_translation_form.locale_provider.default', $config['locale_provider'])
+            ;
+        } else {
             $container->services()
                 ->get($config['locale_provider'])
                 ->args([
@@ -72,17 +77,27 @@ class A2lixTranslationFormBundle extends AbstractBundle
                 ])
                 ->alias('a2lix_translation_form.locale_provider.default', $config['locale_provider'])
             ;
-        } else {
-            $container->services()
-                ->remove('a2lix_translation_form.locale.simple_provider')
-                ->alias('a2lix_translation_form.locale_provider.default', $config['locale_provider'])
-            ;
+        }
+    }
+
+    public function prependExtension(ContainerConfigurator $configurator, ContainerBuilder $container): void
+    {
+        $config = $container->getExtensionConfig($this->extensionAlias);
+
+        if ($container->hasExtension('twig')) {
+            $container->prependExtensionConfig('twig', [
+                'form_themes' => [
+                    $config['templating'] ?? '@A2lixTranslationForm/native_layout.html.twig'
+                ]
+            ]);
         }
 
-        // Twig Form Resources
-        $twigFormResources = $builder->getParameter('twig.form.resources') ?? [];
-        if (!\in_array($config['templating'], $twigFormResources, true)) {
-            $builder->setParameter('twig.form.resources', [...$twigFormResources, $config['templating']]);
+        if ($container->hasExtension('a2lix_auto_form')) {
+            $container->prependExtensionConfig('a2lix_auto_form', [
+                'children_excluded' => [
+                    'id', 'newTranslations', 'translatable', 'locale', 'currentLocale', 'defaultLocale'
+                ]
+            ]);
         }
     }
 }
