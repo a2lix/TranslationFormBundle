@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
+use A2lix\TranslationFormBundle\Form\Extension\LocaleExtension;
 use A2lix\TranslationFormBundle\Form\Type\TranslatedEntityType;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsLocalesSelectorType;
@@ -33,26 +34,21 @@ return static function (ContainerConfigurator $container): void {
         // Form Listeners
         ->set('a2lix_translation_form.form.event_listener.translations_listener', TranslationsListener::class)
 
-        // // Form Extensions
-        // ->set('a2lix_translation_form.form.extension.auto_type_translation_extension', AutoTypeTranslationExtension::class)
-        // ->args([
-        //     '$localeProvider' => service('a2lix_translation_form.locale_provider.default'),
-        //     '$translationsListener' => service('a2lix_translation_form.form.event_listener.translations_listener'),
-        // ])
-        // ->tag('form.type_extension')
+        // Form Extensions
+        ->set('a2lix_translation_form.form.extension.locale_extension', LocaleExtension::class)
+        ->args([
+            '$localeProvider' => service('a2lix_translation_form.locale_provider.default'),
+        ])
+        ->tag('form.type_extension')
 
         // Form Types
         ->set('a2lix_translation_form.form.type.translations_type', TranslationsType::class)
         ->args([
-            '$localeProvider' => service('a2lix_translation_form.locale_provider.default'),
             '$translationsListener' => service('a2lix_translation_form.form.event_listener.translations_listener'),
         ])
         ->tag('form.type')
 
         ->set('a2lix_translation_form.form.type.translations_forms_type', TranslationsFormsType::class)
-        ->args([
-            '$localeProvider' => service('a2lix_translation_form.locale_provider.default'),
-        ])
         ->tag('form.type')
 
         ->set('a2lix_translation_form.form.type.translations_locales_selector_type', TranslationsLocalesSelectorType::class)

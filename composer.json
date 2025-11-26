@@ -55,7 +55,8 @@
     },
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",
-        "prezent/doctrine-translatable-bundle": "For Prezent strategy"
+        "prezent/doctrine-translatable-bundle": "For Prezent strategy",
+        "twig/extra-bundle": "For locale_name filter"
     },
     "scripts": {
         "cs-fixer": [

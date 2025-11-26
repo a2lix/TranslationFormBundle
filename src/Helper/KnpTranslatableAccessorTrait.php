@@ -13,7 +13,7 @@ namespace A2lix\TranslationFormBundle\Helper;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-trait TranslatableAccessorTrait
+trait KnpTranslatableAccessorTrait
 {
     public function __call($method, $arguments)
     {

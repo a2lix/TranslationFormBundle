@@ -25,12 +25,6 @@ class TranslationsLocalesSelectorType extends AbstractType
     ) {}
 
     #[\Override]
-    public function buildView(FormView $view, FormInterface $form, array $options): void
-    {
-        $view->vars['default_locale'] = $this->localeProvider->getDefaultLocale();
-    }
-
-    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -41,6 +35,12 @@ class TranslationsLocalesSelectorType extends AbstractType
                 'class' => 'a2lix_translationsLocalesSelector',
             ],
         ]);
+    }
+
+    #[\Override]
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['default_locale'] = $this->localeProvider->getDefaultLocale();
     }
 
     #[\Override]

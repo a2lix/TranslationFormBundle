@@ -13,17 +13,13 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 
 use A2lix\AutoFormBundle\Form\Type\AutoType;
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
-use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsType extends AbstractType
 {
     public function __construct(
-        private readonly LocaleProviderInterface $localeProvider,
         private readonly TranslationsListener $translationsListener,
     ) {}
 
@@ -31,47 +27,54 @@ class TranslationsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-
             'translation_class' => null,
-            // TODO auto_type options
-
-            'by_reference' => false,
-            'locales' => $this->localeProvider->getLocales(),
-            'default_locale' => $this->localeProvider->getDefaultLocale(),
-            'required_locales' => $this->localeProvider->getRequiredLocales(),
-
-            'locale_labels' => null,
-            'theming_granularity' => 'field',
+            // AutoType options
+            'children' => [],
+            'children_excluded' => [],
+            'children_embedded' => [],
+            // 'children_translated' => true,
+            'children_groups' => [],
+            'builder' => null,
         ]);
-
-        $resolver->setAllowedValues('theming_granularity', ['field', 'locale_field']);
     }
 
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $validAutoTypeOptions = $options;
+        unset(
+            // TranslationsType options
+            $validAutoTypeOptions['translation_class'],
+            // LocaleExtension options
+            $validAutoTypeOptions['default_locale'],
+            $validAutoTypeOptions['required_locales'],
+            $validAutoTypeOptions['locales'],
+            $validAutoTypeOptions['locale_labels'],
+            $validAutoTypeOptions['theming_granularity'],
+        );
+
+        dump($options);
+
         foreach ($options['locales'] as $locale) {
             $builder->add($locale, AutoType::class, [
+                // AutoType options
+                // ...$validAutoTypeOptions,
                 'data_class' => $options['translation_class'],
+                // 'children' => $validAutoTypeOptions['children'],
+                // 'children_excluded' => $validAutoTypeOptions['children_excluded'],
+                // 'children_embedded' => $validAutoTypeOptions['children_embedded'],
+                // 'children_translated' => $validAutoTypeOptions['children_translated'],
+                // 'children_groups' => $validAutoTypeOptions['children_groups'],
+                // 'builder' => $validAutoTypeOptions['builder'],
 
-                
+                // LocaleExtension options process
                 'label' => $formOptions['locale_labels'][$locale] ?? null,
                 'required' => \in_array($locale, $options['required_locales'], true),
                 'block_name' => ('field' === $options['theming_granularity']) ? 'locale' : null,
-
-                // TODO auto_type options
-                'children_excluded' => ['id', 'translatable', 'locale'],
             ]);
         }
 
         $builder->addEventSubscriber($this->translationsListener);
-    }
-
-    #[\Override]
-    public function buildView(FormView $view, FormInterface $form, array $options): void
-    {
-        $view->vars['default_locale'] = $options['default_locale'];
-        $view->vars['required_locales'] = $options['required_locales'];
     }
 
     #[\Override]

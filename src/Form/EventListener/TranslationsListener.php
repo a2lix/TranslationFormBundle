@@ -29,7 +29,7 @@ class TranslationsListener implements EventSubscriberInterface
         $data = $event->getData();
 
         foreach ($data as $locale => $translation) {
-            // Remove empty KNP Translation object
+            // Remove empty Translation object
             if ($translation->isEmpty()) {
                 $data->removeElement($translation);
 

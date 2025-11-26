@@ -29,7 +29,7 @@ class A2lixTranslationFormBundle extends AbstractBundle
             ->end()
             ->scalarNode('default_locale')
             ->defaultNull()
-            ->info('Set your own default locale if different from the SymfonyFramework locale. eg: en')
+            ->info('Set your own default locale if different from the default kernel.default_locale. eg: en')
             ->end()
             ->arrayNode('locales')
             ->beforeNormalization()
@@ -87,17 +87,15 @@ class A2lixTranslationFormBundle extends AbstractBundle
         if ($container->hasExtension('twig')) {
             $container->prependExtensionConfig('twig', [
                 'form_themes' => [
-                    $config['templating'] ?? '@A2lixTranslationForm/native_layout.html.twig'
-                ]
+                    $config['templating'] ?? '@A2lixTranslationForm/native_layout.html.twig',
+                ],
             ]);
         }
 
-        if ($container->hasExtension('a2lix_auto_form')) {
-            $container->prependExtensionConfig('a2lix_auto_form', [
-                'children_excluded' => [
-                    'id', 'newTranslations', 'translatable', 'locale', 'currentLocale', 'defaultLocale'
-                ]
-            ]);
-        }
+        $container->prependExtensionConfig('a2lix_auto_form', [
+            'children_excluded' => [
+                'id', 'newTranslations', 'translatable', 'locale', 'currentLocale', 'defaultLocale',
+            ],
+        ]);
     }
 }

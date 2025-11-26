@@ -47,6 +47,7 @@ class TranslatedEntityType extends AbstractType
         ]);
 
         $resolver->setRequired('translation_property');
+        $resolver->setAllowedTypes('translation_property', 'string');
     }
 
     #[\Override]

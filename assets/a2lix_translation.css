@@ -5,6 +5,10 @@
         list-style: none;
         padding: .5rem;
         white-space: nowrap;
+
+        &::hover {
+            border-bottom-color: dodgerblue;
+        }
     }
 
     details {
