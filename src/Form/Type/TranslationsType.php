@@ -14,6 +14,7 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 use A2lix\AutoFormBundle\Form\Type\AutoType;
 use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -53,25 +54,25 @@ class TranslationsType extends AbstractType
             $validAutoTypeOptions['theming_granularity'],
         );
 
-        dump($options);
+        // Build once only
+        $autoChildren = $builder->create('tmp', AutoType::class, [
+            'data_class' => $options['translation_class'],
+        ])->all();
 
         foreach ($options['locales'] as $locale) {
-            $builder->add($locale, AutoType::class, [
-                // AutoType options
-                // ...$validAutoTypeOptions,
+            $localeFormBuilder = $builder->create($locale, FormType::class, [
                 'data_class' => $options['translation_class'],
-                // 'children' => $validAutoTypeOptions['children'],
-                // 'children_excluded' => $validAutoTypeOptions['children_excluded'],
-                // 'children_embedded' => $validAutoTypeOptions['children_embedded'],
-                // 'children_translated' => $validAutoTypeOptions['children_translated'],
-                // 'children_groups' => $validAutoTypeOptions['children_groups'],
-                // 'builder' => $validAutoTypeOptions['builder'],
-
                 // LocaleExtension options process
                 'label' => $formOptions['locale_labels'][$locale] ?? null,
                 'required' => \in_array($locale, $options['required_locales'], true),
                 'block_name' => ('field' === $options['theming_granularity']) ? 'locale' : null,
             ]);
+
+            foreach ($autoChildren as $autoChild) {
+                $localeFormBuilder->add($autoChild);
+            }
+
+            $builder->add($localeFormBuilder);
         }
 
         $builder->addEventSubscriber($this->translationsListener);

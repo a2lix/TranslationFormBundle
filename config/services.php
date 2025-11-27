@@ -59,7 +59,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set('a2lix_translation_form.form.type.translated_entity_type', TranslatedEntityType::class)
         ->args([
-            '$requestStack' => service('request_stack'),
+            '$localeSwitcher' => service('translation.locale_switcher'),
         ])
         ->tag('form.type')
     ;

@@ -1,12 +1,12 @@
 {% block a2lix_translations_widget %}
     {{ form_errors(form) }}
-    {% set currLocale = app.request.locale %}
+    {% set currLocale = app.locale %}
 
     <div class="a2lix_translations">
         <ul class="a2lix_translationsLocales nav nav-tabs" role="tablist">
         {% for translationsFields in form %}
             {% set formLocale = translationsFields.vars.name %}
-            {% set isActiveLocale = currLocale == formLocale %}
+            {% set isActiveLocale = app.locale == formLocale %}
             {% set isDefaultLocale = formLocale == form.vars.default_locale %}
 
             <li class="nav-item">

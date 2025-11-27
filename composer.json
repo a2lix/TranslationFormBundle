@@ -33,7 +33,7 @@
         "symfony/doctrine-bridge": "^6.4|^7.3",
         "symfony/event-dispatcher": "^6.4|^7.3",
         "symfony/form": "^6.4|^7.3",
-        "symfony/http-foundation": "^6.4|^7.3",
+        "symfony/translation": "^6.4|^7.3",
         "symfony/http-kernel": "^6.4|^7.3",
         "symfony/options-resolver": "^6.4|^7.3"
     },

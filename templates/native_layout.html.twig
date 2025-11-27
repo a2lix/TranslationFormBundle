@@ -1,6 +1,6 @@
 {% block a2lix_translations_widget %}
     {{ form_errors(form) }}
-    {% set currLocale = app.request.locale %}
+    {% set currLocale = app.locale %}
 
     <div class="a2lix_translations">
     {% for translationsFields in form %}

@@ -1,27 +1,27 @@
 .a2lix_translations {
-    summary {
-        border-bottom: 2px solid transparent;
-        cursor: pointer;
-        list-style: none;
-        padding: .5rem;
-        white-space: nowrap;
-
-        &::hover {
-            border-bottom-color: dodgerblue;
-        }
-    }
-
     details {
-        &[open]>summary {
+        summary {
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            list-style: none;
+            padding: .5rem;
+            white-space: nowrap;
+
+            &:hover {
+                border-bottom-color: lightskyblue;
+            }
+        }
+
+        ::details-content {
+            padding: .5rem;
+        }
+
+        &:open > summary {
             border-bottom-color: dodgerblue;
             font-weight: 700;
         }
 
-        &::details-content {
-            padding: .5rem;
-        }
-
-        &:not([open])::details-content {
+        &:not(:open)::details-content {
             display: none;
         }
     }
@@ -33,15 +33,16 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 
-        summary {
-            grid-row: 1;
-            padding: .5rem 1rem;
-        }
-
         details {
             display: contents;
 
+            summary {
+                grid-row: 1;
+                padding: .5rem 1rem;
+            }
+
             &::details-content {
+                color: red; /* debug */
                 grid-row: 2;
                 grid-column: 1 / -1;
                 padding: 1rem;

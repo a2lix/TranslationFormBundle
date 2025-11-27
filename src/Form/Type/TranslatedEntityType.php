@@ -17,11 +17,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\LocaleSwitcher;
 
 class TranslatedEntityType extends AbstractType
 {
     public function __construct(
-        private readonly RequestStack $requestStack,
+        private LocaleSwitcher $localeSwitcher,
     ) {}
 
     #[\Override]
@@ -33,14 +34,10 @@ class TranslatedEntityType extends AbstractType
                 ->select('e, t')
                 ->join('e.translations', 't'),
             'choice_label' => function (Options $options) {
-                if (null === ($request = $this->requestStack->getCurrentRequest())) {
-                    throw new \RuntimeException('Error while getting request');
-                }
-
                 return \sprintf(
                     '%s[%s].%s',
                     $options['translation_path'],
-                    $request->getLocale(),
+                    $this->localeSwitcher->getLocale(),
                     $options['translation_property'],
                 );
             },
