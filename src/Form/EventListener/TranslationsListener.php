@@ -27,8 +27,15 @@ class TranslationsListener implements EventSubscriberInterface
     public function submit(FormEvent $event): void
     {
         $data = $event->getData();
+        dump($data);
+        if (null === $data) {
+            return;
+        }
+
+        // $data->setLocale($event->getForm()->getName());
 
         foreach ($data as $locale => $translation) {
+
             // Remove empty Translation object
             if ($translation->isEmpty()) {
                 $data->removeElement($translation);
