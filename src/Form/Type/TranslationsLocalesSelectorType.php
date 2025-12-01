@@ -11,7 +11,7 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use A2lix\TranslationFormBundle\LocaleProvider\LocaleProviderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormInterface;

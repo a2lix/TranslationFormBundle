@@ -19,33 +19,30 @@ use A2lix\TranslationFormBundle\Form\Type\TranslatedEntityType;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsLocalesSelectorType;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
-use A2lix\TranslationFormBundle\Locale\SimpleProvider;
+use A2lix\TranslationFormBundle\LocaleProvider\LocaleProviderInterface;
+use A2lix\TranslationFormBundle\LocaleProvider\SimpleLocaleProvider;
+use A2lix\TranslationFormBundle\Twig\Components\LocaleSwitcher;
 
 return static function (ContainerConfigurator $container): void {
     $container->services()
         // Locale Provider
-        ->set('a2lix_translation_form.locale.simple_provider', SimpleProvider::class)
+        ->set('a2lix_translation_form.locale_provider.simple_locale_provider', SimpleLocaleProvider::class)
         ->args([
             '$locales' => abstract_arg('locales'),
             '$defaultLocale' => abstract_arg('defaultLocale'),
             '$requiredLocales' => abstract_arg('requiredLocales'),
         ])
-
-        // Form Listeners
-        ->set('a2lix_translation_form.form.event_listener.translations_listener', TranslationsListener::class)
+        ->alias(LocaleProviderInterface::class, 'a2lix_translation_form.locale_provider.simple_locale_provider')
 
         // Form Extensions
         ->set('a2lix_translation_form.form.extension.locale_extension', LocaleExtension::class)
         ->args([
-            '$localeProvider' => service('a2lix_translation_form.locale_provider.default'),
+            '$localeProvider' => service(LocaleProviderInterface::class),
         ])
         ->tag('form.type_extension')
 
         // Form Types
         ->set('a2lix_translation_form.form.type.translations_type', TranslationsType::class)
-        ->args([
-            '$translationsListener' => service('a2lix_translation_form.form.event_listener.translations_listener'),
-        ])
         ->tag('form.type')
 
         ->set('a2lix_translation_form.form.type.translations_forms_type', TranslationsFormsType::class)
@@ -53,7 +50,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set('a2lix_translation_form.form.type.translations_locales_selector_type', TranslationsLocalesSelectorType::class)
         ->args([
-            '$localeProvider' => service('a2lix_translation_form.locale_provider.default'),
+            '$localeProvider' => service(LocaleProviderInterface::class),
         ])
         ->tag('form.type')
 
@@ -62,5 +59,16 @@ return static function (ContainerConfigurator $container): void {
             '$localeSwitcher' => service('translation.locale_switcher'),
         ])
         ->tag('form.type')
+
+        // Twig Components
+        ->set(LocaleSwitcher::class)
+        ->args([
+            '$localeProvider' => service(LocaleProviderInterface::class),
+            '$localeSwitcher' => service('translation.locale_switcher'),
+        ])
+        ->tag('twig.component', [
+            'key' => 'A2lixTranslationForm:LocaleSwitcher',
+            'template' => '@A2lixTranslationForm/components/LocaleSwitcher_bootstrap_5.html.twig',
+        ])
     ;
 };

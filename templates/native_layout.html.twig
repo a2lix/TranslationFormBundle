@@ -1,17 +1,16 @@
 {% block a2lix_translations_widget %}
     {{ form_errors(form) }}
-    {% set currLocale = app.locale %}
 
     <div class="a2lix_translations">
     {% for translationsFields in form %}
         {% set formLocale = translationsFields.vars.name %}
-        {% set isActiveLocale = currLocale == formLocale %}
+        {% set isActiveLocale = app.locale == formLocale %}
         {% set isDefaultLocale = formLocale == form.vars.default_locale %}
 
         <details name="{{ form.vars.id }}" {{ isActiveLocale ? 'open' }}>
             <summary>
                 {% guard filter locale_name %}
-                    {{ translationsFields.vars.label ?? formLocale|locale_name(currLocale)|humanize }}
+                    {{ translationsFields.vars.label ?? formLocale|locale_name(app.locale)|humanize }}
                 {% else %}
                     {{ translationsFields.vars.label ?? formLocale|humanize }}
                 {% endguard %}

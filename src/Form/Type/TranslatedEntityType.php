@@ -14,7 +14,6 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\LocaleSwitcher;
@@ -22,7 +21,7 @@ use Symfony\Component\Translation\LocaleSwitcher;
 class TranslatedEntityType extends AbstractType
 {
     public function __construct(
-        private LocaleSwitcher $localeSwitcher,
+        private readonly LocaleSwitcher $localeSwitcher,
     ) {}
 
     #[\Override]
@@ -33,14 +32,12 @@ class TranslatedEntityType extends AbstractType
             'query_builder' => static fn (EntityRepository $er) => $er->createQueryBuilder('e')
                 ->select('e, t')
                 ->join('e.translations', 't'),
-            'choice_label' => function (Options $options) {
-                return \sprintf(
-                    '%s[%s].%s',
-                    $options['translation_path'],
-                    $this->localeSwitcher->getLocale(),
-                    $options['translation_property'],
-                );
-            },
+            'choice_label' => fn (Options $options) => \sprintf(
+                '%s[%s].%s',
+                $options['translation_path'],
+                $this->localeSwitcher->getLocale(),
+                $options['translation_property'],
+            ),
         ]);
 
         $resolver->setRequired('translation_property');

@@ -1,6 +1,5 @@
 {% block a2lix_translations_widget %}
     {{ form_errors(form) }}
-    {% set currLocale = app.locale %}
 
     <div class="a2lix_translations">
         <ul class="a2lix_translationsLocales nav nav-tabs" role="tablist">
@@ -16,7 +15,7 @@
                     data-bs-toggle="tab" role="tab"
                 >
                     {% guard filter locale_name %}
-                        {{ translationsFields.vars.label ?? formLocale|locale_name(currLocale)|humanize }}
+                        {{ translationsFields.vars.label ?? formLocale|locale_name(app.locale)|humanize }}
                     {% else %}
                         {{ translationsFields.vars.label ?? formLocale|humanize }}
                     {% endguard %}
@@ -30,7 +29,7 @@
         <div class="a2lix_translationsFields tab-content">
         {% for translationsFields in form %}
             {% set formLocale = translationsFields.vars.name %}
-            {% set isActiveLocale = currLocale == formLocale %}
+            {% set isActiveLocale = app.locale == formLocale %}
 
             <div
                 id="{{ translationsFields.vars.id }}_a2lix_translations-fields" role="tabpanel"

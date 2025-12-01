@@ -33,9 +33,11 @@
         "symfony/doctrine-bridge": "^6.4|^7.3",
         "symfony/event-dispatcher": "^6.4|^7.3",
         "symfony/form": "^6.4|^7.3",
-        "symfony/translation": "^6.4|^7.3",
         "symfony/http-kernel": "^6.4|^7.3",
-        "symfony/options-resolver": "^6.4|^7.3"
+        "symfony/intl": "^7.4",
+        "symfony/options-resolver": "^6.4|^7.3",
+        "symfony/translation": "^6.4|^7.3",
+        "symfony/ux-twig-component": "^2.31"
     },
     "require-dev": {
         "doctrine/orm": "^3.5",

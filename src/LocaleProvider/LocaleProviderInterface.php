@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace A2lix\TranslationFormBundle\Locale;
+namespace A2lix\TranslationFormBundle\LocaleProvider;
 
 interface LocaleProviderInterface
 {
