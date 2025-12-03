@@ -28,7 +28,7 @@ class TranslatedEntityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'translation_path' => 'translations',
+            // EntityType
             'query_builder' => static fn (EntityRepository $er) => $er->createQueryBuilder('e')
                 ->select('e, t')
                 ->join('e.translations', 't'),
@@ -38,6 +38,8 @@ class TranslatedEntityType extends AbstractType
                 $this->localeSwitcher->getLocale(),
                 $options['translation_property'],
             ),
+            // Adds
+            'translation_path' => 'translations',
         ]);
 
         $resolver->setRequired('translation_property');

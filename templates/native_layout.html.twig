@@ -9,11 +9,7 @@
 
         <details name="{{ form.vars.id }}" {{ isActiveLocale ? 'open' }}>
             <summary>
-                {% guard filter locale_name %}
-                    {{ translationsFields.vars.label ?? formLocale|locale_name(app.locale)|humanize }}
-                {% else %}
-                    {{ translationsFields.vars.label ?? formLocale|humanize }}
-                {% endguard %}
+                {{ translationsFields.vars.label ?? locale_render(formLocale) }}
                 {{ isDefaultLocale ? '[Default]'|trans }}
                 {{ translationsFields.vars.required ? '*' }}
             </summary>

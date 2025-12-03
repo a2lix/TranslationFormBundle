@@ -12,13 +12,9 @@
                 <div
                     class="nav-link {{ isActiveLocale ? 'active' }}"
                     data-bs-target="#{{ translationsFields.vars.id }}_a2lix_translations-fields"
-                    data-bs-toggle="tab" role="tab"
+                    data-bs-toggle="tab" role="button"
                 >
-                    {% guard filter locale_name %}
-                        {{ translationsFields.vars.label ?? formLocale|locale_name(app.locale)|humanize }}
-                    {% else %}
-                        {{ translationsFields.vars.label ?? formLocale|humanize }}
-                    {% endguard %}
+                    {{ translationsFields.vars.label ?? locale_render(formLocale) }}
                     {{ isDefaultLocale ? '[Default]'|trans }}
                     {{ translationsFields.vars.required ? '*' }}
                 </div>

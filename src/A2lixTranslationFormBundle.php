@@ -12,6 +12,7 @@
 namespace A2lix\TranslationFormBundle;
 
 use A2lix\TranslationFormBundle\LocaleProvider\LocaleProviderInterface;
+use A2lix\TranslationFormBundle\LocaleProvider\SimpleLocaleProvider;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -26,7 +27,7 @@ class A2lixTranslationFormBundle extends AbstractBundle
         $definition->rootNode()
             ->children()
             ->scalarNode('locale_provider')
-            ->defaultValue('a2lix_translation_form.locale_provider.simple_locale_provider')
+            ->defaultValue(SimpleLocaleProvider::class)
             ->info('Set your own LocaleProvider service identifier if required')
             ->end()
             ->scalarNode('default_locale')
@@ -72,7 +73,7 @@ class A2lixTranslationFormBundle extends AbstractBundle
         if ($container->hasExtension('twig')) {
             $container->prependExtensionConfig('twig', [
                 'form_themes' => [
-                    $config['templating'] ?? '@A2lixTranslationForm/native_layout.html.twig',
+                    $config['templating'] ?? '@A2lixTranslationForm/bootstrap_5_layout.html.twig',
                 ],
             ]);
         }
@@ -92,9 +93,9 @@ class A2lixTranslationFormBundle extends AbstractBundle
     private function configureLocaleProvider(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         // Custom?
-        if ('a2lix_translation_form.locale_provider.simple_locale_provider' !== $config['locale_provider']) {
+        if (SimpleLocaleProvider::class !== $config['locale_provider']) {
             $container->services()
-                ->remove('a2lix_translation_form.locale_provider.simple_locale_provider')
+                ->remove(SimpleLocaleProvider::class)
                 ->alias(LocaleProviderInterface::class, $config['locale_provider'])
             ;
 

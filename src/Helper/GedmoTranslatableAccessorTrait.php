@@ -13,23 +13,15 @@ namespace A2lix\TranslationFormBundle\Helper;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-trait KnpTranslatableAccessorTrait
+trait GedmoTranslatableAccessorTrait
 {
     public function __call($method, $arguments)
     {
-        if (null === $this->translate()->id) {
-            return null;
-        }
-
-        return PropertyAccess::createPropertyAccessor()->getValue($this->translate(), $method);
+        return PropertyAccess::createPropertyAccessor()->getValue($this, $method);
     }
 
     public function __get($property)
     {
-        if (null === $this->translate()->id) {
-            return null;
-        }
-
-        return PropertyAccess::createPropertyAccessor()->getValue($this->translate(), $property);
+        return PropertyAccess::createPropertyAccessor()->getValue($this, $property);
     }
 }

@@ -11,8 +11,10 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsFormsType extends AbstractType
@@ -20,9 +22,15 @@ class TranslationsFormsType extends AbstractType
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('form_options', []);
-        $resolver->setAllowedTypes('form_options', 'array');
+        $resolver->setDefaults([
+            // FormType
+            'by_reference' => false,
+            'empty_data' => new ArrayCollection(),
+            // Adds
+            'form_options' => [],
+        ]);
 
+        $resolver->setAllowedTypes('form_options', 'array');
         $resolver->setRequired('form_type');
         $resolver->setAllowedTypes('form_type', 'string');
     }
@@ -33,6 +41,20 @@ class TranslationsFormsType extends AbstractType
         foreach ($options['locales'] as $locale) {
             $builder->add($locale, $options['form_type'], [
                 ...$options['form_options'],
+                'setter' => static function ($translationColl, $translation, FormInterface $form) use ($locale): void {
+                    if (null === $translation) {
+                        return;
+                    }
+
+                    if ($translation->isEmpty()) {
+                        $translationColl->removeElement($translation);
+
+                        return;
+                    }
+
+                    $translation->locale = $locale;
+                    $translationColl->add($translation);
+                },
                 // LocaleExtension options process
                 'label' => $formOptions['locale_labels'][$locale] ?? null,
                 'required' => \in_array($locale, $options['required_locales'], true),

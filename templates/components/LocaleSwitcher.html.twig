@@ -1,0 +1,41 @@
+{% if this.render == 'basic' %}
+    <nav class="locale-switcher hstack gap-1">
+        {% for locale in this.locales %}
+            {% if locale == app.locale %}
+            <div class="badge text-bg-light">
+                {{ locale_render(locale, 'locale_upper') }}
+            </div>
+            {% else %}
+            <div class="badge text-bg-secondary">
+                <a href="{{ path(app.current_route, app.current_route_parameters|merge({ _locale: locale })) }}" class="text-reset">
+                    {{ locale_render(locale, 'locale_upper') }}
+                </a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </nav>
+
+{% elseif this.render == 'dropdown' %}
+    <nav class="locale-switcher dropdown">
+        <button
+            class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
+            data-bs-toggle="dropdown" aria-expanded="false"
+        >
+            {{ locale_render(app.locale) }}
+        </button>
+
+
+        <ul class="dropdown-menu">
+        {% for locale in this.locales|filter(l => l != app.locale) %}
+            <li>
+                <a
+                    href="{{ path(app.current_route, app.current_route_parameters|merge({ _locale: locale })) }}"
+                    class="dropdown-item"
+                >
+                    {{ locale_render(locale) }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </nav>
+{% endif %}

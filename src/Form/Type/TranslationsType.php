@@ -12,9 +12,12 @@
 namespace A2lix\TranslationFormBundle\Form\Type;
 
 use A2lix\AutoFormBundle\Form\Type\AutoType;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,19 +28,23 @@ class TranslationsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            // FormType
             'by_reference' => false,
-            'translatable_class' => null,
-            'gedmo' => false,
-            // AutoType options
+            // AutoType
             'children' => [],
-            'children_excluded' => [],
-            'children_embedded' => [],
-            'children_groups' => [],
+            'children_excluded' => null,
+            'children_embedded' => null,
+            'children_groups' => null,
             'builder' => null,
+            // Adds
+            'gedmo' => false,
         ]);
 
+        $resolver->setRequired('translatable_class');
+        $resolver->setAllowedTypes('translatable_class', 'string');
         $resolver->setDefault('translation_class', static fn (Options $options): string => self::getTranslationClass($options['translatable_class']));
         $resolver->setDefault('inherit_data', static fn (Options $options): bool => $options['gedmo']);
+        $resolver->setDefault('empty_data', static fn (Options $options) => !$options['gedmo'] ? new ArrayCollection() : null);
     }
 
     #[\Override]
@@ -73,11 +80,59 @@ class TranslationsType extends AbstractType
         return $translatableClass.'Translation';
     }
 
+    private function buildKnp(FormBuilderInterface $builder, array $options): void
+    {
+        // Build once optimization
+        $builtChildren = $builder->create('tmp', AutoType::class, [
+            'data_class' => $options['translation_class'],
+            // 'children' => $options['children'],
+            // 'children_excluded' => $options['children_excluded'],
+            // 'children_embedded' => $options['children_embedded'],
+            // 'children_groups' => $options['children_groups'],
+            // 'builder' => $options['builder'],
+        ])->all();
+
+        foreach ($options['locales'] as $locale) {
+            $localeFormBuilder = $builder->create($locale, FormType::class, [
+                'data_class' => $options['translation_class'],
+                'setter' => static function ($translationColl, $translation, FormInterface $form) use ($locale): void {
+                    if (null === $translation) {
+                        return;
+                    }
+
+                    if ($translation->isEmpty()) {
+                        $translationColl->removeElement($translation);
+
+                        return;
+                    }
+
+                    $translation->setLocale($locale);
+                    $translationColl->add($translation);
+                },
+                // LocaleExtension options process
+                'label' => $formOptions['locale_labels'][$locale] ?? null,
+                'required' => \in_array($locale, $options['required_locales'], true),
+                'block_name' => ('field' === $options['theming_granularity']) ? 'locale' : null,
+            ]);
+
+            foreach ($builtChildren as $builtChild) {
+                $localeFormBuilder->add($builtChild);
+            }
+
+            $builder->add($localeFormBuilder);
+        }
+    }
+
     private function buildGedmo(FormBuilderInterface $builder, array $options): void
     {
         // Build once optimization
         $builtChildren = $builder->create('tmp', AutoType::class, [
             'data_class' => $options['translatable_class'],
+            // 'children' => $options['children'],
+            // 'children_excluded' => $options['children_excluded'],
+            // 'children_embedded' => $options['children_embedded'],
+            // 'children_groups' => $options['children_groups'],
+            // 'builder' => $options['builder'],
             'gedmo_only' => true,
         ])->all();
 
@@ -88,7 +143,7 @@ class TranslationsType extends AbstractType
                     ? [
                         'inherit_data' => true,
                     ] : [
-                        'getter' => static function ($translatable, FormInterface $form) use ($locale) {
+                        'getter' => static function (mixed $translatable, FormInterface $form) use ($locale) {
                             return $translatable->getTranslations()->reduce(static function (array $acc, $item) use ($locale) {
                                 if ($item->getLocale() !== $locale) {
                                     return $acc;
@@ -99,20 +154,18 @@ class TranslationsType extends AbstractType
                                 return $acc;
                             }, []);
                         },
-                        'setter' => static function ($translatable, $data, FormInterface $form): void {
-                            $translationColl = $translatable->getTranslations();
+                        'setter' => static function (mixed $translatable, $data, FormInterface $form): void {
                             foreach ($data as $translation) {
                                 if (null === $translation->getContent()) {
-                                    $translationColl->removeElement($translation);
+                                    $translatable->removeTranslation($translation);
                                     continue;
                                 }
 
-                                $translationColl->add($translation->setObject($translatable));
+                                $translatable->addTranslation($translation);
                             }
                         },
                     ]
                 ),
-
                 // LocaleExtension options process
                 'label' => $formOptions['locale_labels'][$locale] ?? null,
                 'required' => \in_array($locale, $options['required_locales'], true),
@@ -128,58 +181,23 @@ class TranslationsType extends AbstractType
                 $field = $builtChild->getName();
                 $localeFormBuilder->add($builtChild->getName(), $builtChild->getType()->getInnerType()::class, [
                     ...$builtChild->getFormConfig()->getOptions(),
-                    'getter' => static fn ($translations, FormInterface $form) => $translations[$field]?->getContent(),
-                    'setter' => static function ($translations, $data, FormInterface $form) use ($field, $locale, $options): void {
-                        if (null !== $translation = $translations[$field]) {
+                    'getter' => static function (array $translations, FormInterface $form) use ($field) {
+                        return ($translations[$field] ?? null)?->getContent();
+                    },
+                    'setter' => static function (array &$translations, $data, FormInterface $form) use ($field, $locale, $options): void {
+                        // Update
+                        if (null !== $translation = ($translations[$field] ?? null)) {
                             $translation->setContent($data);
 
                             return;
                         }
 
+                        // Create
                         if (null !== $data) {
                             $translations[$field] = new ($options['translation_class'])($locale, $field, $data);
                         }
                     },
                 ]);
-            }
-
-            $builder->add($localeFormBuilder);
-        }
-    }
-
-    private function buildKnp(FormBuilderInterface $builder, array $options): void
-    {
-        // Build once optimization
-        $builtChildren = $builder->create('tmp', AutoType::class, [
-            'data_class' => $options['translation_class'],
-        ])->all();
-
-        foreach ($options['locales'] as $locale) {
-            $localeFormBuilder = $builder->create($locale, FormType::class, [
-                'data_class' => $options['translation_class'],
-                // LocaleExtension options process
-                'label' => $formOptions['locale_labels'][$locale] ?? null,
-                'required' => \in_array($locale, $options['required_locales'], true),
-                'block_name' => ('field' === $options['theming_granularity']) ? 'locale' : null,
-
-                'setter' => static function ($translationColl, $translation, FormInterface $form) use ($locale): void {
-                    if (null === $translation) {
-                        return;
-                    }
-
-                    if ($translation->isEmpty()) {
-                        $translationColl->removeElement($translation);
-
-                        return;
-                    }
-
-                    $translation->setLocale($locale);
-                    $translationColl->add($translation);
-                },
-            ]);
-
-            foreach ($builtChildren as $builtChild) {
-                $localeFormBuilder->add($builtChild);
             }
 
             $builder->add($localeFormBuilder);

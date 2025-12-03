@@ -38,7 +38,6 @@
 
             summary {
                 grid-row: 1;
-                padding: .5rem 1rem;
             }
 
             &::details-content {

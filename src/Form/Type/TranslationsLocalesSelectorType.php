@@ -28,6 +28,7 @@ class TranslationsLocalesSelectorType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            // ChoiceType
             'choices' => array_combine($this->localeProvider->getLocales(), $this->localeProvider->getLocales()),
             'expanded' => true,
             'multiple' => true,
