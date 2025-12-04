@@ -14,9 +14,10 @@ namespace A2lix\TranslationFormBundle\Tests\Form;
 use A2lix\AutoFormBundle\Form\Builder\AutoTypeBuilder;
 use A2lix\AutoFormBundle\Form\Type\AutoType;
 use A2lix\AutoFormBundle\Form\TypeGuesser\TypeInfoTypeGuesser;
+use A2lix\TranslationFormBundle\Form\Extension\LocaleExtension;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
-use A2lix\TranslationFormBundle\Locale\SimpleProvider;
+use A2lix\TranslationFormBundle\LocaleProvider\SimpleLocaleProvider;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -52,8 +53,8 @@ abstract class TypeTestCase extends BaseTypeTestCase
     {
         VarDumper::setHandler(static function (mixed $var): void {
             /** @psalm-suppress PossiblyInvalidArgument */
-            (new HtmlDumper())->dump(
-                (new VarCloner())->cloneVar($var),
+            new HtmlDumper()->dump(
+                new VarCloner()->cloneVar($var),
                 @fopen(__DIR__.'/../../dump.html', 'a')
             );
         });
@@ -67,13 +68,14 @@ abstract class TypeTestCase extends BaseTypeTestCase
             ['id']
         );
 
-        $localProvider = new SimpleProvider($this->locales, $this->defaultLocale, $this->requiredLocales);
-        $translationsType = new TranslationsType($localProvider);
-        $translationsFormsType = new TranslationsFormsType($localProvider);
+        $localeProvider = new SimpleLocaleProvider($this->locales, $this->defaultLocale, $this->requiredLocales);
+        $localeExtension = new LocaleExtension($localeProvider);
+        $translationsType = new TranslationsType();
+        $translationsFormsType = new TranslationsFormsType();
 
         return [
             ...parent::getExtensions(),
-            new PreloadedExtension([$autoType, $translationsType, $translationsFormsType], [], $this->getFormTypeGuesserChain()),
+            new PreloadedExtension([$autoType, $translationsType, $translationsFormsType], [$localeExtension], $this->getFormTypeGuesserChain()),
         ];
     }
 

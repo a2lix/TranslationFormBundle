@@ -11,11 +11,8 @@
 
 namespace A2lix\TranslationFormBundle;
 
-use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use A2lix\TranslationFormBundle\LocaleProvider\LocaleProviderInterface;
-use A2lix\TranslationFormBundle\LocaleProvider\SimpleLocaleProvider;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;

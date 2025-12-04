@@ -11,8 +11,8 @@
 
 namespace A2lix\TranslationFormBundle\Twig;
 
-use Symfony\Component\Translation\LocaleSwitcher;
 use Symfony\Component\Intl\Locales;
+use Symfony\Component\Translation\LocaleSwitcher;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\CoreExtension;
 

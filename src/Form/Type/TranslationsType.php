@@ -14,10 +14,8 @@ namespace A2lix\TranslationFormBundle\Form\Type;
 use A2lix\AutoFormBundle\Form\Type\AutoType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Event\SubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -56,7 +54,7 @@ class TranslationsType extends AbstractType
         $resolver->setAllowedTypes('children_excluded', 'string[]|string|callable|null');
         $resolver->setInfo('children_excluded', 'An array of properties, the * wildcard, or a callable (mixed $previousValue): mixed');
         $resolver->setNormalizer('children_excluded', static function (Options $options, mixed $value): mixed {
-            if (is_callable($value)) {
+            if (\is_callable($value)) {
                 return $value($options['children_excluded_']);
             }
 
@@ -66,7 +64,7 @@ class TranslationsType extends AbstractType
         $resolver->setAllowedTypes('children_embedded', 'string[]|string|callable|null');
         $resolver->setInfo('children_embedded', 'An array of properties, the * wildcard, or a callable (mixed $previousValue): mixed');
         $resolver->setNormalizer('children_embedded', static function (Options $options, mixed $value): mixed {
-            if (is_callable($value)) {
+            if (\is_callable($value)) {
                 return $value($options['children_embedded_']);
             }
 
@@ -76,7 +74,6 @@ class TranslationsType extends AbstractType
         $resolver->setAllowedTypes('children_groups', 'string[]|null');
         $resolver->setAllowedTypes('builder', 'callable|null');
         $resolver->setInfo('builder', 'A callable (FormBuilderInterface $builder, string[] $classProperties): void');
-
     }
 
     #[\Override]
@@ -215,9 +212,7 @@ class TranslationsType extends AbstractType
                 $field = $builtChild->getName();
                 $localeFormBuilder->add($builtChild->getName(), $builtChild->getType()->getInnerType()::class, [
                     ...$builtChild->getFormConfig()->getOptions(),
-                    'getter' => static function (array $translations, FormInterface $form) use ($field) {
-                        return ($translations[$field] ?? null)?->getContent();
-                    },
+                    'getter' => static fn (array $translations, FormInterface $form) => ($translations[$field] ?? null)?->getContent(),
                     'setter' => static function (array &$translations, $data, FormInterface $form) use ($field, $locale, $options): void {
                         // Update
                         if (null !== $translation = ($translations[$field] ?? null)) {
