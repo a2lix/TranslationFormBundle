@@ -11,6 +11,7 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'product_translations')]
@@ -19,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductTranslation
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
@@ -29,11 +30,11 @@ class ProductTranslation
     #[ORM\Column(nullable: true)]
     private ?string $title = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'translations')]
-    #[ORM\JoinColumn(name: 'translatable_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\JoinColumn(name: 'translatable_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Product $translatable;
 
     public function getId(): ?int

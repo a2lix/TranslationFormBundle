@@ -11,13 +11,14 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 class MediaLocalize
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use A2lix\TranslationFormBundle\Form\EventListener\TranslationsListener;
 use A2lix\TranslationFormBundle\Form\Extension\LocaleExtension;
 use A2lix\TranslationFormBundle\Form\Type\TranslatedEntityType;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;

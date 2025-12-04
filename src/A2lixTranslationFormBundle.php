@@ -78,6 +78,9 @@ class A2lixTranslationFormBundle extends AbstractBundle
         }
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     private function configureLocaleProvider(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         // Custom?

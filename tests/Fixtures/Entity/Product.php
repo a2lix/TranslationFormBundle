@@ -11,6 +11,7 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,23 +20,23 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $title = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $url = null;
 
-    #[ORM\OneToMany(targetEntity: MediaLocalize::class, mappedBy: 'product', indexBy: 'locale', cascade: ['all'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: MediaLocalize::class, mappedBy: 'product', cascade: ['all'], orphanRemoval: true, indexBy: 'locale')]
     private ArrayCollection $medias;
 
-    #[ORM\OneToMany(targetEntity: ProductTranslation::class, mappedBy: 'object', indexBy: 'locale', cascade: ['all'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: ProductTranslation::class, mappedBy: 'object', cascade: ['all'], orphanRemoval: true, indexBy: 'locale')]
     private ArrayCollection $translations;
 
     public function __construct()
@@ -85,6 +86,9 @@ class Product
         return $this;
     }
 
+    /**
+     * @return Collection<int, ProductTranslation>
+     */
     public function getTranslations(): Collection
     {
         return $this->translations;
@@ -107,6 +111,9 @@ class Product
         return $this;
     }
 
+    /**
+     * @return Collection<int, MediaLocalize>
+     */
     public function getMedias(): Collection
     {
         return $this->medias;

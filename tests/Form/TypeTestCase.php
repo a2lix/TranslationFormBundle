@@ -43,7 +43,9 @@ abstract class TypeTestCase extends BaseTypeTestCase
     use ValidatorExtensionTrait;
 
     protected $locales = ['en', 'fr', 'de'];
+
     protected $defaultLocale = 'en';
+
     protected $requiredLocales = ['en', 'fr'];
 
     private ?EntityManagerInterface $entityManager = null;
@@ -81,7 +83,7 @@ abstract class TypeTestCase extends BaseTypeTestCase
 
     private function getEntityManager(): EntityManagerInterface
     {
-        if (null !== $this->entityManager) {
+        if ($this->entityManager instanceof EntityManagerInterface) {
             return $this->entityManager;
         }
 

@@ -11,6 +11,7 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -29,10 +30,10 @@ class TranslatedEntityType extends AbstractType
     {
         $resolver->setDefaults([
             // EntityType
-            'query_builder' => static fn (EntityRepository $er) => $er->createQueryBuilder('e')
+            'query_builder' => static fn (EntityRepository $er): QueryBuilder => $er->createQueryBuilder('e')
                 ->select('e, t')
                 ->join('e.translations', 't'),
-            'choice_label' => fn (Options $options) => \sprintf(
+            'choice_label' => fn (Options $options): string => \sprintf(
                 '%s[%s].%s',
                 $options['translation_path'],
                 $this->localeSwitcher->getLocale(),

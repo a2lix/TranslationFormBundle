@@ -16,10 +16,10 @@ use Symfony\Component\Translation\LocaleSwitcher;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\CoreExtension;
 
-final class LocaleExtension
+final readonly class LocaleExtension
 {
     public function __construct(
-        private readonly LocaleSwitcher $localeSwitcher,
+        private LocaleSwitcher $localeSwitcher,
     ) {}
 
     #[AsTwigFunction('locale_render', needsCharset: true)]

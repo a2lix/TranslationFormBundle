@@ -11,11 +11,12 @@
 
 namespace A2lix\TranslationFormBundle\Helper;
 
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 trait KnpTranslatableAccessorTrait
 {
-    public function __call($method, $arguments)
+    public function __call(string|PropertyPathInterface $method, $arguments)
     {
         if (null === $this->translate()->id) {
             return null;
@@ -24,7 +25,7 @@ trait KnpTranslatableAccessorTrait
         return PropertyAccess::createPropertyAccessor()->getValue($this->translate(), $method);
     }
 
-    public function __get($property)
+    public function __get(string|PropertyPathInterface $property)
     {
         if (null === $this->translate()->id) {
             return null;

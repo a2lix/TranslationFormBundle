@@ -48,7 +48,7 @@ class TranslationsType extends AbstractType
         $resolver->setDefault('translation_class', static fn (Options $options): string => self::getTranslationClass($options['translatable_class']));
         $resolver->setDefault('gedmo', static fn (Options $options): bool => is_subclass_of($options['translation_class'], 'Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation'));
         $resolver->setDefault('inherit_data', static fn (Options $options): bool => $options['gedmo']);
-        $resolver->setDefault('empty_data', static fn (Options $options) => !$options['gedmo'] ? new ArrayCollection() : null);
+        $resolver->setDefault('empty_data', static fn (Options $options): ?ArrayCollection => $options['gedmo'] ? null : new ArrayCollection());
 
         // AutoType
         $resolver->setAllowedTypes('children_excluded', 'string[]|string|callable|null');
@@ -109,6 +109,9 @@ class TranslationsType extends AbstractType
         return $translatableClass.'Translation';
     }
 
+    /**
+     * @param non-empty-array<string, mixed> $options
+     */
     private function buildKnp(FormBuilderInterface $builder, array $options): void
     {
         // Build once optimization
@@ -152,6 +155,9 @@ class TranslationsType extends AbstractType
         }
     }
 
+    /**
+     * @param non-empty-array<string, mixed> $options
+     */
     private function buildGedmo(FormBuilderInterface $builder, array $options): void
     {
         // Build once optimization
@@ -172,17 +178,15 @@ class TranslationsType extends AbstractType
                     ? [
                         'inherit_data' => true,
                     ] : [
-                        'getter' => static function (mixed $translatable, FormInterface $form) use ($locale) {
-                            return $translatable->getTranslations()->reduce(static function (array $acc, $item) use ($locale) {
-                                if ($item->getLocale() !== $locale) {
-                                    return $acc;
-                                }
-
-                                $acc[$item->getField()] = $item;
-
+                        'getter' => static fn(mixed $translatable, FormInterface $form) => $translatable->getTranslations()->reduce(static function (array $acc, $item) use ($locale): array {
+                            if ($item->getLocale() !== $locale) {
                                 return $acc;
-                            }, []);
-                        },
+                            }
+
+                            $acc[$item->getField()] = $item;
+
+                            return $acc;
+                        }, []),
                         'setter' => static function (mixed $translatable, $data, FormInterface $form): void {
                             foreach ($data as $translation) {
                                 if (null === $translation->getContent()) {

@@ -11,6 +11,8 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Form\Type;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use Symfony\Component\Form\FormInterface;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Product;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Form\MediaLocalizeType;
@@ -20,13 +22,14 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class TranslationsFormsTypeAdvancedTest extends TypeTestCase
 {
     protected $locales = ['en', 'fr', 'de'];
+
     protected $defaultLocale = 'en';
+
     protected $requiredLocales = ['en', 'fr'];
 
     public function testEmptyFormOverrideLocales(): void
@@ -47,13 +50,13 @@ final class TranslationsFormsTypeAdvancedTest extends TypeTestCase
 
         $mediasForm = $form->get('medias')->all();
         $mediasLocales = array_keys($mediasForm);
-        $mediasRequiredLocales = array_keys(array_filter($mediasForm, static fn ($form) => $form->isRequired()));
+        $mediasRequiredLocales = array_keys(array_filter($mediasForm, static fn (FormInterface $form): bool => $form->isRequired()));
 
-        self::assertSame($overrideLocales, $mediasLocales, 'Locales should be same as config');
-        self::assertSame($overrideRequiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
+        $this->assertSame($overrideLocales, $mediasLocales, 'Locales should be same as config');
+        $this->assertSame($overrideRequiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
 
-        self::assertSame(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
-        self::assertSame(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
-        self::assertSame(['url', 'description'], array_keys($mediasForm['es']->all()), 'Fields should matches MediaLocalizeType fields');
+        $this->assertSame(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
+        $this->assertSame(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
+        $this->assertSame(['url', 'description'], array_keys($mediasForm['es']->all()), 'Fields should matches MediaLocalizeType fields');
     }
 }
