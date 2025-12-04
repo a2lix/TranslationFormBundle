@@ -178,7 +178,7 @@ class TranslationsType extends AbstractType
                     ? [
                         'inherit_data' => true,
                     ] : [
-                        'getter' => static fn(mixed $translatable, FormInterface $form) => $translatable->getTranslations()->reduce(static function (array $acc, $item) use ($locale): array {
+                        'getter' => static fn (mixed $translatable, FormInterface $form) => $translatable->getTranslations()->reduce(static function (array $acc, $item) use ($locale): array {
                             if ($item->getLocale() !== $locale) {
                                 return $acc;
                             }

@@ -11,8 +11,8 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;

@@ -11,16 +11,16 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Form\Type;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
-use Symfony\Component\Form\FormInterface;
-use PHPUnit\Framework\Attributes\Depends;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\MediaLocalize;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Product;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Form\MediaLocalizeType;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @internal
@@ -49,12 +49,12 @@ final class TranslationsFormsTypeSimpleTest extends TypeTestCase
         $mediasLocales = array_keys($mediasForm);
         $mediasRequiredLocales = array_keys(array_filter($mediasForm, static fn (FormInterface $form): bool => $form->isRequired()));
 
-        $this->assertSame($this->locales, $mediasLocales, 'Locales should be same as config');
-        $this->assertSame($this->requiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
+        self::assertSame($this->locales, $mediasLocales, 'Locales should be same as config');
+        self::assertSame($this->requiredLocales, $mediasRequiredLocales, 'Required locales should be same as config');
 
-        $this->assertSame(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
-        $this->assertSame(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
-        $this->assertSame(['url', 'description'], array_keys($mediasForm['de']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertSame(['url', 'description'], array_keys($mediasForm['en']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertSame(['url', 'description'], array_keys($mediasForm['fr']->all()), 'Fields should matches MediaLocalizeType fields');
+        self::assertSame(['url', 'description'], array_keys($mediasForm['de']->all()), 'Fields should matches MediaLocalizeType fields');
     }
 
     public function testCreationForm(): Product
@@ -110,8 +110,8 @@ final class TranslationsFormsTypeSimpleTest extends TypeTestCase
         ];
 
         $form->submit($formData);
-        $this->assertTrue($form->isSynchronized());
-        $this->assertSame($product, $form->getData());
+        self::assertTrue($form->isSynchronized());
+        self::assertSame($product, $form->getData());
 
         return $product;
     }
@@ -150,14 +150,14 @@ final class TranslationsFormsTypeSimpleTest extends TypeTestCase
         ;
 
         $form->submit($formData);
-        $this->assertTrue($form->isSynchronized());
-        $this->assertSame($product, $form->getData());
+        self::assertTrue($form->isSynchronized());
+        self::assertSame($product, $form->getData());
 
         $view = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {
-            $this->assertArrayHasKey($key, $children);
+            self::assertArrayHasKey($key, $children);
         }
     }
 }

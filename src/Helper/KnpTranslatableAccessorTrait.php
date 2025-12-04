@@ -11,8 +11,8 @@
 
 namespace A2lix\TranslationFormBundle\Helper;
 
-use Symfony\Component\PropertyAccess\PropertyPathInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 trait KnpTranslatableAccessorTrait
 {
