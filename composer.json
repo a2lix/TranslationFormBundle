@@ -11,6 +11,7 @@
         "translatable",
         "form",
         "knplabs",
+        "gedmo",
         "prezent"
     ],
     "homepage": "https://github.com/a2lix/TranslationFormBundle",
@@ -26,17 +27,17 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.4",
         "a2lix/auto-form-bundle": "@beta",
-        "symfony/config": "^6.4|^7.3",
-        "symfony/dependency-injection": "^6.4|^7.3",
-        "symfony/doctrine-bridge": "^6.4|^7.3",
-        "symfony/event-dispatcher": "^6.4|^7.3",
-        "symfony/form": "^6.4|^7.3",
-        "symfony/http-kernel": "^6.4|^7.3",
-        "symfony/intl": "^7.4",
-        "symfony/options-resolver": "^6.4|^7.3",
-        "symfony/translation": "^6.4|^7.3",
+        "symfony/config": "^7.4|^8.0",
+        "symfony/dependency-injection": "^7.4|^8.0",
+        "symfony/doctrine-bridge": "^7.4|^8.0",
+        "symfony/event-dispatcher": "^7.4|^8.0",
+        "symfony/form": "^7.4|^8.0",
+        "symfony/http-kernel": "^7.4|^8.0",
+        "symfony/intl": "^7.4|^8.0",
+        "symfony/options-resolver": "^7.4|^8.0",
+        "symfony/translation": "^7.4|^8.0",
         "symfony/ux-twig-component": "^2.31"
     },
     "require-dev": {
@@ -50,15 +51,14 @@
         "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^12.3",
         "rector/rector": "^2.2",
-        "symfony/cache": "^6.4|^7.3",
-        "symfony/doctrine-bridge": "^7.3",
-        "symfony/validator": "^6.4|^7.3",
+        "symfony/cache": "^7.4|^8.0",
+        "symfony/validator": "^7.4|^8.0",
         "symfony/var-dumper": "^7.3"
     },
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",
         "prezent/doctrine-translatable-bundle": "For Prezent strategy",
-        "twig/extra-bundle": "For locale_name filter"
+        "stof/doctrine-extensions-bundle": "For Gedmo strategy"
     },
     "scripts": {
         "cs-fixer": [
@@ -86,7 +86,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.x-dev"
+            "dev-master": "4.x-dev"
         }
     }
 }

@@ -1,4 +1,4 @@
-FROM php:8.4-cli-trixie
+FROM php:8.5-cli-trixie
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     file \

@@ -12,22 +12,22 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
 
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ~/.cache/composer/files
-          key: ${{ runner.os }}-php-8.4-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-8.5-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-php-8.4-composer-
+            ${{ runner.os }}-php-8.5-composer-
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
@@ -42,22 +42,22 @@ jobs:
     name: Static Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
 
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ~/.cache/composer/files
-          key: ${{ runner.os }}-php-8.4-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-8.5-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-php-8.4-composer-
+            ${{ runner.os }}-php-8.5-composer-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
@@ -76,31 +76,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Symfony 7.3 (stable)
-          - php: '8.4'
-            symfony: '7.3'
+          # Symfony 7.4 (stable)
+          - php: '8.5'
+            symfony: '7.4'
             composer_args: '--prefer-stable'
             stability: 'stable'
             coverage: true
-          - php: '8.4'
-            symfony: '7.3'
+          - php: '8.5'
+            symfony: '7.4'
             composer_args: '--prefer-lowest'
             stability: 'stable'
 
-          # Symfony 7.4 (dev)
-          - php: '8.4'
-            symfony: '7.4'
-            composer_args: '--prefer-stable'
-            stability: 'dev'
-
-          # Symfony 8.0 (dev)
-          - php: '8.4'
+          # Symfony 8.0 (stable)
+          - php: '8.5'
             symfony: '8.0'
             composer_args: '--prefer-stable'
-            stability: 'dev'
+            stability: 'stable'
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
