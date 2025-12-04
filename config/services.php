@@ -27,35 +27,39 @@ use A2lix\TranslationFormBundle\Twig\LocaleExtension as TwigLocaleExtension;
 return static function (ContainerConfigurator $container): void {
     $container->services()
         // Locale Provider
-        ->set(SimpleLocaleProvider::class)
+        ->set('a2lix_translation_form.locale_provider.simple_locale_provider', SimpleLocaleProvider::class)
         ->args([
             '$locales' => abstract_arg('locales'),
             '$defaultLocale' => abstract_arg('defaultLocale'),
             '$requiredLocales' => abstract_arg('requiredLocales'),
         ])
-        ->alias(LocaleProviderInterface::class, SimpleLocaleProvider::class)
+        ->alias(LocaleProviderInterface::class, 'a2lix_translation_form.locale_provider.simple_locale_provider')
 
         // Form Extensions
-        ->set(LocaleExtension::class)
+        ->set('a2lix_translation_form.form.extension.locale_extension', LocaleExtension::class)
         ->args([
             '$localeProvider' => service(LocaleProviderInterface::class),
         ])
         ->tag('form.type_extension')
 
         // Form Types
-        ->set(TranslationsType::class)
+        ->set('a2lix_translation_form.form.type.translations_type', TranslationsType::class)
+        ->args([
+            '$globalExcludedChildren' => abstract_arg('globalExcludedChildren'),
+            '$globalEmbeddedChildren' => abstract_arg('globalEmbeddedChildren'),
+        ])
         ->tag('form.type')
 
-        ->set(TranslationsFormsType::class)
+        ->set('a2lix_translation_form.form.type.translations_forms_type', TranslationsFormsType::class)
         ->tag('form.type')
 
-        ->set(TranslationsLocalesSelectorType::class)
+        ->set('a2lix_translation_form.form.type.translations_locales_selector_type', TranslationsLocalesSelectorType::class)
         ->args([
             '$localeProvider' => service(LocaleProviderInterface::class),
         ])
         ->tag('form.type')
 
-        ->set(TranslatedEntityType::class)
+        ->set('a2lix_translation_form.form.type.translated_entity_type', TranslatedEntityType::class)
         ->args([
             '$localeSwitcher' => service('translation.locale_switcher'),
         ])

@@ -24,6 +24,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationsType extends AbstractType
 {
+    public function __construct(
+        private readonly array $globalExcludedChildren = [],
+        private readonly array $globalEmbeddedChildren = [],
+    ) {}
+
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -32,19 +37,46 @@ class TranslationsType extends AbstractType
             'by_reference' => false,
             // AutoType
             'children' => [],
+            'children_excluded_' => $this->globalExcludedChildren,
             'children_excluded' => null,
+            'children_embedded_' => $this->globalEmbeddedChildren,
             'children_embedded' => null,
-            'children_groups' => null,
+            'children_groups' => ['Default'],
             'builder' => null,
-            // Adds
-            'gedmo' => false,
         ]);
 
         $resolver->setRequired('translatable_class');
         $resolver->setAllowedTypes('translatable_class', 'string');
         $resolver->setDefault('translation_class', static fn (Options $options): string => self::getTranslationClass($options['translatable_class']));
+        $resolver->setDefault('gedmo', static fn (Options $options): bool => is_subclass_of($options['translation_class'], 'Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation'));
         $resolver->setDefault('inherit_data', static fn (Options $options): bool => $options['gedmo']);
         $resolver->setDefault('empty_data', static fn (Options $options) => !$options['gedmo'] ? new ArrayCollection() : null);
+
+        // AutoType
+        $resolver->setAllowedTypes('children_excluded', 'string[]|string|callable|null');
+        $resolver->setInfo('children_excluded', 'An array of properties, the * wildcard, or a callable (mixed $previousValue): mixed');
+        $resolver->setNormalizer('children_excluded', static function (Options $options, mixed $value): mixed {
+            if (is_callable($value)) {
+                return $value($options['children_excluded_']);
+            }
+
+            return $value ?? $options['children_excluded_'];
+        });
+
+        $resolver->setAllowedTypes('children_embedded', 'string[]|string|callable|null');
+        $resolver->setInfo('children_embedded', 'An array of properties, the * wildcard, or a callable (mixed $previousValue): mixed');
+        $resolver->setNormalizer('children_embedded', static function (Options $options, mixed $value): mixed {
+            if (is_callable($value)) {
+                return $value($options['children_embedded_']);
+            }
+
+            return $value ?? $options['children_embedded_'];
+        });
+
+        $resolver->setAllowedTypes('children_groups', 'string[]|null');
+        $resolver->setAllowedTypes('builder', 'callable|null');
+        $resolver->setInfo('builder', 'A callable (FormBuilderInterface $builder, string[] $classProperties): void');
+
     }
 
     #[\Override]
@@ -85,11 +117,11 @@ class TranslationsType extends AbstractType
         // Build once optimization
         $builtChildren = $builder->create('tmp', AutoType::class, [
             'data_class' => $options['translation_class'],
-            // 'children' => $options['children'],
-            // 'children_excluded' => $options['children_excluded'],
-            // 'children_embedded' => $options['children_embedded'],
-            // 'children_groups' => $options['children_groups'],
-            // 'builder' => $options['builder'],
+            'children' => $options['children'],
+            'children_excluded' => $options['children_excluded'],
+            'children_embedded' => $options['children_embedded'],
+            'children_groups' => $options['children_groups'],
+            'builder' => $options['builder'],
         ])->all();
 
         foreach ($options['locales'] as $locale) {
@@ -128,11 +160,11 @@ class TranslationsType extends AbstractType
         // Build once optimization
         $builtChildren = $builder->create('tmp', AutoType::class, [
             'data_class' => $options['translatable_class'],
-            // 'children' => $options['children'],
-            // 'children_excluded' => $options['children_excluded'],
-            // 'children_embedded' => $options['children_embedded'],
-            // 'children_groups' => $options['children_groups'],
-            // 'builder' => $options['builder'],
+            'children' => $options['children'],
+            'children_excluded' => $options['children_excluded'],
+            'children_embedded' => $options['children_embedded'],
+            'children_groups' => $options['children_groups'],
+            'builder' => $options['builder'],
             'gedmo_only' => true,
         ])->all();
 
@@ -173,11 +205,13 @@ class TranslationsType extends AbstractType
             ]);
 
             foreach ($builtChildren as $builtChild) {
+                // Translatable fields
                 if ($locale === $options['default_locale']) {
                     $localeFormBuilder->add($builtChild);
                     continue;
                 }
 
+                // Translation fields/objects
                 $field = $builtChild->getName();
                 $localeFormBuilder->add($builtChild->getName(), $builtChild->getType()->getInnerType()::class, [
                     ...$builtChild->getFormConfig()->getOptions(),

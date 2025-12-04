@@ -11,9 +11,11 @@
 
 namespace A2lix\TranslationFormBundle;
 
+use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use A2lix\TranslationFormBundle\LocaleProvider\LocaleProviderInterface;
 use A2lix\TranslationFormBundle\LocaleProvider\SimpleLocaleProvider;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
@@ -27,7 +29,7 @@ class A2lixTranslationFormBundle extends AbstractBundle
         $definition->rootNode()
             ->children()
             ->scalarNode('locale_provider')
-            ->defaultValue(SimpleLocaleProvider::class)
+            ->defaultValue('a2lix_translation_form.locale_provider.simple_locale_provider')
             ->info('Set your own LocaleProvider service identifier if required')
             ->end()
             ->scalarNode('default_locale')
@@ -77,25 +79,14 @@ class A2lixTranslationFormBundle extends AbstractBundle
                 ],
             ]);
         }
-
-        $container->prependExtensionConfig('a2lix_auto_form', [
-            'children_excluded' => [
-                'id',
-                'newTranslations',
-                'translatable',
-                'locale',
-                'currentLocale',
-                'defaultLocale',
-            ],
-        ]);
     }
 
     private function configureLocaleProvider(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         // Custom?
-        if (SimpleLocaleProvider::class !== $config['locale_provider']) {
+        if ('a2lix_translation_form.locale_provider.simple_locale_provider' !== $config['locale_provider']) {
             $container->services()
-                ->remove(SimpleLocaleProvider::class)
+                ->remove('a2lix_translation_form.locale_provider.simple_locale_provider')
                 ->alias(LocaleProviderInterface::class, $config['locale_provider'])
             ;
 
