@@ -19,7 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Stub as Stub;
 
 /**
  * @phpstan-type FormOptionsDefaults array{
@@ -142,7 +141,7 @@ class TranslationsType extends AbstractType
 
     /**
      * @param FormBuilderInterface<mixed> $builder
-     * @param FormOptionsDefaults $options
+     * @param FormOptionsDefaults         $options
      */
     private function buildKnp(FormBuilderInterface $builder, array $options): void
     {
@@ -176,7 +175,7 @@ class TranslationsType extends AbstractType
 
     /**
      * @param FormBuilderInterface<mixed> $builder
-     * @param FormOptionsDefaults $options
+     * @param FormOptionsDefaults         $options
      */
     private function buildGedmo(FormBuilderInterface $builder, array $options): void
     {
@@ -230,9 +229,9 @@ class TranslationsType extends AbstractType
         }
     }
 
-    /** 
-     * @param Collection<int, Stub\KnpTranslation> $translationColl 
-     * @param ?Stub\KnpTranslation $translation
+    /**
+     * @param Collection<int, \Stub\KnpTranslation> $translationColl
+     * @param ?\Stub\KnpTranslation                 $translation
      */
     private static function knpLocaleSetter(string $locale, Collection $translationColl, ?object $translation): void
     {
@@ -250,13 +249,14 @@ class TranslationsType extends AbstractType
         $translationColl->add($translation);
     }
 
-    /** 
-     * @param Stub\GedmoTranslatable $translatable 
-     * @return array<string, Stub\GedmoTranslation>
+    /**
+     * @param \Stub\GedmoTranslatable $translatable
+     *
+     * @return array<string, \Stub\GedmoTranslation>
      */
     private static function gedmoLocaleGetter(string $locale, object $translatable): array
     {
-        /** @var array<string, Stub\GedmoTranslation> */
+        /** @var array<string, \Stub\GedmoTranslation> */
         return $translatable->getTranslations()->reduce(
             static function (array $acc, object $item) use ($locale): array {
                 if ($item->getLocale() !== $locale) {
@@ -271,9 +271,9 @@ class TranslationsType extends AbstractType
         );
     }
 
-    /** 
-     * @param Stub\GedmoTranslatable $translatable 
-     * @param array<string, Stub\GedmoTranslation> $data
+    /**
+     * @param \Stub\GedmoTranslatable               $translatable
+     * @param array<string, \Stub\GedmoTranslation> $data
      */
     private static function gedmoLocaleSetter(object $translatable, array $data): void
     {
@@ -288,7 +288,7 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     * @param array<string, Stub\GedmoTranslation> $translations
+     * @param array<string, \Stub\GedmoTranslation> $translations
      */
     private static function gedmoFieldGetter(string $field, array $translations): ?string
     {
@@ -296,15 +296,15 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     * @param class-string<Stub\GedmoTranslation> $translationClass
-     * @param array<string, Stub\GedmoTranslation> $translations
+     * @param class-string<\Stub\GedmoTranslation>  $translationClass
+     * @param array<string, \Stub\GedmoTranslation> $translations
      */
     private static function gedmoFieldSetter(
         string $field,
         string $locale,
         string $translationClass,
         array &$translations,
-        ?string $data
+        ?string $data,
     ): void {
         // Update
         if (null !== $translation = ($translations[$field] ?? null)) {

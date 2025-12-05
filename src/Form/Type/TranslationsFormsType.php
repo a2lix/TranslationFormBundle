@@ -30,7 +30,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *    form_type: string,
  *    ...
  * }
- * 
+ *
  * @extends AbstractType<mixed>
  */
 class TranslationsFormsType extends AbstractType

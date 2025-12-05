@@ -25,7 +25,7 @@ use Symfony\Component\Translation\LocaleSwitcher;
  *    translation_property: string,
  *    ...
  * }
- * 
+ *
  * @extends AbstractType<mixed>
  */
 class TranslatedEntityType extends AbstractType

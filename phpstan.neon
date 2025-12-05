@@ -7,7 +7,7 @@ parameters:
         - src/A2lixTranslationFormBundle.php
         - src/Helper
         - tests
-    stubFiles:
+    scanFiles:
         - stubs/GedmoTranslatable.stub
         - stubs/GedmoTranslation.stub
         - stubs/KnpTranslation.stub
