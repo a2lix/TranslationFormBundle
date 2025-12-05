@@ -58,13 +58,6 @@ class A2lixTranslationFormBundle extends AbstractBundle
     }
 
     #[\Override]
-    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
-    {
-        $container->import('../config/services.php');
-
-        $this->configureLocaleProvider($config, $container, $builder);
-    }
-
     public function prependExtension(ContainerConfigurator $configurator, ContainerBuilder $container): void
     {
         $config = $container->getExtensionConfig($this->extensionAlias);
@@ -78,9 +71,14 @@ class A2lixTranslationFormBundle extends AbstractBundle
         }
     }
 
-    /**
-     * @param array<string, mixed> $config
-     */
+    #[\Override]
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        $container->import('../config/services.php');
+
+        $this->configureLocaleProvider($config, $container, $builder);
+    }
+
     private function configureLocaleProvider(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         // Custom?

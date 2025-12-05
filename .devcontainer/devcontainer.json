@@ -13,6 +13,7 @@
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "intelephense.telemetry.enabled": false,
+        "phpstan.checkValidity": true,
         "workbench.colorCustomizations": {
           "statusBar.background": "#ffa600d3",
           "statusBar.noFolderBackground": "#ffa600d3",

@@ -13,4 +13,5 @@ namespace A2lix\TranslationFormBundle\Helper;
 
 interface OneLocaleInterface
 {
+    public function isEmpty(): bool;
 }

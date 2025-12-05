@@ -19,12 +19,23 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/** 
+ * @phpstan-type LocaleFormOptionsDefaults array{
+ *    default_locale: string,
+ *    required_locales: list<string>,
+ *    locales: list<string>,
+ *    locale_labels: array<string, string>|null,
+ *    theming_granularity: string,
+ *    ...
+ * }
+ */
 class LocaleExtension extends AbstractTypeExtension
 {
     public function __construct(
         private readonly LocaleProviderInterface $localeProvider,
     ) {}
 
+    #[\Override]
     public static function getExtendedTypes(): iterable
     {
         yield TranslationsFormsType::class;

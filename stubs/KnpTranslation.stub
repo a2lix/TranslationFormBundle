@@ -1,0 +1,9 @@
+<?php
+
+namespace Stub;
+
+interface KnpTranslation
+{
+    public function setLocale(string $locale): void;
+    public function isEmpty(): bool;
+}

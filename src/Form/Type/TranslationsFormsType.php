@@ -11,12 +11,28 @@
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
+use A2lix\TranslationFormBundle\Helper\OneLocaleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @phpstan-type FormOptionsDefaults array{
+ *    default_locale: string,
+ *    required_locales: list<string>,
+ *    locales: list<string>,
+ *    locale_labels: array<string, string>|null,
+ *    theming_granularity: string,
+ *    form_options: array<string, mixed>,
+ *    form_type: string,
+ *    ...
+ * }
+ * 
+ * @extends AbstractType<mixed>
+ */
 class TranslationsFormsType extends AbstractType
 {
     #[\Override]
@@ -38,10 +54,13 @@ class TranslationsFormsType extends AbstractType
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var FormOptionsDefaults $options */
+        $options = $options;
+
         foreach ($options['locales'] as $locale) {
             $builder->add($locale, $options['form_type'], [
                 ...$options['form_options'],
-                'setter' => static function ($translationColl, $translation, FormInterface $form) use ($locale): void {
+                'setter' => static function (Collection $translationColl, ?OneLocaleInterface $translation, FormInterface $form) use ($locale): void {
                     if (null === $translation) {
                         return;
                     }
@@ -52,11 +71,11 @@ class TranslationsFormsType extends AbstractType
                         return;
                     }
 
-                    $translation->locale = $locale;
+                    $translation->locale = $locale; // @phpstan-ignore property.notFound
                     $translationColl->add($translation);
                 },
                 // LocaleExtension options process
-                'label' => $formOptions['locale_labels'][$locale] ?? null,
+                'label' => $options['locale_labels'][$locale] ?? null,
                 'required' => \in_array($locale, $options['required_locales'], true),
                 'block_name' => ('field' === $options['theming_granularity']) ? 'locale' : null,
             ]);

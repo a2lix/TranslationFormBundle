@@ -32,6 +32,7 @@ final readonly class LocaleExtension
         return match ($render) {
             'locale_upper', 'locale_name_upper' => CoreExtension::upper($charset, $locale),
             'locale_title', 'locale_name_title' => CoreExtension::titleCase($charset, $locale),
+            default => $locale,
         };
     }
 }

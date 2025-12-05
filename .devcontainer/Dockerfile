@@ -13,7 +13,7 @@ RUN set -eux; \
         @composer \
         apcu \
         opcache \
-        xdebug \
+        # xdebug \
     ;
 
 RUN useradd -m vscode

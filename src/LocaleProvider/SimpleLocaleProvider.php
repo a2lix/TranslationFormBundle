@@ -13,6 +13,10 @@ namespace A2lix\TranslationFormBundle\LocaleProvider;
 
 class SimpleLocaleProvider implements LocaleProviderInterface
 {
+    /**
+     * @param list<string> $locales
+     * @param list<string> $requiredLocales
+     */
     public function __construct(
         private readonly array $locales,
         private readonly string $defaultLocale,
@@ -22,6 +26,7 @@ class SimpleLocaleProvider implements LocaleProviderInterface
     #[\Override]
     public function getLocales(): array
     {
+        /** @var list<string> */
         return $this->locales;
     }
 

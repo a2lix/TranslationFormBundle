@@ -19,6 +19,15 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\LocaleSwitcher;
 
+/**
+ * @phpstan-type FormOptionsDefaults array{
+ *    translation_path: string,
+ *    translation_property: string,
+ *    ...
+ * }
+ * 
+ * @extends AbstractType<mixed>
+ */
 class TranslatedEntityType extends AbstractType
 {
     public function __construct(
@@ -35,14 +44,15 @@ class TranslatedEntityType extends AbstractType
                 ->join('e.translations', 't'),
             'choice_label' => fn (Options $options): string => \sprintf(
                 '%s[%s].%s',
-                $options['translation_path'],
+                $options['translation_path'], // @phpstan-ignore argument.type
                 $this->localeSwitcher->getLocale(),
-                $options['translation_property'],
+                $options['translation_property'], // @phpstan-ignore argument.type
             ),
             // Adds
             'translation_path' => 'translations',
         ]);
 
+        $resolver->setAllowedTypes('translation_path', 'string');
         $resolver->setRequired('translation_property');
         $resolver->setAllowedTypes('translation_property', 'string');
     }

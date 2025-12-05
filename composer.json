@@ -41,19 +41,20 @@
         "symfony/ux-twig-component": "^2.31"
     },
     "require-dev": {
-        "doctrine/orm": "^3.5",
-        "friendsofphp/php-cs-fixer": "^3.45",
-        "kubawerlos/php-cs-fixer-custom-fixers": "^3.18",
-        "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan": "^2.0",
-        "phpstan/phpstan-phpunit": "^2.0",
-        "phpstan/phpstan-strict-rules": "^2.0",
-        "phpstan/phpstan-symfony": "^2.0",
-        "phpunit/phpunit": "^12.3",
-        "rector/rector": "^2.2",
+        "doctrine/orm": "^3.5.8",
+        "friendsofphp/php-cs-fixer": "^3.91.2",
+        "kubawerlos/php-cs-fixer-custom-fixers": "^3.35.1",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan": "^2.1.33",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0.9",
+        "phpstan/phpstan-strict-rules": "^2.0.7",
+        "phpstan/phpstan-symfony": "^2.0.9",
+        "phpunit/phpunit": "^12.5.0",
+        "rector/rector": "^2.2.11",
         "symfony/cache": "^7.4|^8.0",
         "symfony/validator": "^7.4|^8.0",
-        "symfony/var-dumper": "^7.3"
+        "symfony/var-dumper": "^7.4"
     },
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",

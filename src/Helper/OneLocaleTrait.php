@@ -13,10 +13,11 @@ namespace A2lix\TranslationFormBundle\Helper;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @phpstan-require-implements OneLocaleInterface
+ */
 trait OneLocaleTrait
 {
     #[ORM\Column(length: 10)]
     public string $locale;
-
-    abstract public function isEmpty(): bool;
 }

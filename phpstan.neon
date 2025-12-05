@@ -5,7 +5,12 @@ parameters:
         - tests
     excludePaths:
         - src/A2lixTranslationFormBundle.php
-        - tests/Fixtures/*
+        - src/Helper
+        - tests
+    stubFiles:
+        - stubs/GedmoTranslatable.stub
+        - stubs/GedmoTranslation.stub
+        - stubs/KnpTranslation.stub
 
     # Stricter setup
     checkTooWideReturnTypesInProtectedAndPublicMethods: true

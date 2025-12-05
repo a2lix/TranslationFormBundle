@@ -13,9 +13,15 @@ namespace A2lix\TranslationFormBundle\LocaleProvider;
 
 interface LocaleProviderInterface
 {
+    /**
+     * @return list<string>
+     */
     public function getLocales(): array;
 
     public function getDefaultLocale(): string;
 
+    /**
+     * @return list<string>
+     */
     public function getRequiredLocales(): array;
 }

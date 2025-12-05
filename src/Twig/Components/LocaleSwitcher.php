@@ -21,7 +21,10 @@ class LocaleSwitcher
         private readonly LocaleProviderInterface $localeProvider,
     ) {}
 
-    public function getLocales(): iterable
+    /**
+     * @return list<string>
+     */
+    public function getLocales(): array
     {
         return $this->localeProvider->getLocales();
     }
