@@ -28,38 +28,46 @@
     ],
     "require": {
         "php": "^8.4",
-        "a2lix/auto-form-bundle": "@beta",
-        "symfony/config": "^7.4|^8.0",
-        "symfony/dependency-injection": "^7.4|^8.0",
-        "symfony/doctrine-bridge": "^7.4|^8.0",
+        "a2lix/auto-form-bundle": "@dev",
+        "symfony/config": "^7.4.1|^8.0",
+        "symfony/dependency-injection": "^7.4.2|^8.0",
+        "symfony/doctrine-bridge": "^7.4.1|^8.0",
         "symfony/event-dispatcher": "^7.4|^8.0",
-        "symfony/form": "^7.4|^8.0",
-        "symfony/http-kernel": "^7.4|^8.0",
-        "symfony/intl": "^7.4|^8.0",
+        "symfony/form": "^7.4|^8.0.1",
+        "symfony/http-kernel": "^7.4.2|^8.0",
+        "symfony/intl": "^7.4|^8.0.1",
         "symfony/options-resolver": "^7.4|^8.0",
-        "symfony/translation": "^7.4|^8.0",
+        "symfony/translation": "^7.4|^8.0.1",
         "symfony/ux-twig-component": "^2.31"
     },
     "require-dev": {
         "doctrine/orm": "^3.5.8",
-        "friendsofphp/php-cs-fixer": "^3.91.2",
+        "friendsofphp/php-cs-fixer": "^3.91.3",
+        "knplabs/doctrine-behaviors": "^3.0.0",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.35.1",
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan": "^2.1.33",
-        "phpstan/phpstan-doctrine": "^2.0",
-        "phpstan/phpstan-phpunit": "^2.0.9",
+        "phpstan/phpstan-doctrine": "^2.0.12",
+        "phpstan/phpstan-phpunit": "^2.0.10",
         "phpstan/phpstan-strict-rules": "^2.0.7",
         "phpstan/phpstan-symfony": "^2.0.9",
-        "phpunit/phpunit": "^12.5.0",
-        "rector/rector": "^2.2.11",
-        "symfony/cache": "^7.4|^8.0",
-        "symfony/validator": "^7.4|^8.0",
+        "phpunit/phpunit": "^12.5.2",
+        "rector/rector": "^2.2.14",
+        "stof/doctrine-extensions-bundle": "^1.14",
+        "symfony/cache": "^7.4.1|^8.0.1",
+        "symfony/validator": "^7.4|^8.0.2",
         "symfony/var-dumper": "^7.4"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/workspaces/AutoFormBundle"
+        }
+    ],
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",
-        "prezent/doctrine-translatable-bundle": "For Prezent strategy",
-        "stof/doctrine-extensions-bundle": "For Gedmo strategy"
+        "stof/doctrine-extensions-bundle": "For Gedmo strategy",
+        "prezent/doctrine-translatable-bundle": "For Prezent strategy"
     },
     "scripts": {
         "cs-fixer": [

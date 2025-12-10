@@ -31,13 +31,12 @@ class A2lixTranslationFormBundle extends AbstractBundle
             ->end()
             ->scalarNode('default_locale')
             ->defaultNull()
-            ->info('Set your own default locale if different from the default kernel.default_locale. eg: en')
+            ->info('Set your own default locale if different from the default framework.default_locale. eg: en')
             ->end()
-            ->arrayNode('locales')
-            ->requiresAtLeastOneElement()
+            ->arrayNode('enabled_locales')
             ->scalarPrototype()
             ->end()
-            ->info('Set the list of locales to manage (default locale included). eg: [en, fr, de, es]')
+            ->info('Set your own list of locales (default locale included) if different from the default framework.enabled_locales. eg: [en, fr, de, es]')
             ->end()
             ->arrayNode('required_locales')
             ->scalarPrototype()
@@ -48,11 +47,6 @@ class A2lixTranslationFormBundle extends AbstractBundle
             ->defaultValue('@A2lixTranslationForm/native_layout.html.twig')
             ->info('Set your own template path if required')
             ->end()
-            ->end()
-
-            ->validate()
-            ->ifTrue(static fn (array $v): bool => [] !== array_diff($v['required_locales'], $v['locales']))
-            ->thenInvalid('Configuration error in a2lix_translation_form: All required locales must be present in the defined locales.')
             ->end()
         ;
     }
@@ -91,23 +85,25 @@ class A2lixTranslationFormBundle extends AbstractBundle
             return;
         }
 
-        // SimpleProvider
-        foreach ($config['locales'] as $locale) {
+
+        // SimpleLocaleProvider
+        $enabledLocales = $config['enabled_locales'] ?: $builder->getParameter('kernel.enabled_locales');
+        foreach ($enabledLocales as $locale) {
             if (!Locales::exists($locale)) {
                 throw new \InvalidArgumentException(\sprintf('Configuration error in a2lix_translation_form: The locale "%s" is not a valid country code or locale code recognized by the Symfony Intl component.', $locale));
             }
         }
 
         $defaultLocale = $config['default_locale'] ?? $builder->getParameter('kernel.default_locale');
-        if (!\in_array($defaultLocale, $config['locales'], true)) {
+        if (!\in_array($defaultLocale, $enabledLocales, true)) {
             throw new \InvalidArgumentException(\sprintf('Configuration error in a2lix_translation_form: The list of locales must contain the determined default locale "%s"', $defaultLocale));
         }
 
         $container->services()
             ->get($config['locale_provider'])
             ->args([
-                '$locales' => $config['locales'],
                 '$defaultLocale' => $defaultLocale,
+                '$enabledLocales' => $enabledLocales,
                 '$requiredLocales' => $config['required_locales'],
             ])
         ;

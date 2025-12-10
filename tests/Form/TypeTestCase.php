@@ -23,7 +23,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bridge\Doctrine\Form\DoctrineOrmTypeGuesser;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
 use Symfony\Bridge\Doctrine\PropertyInfo\DoctrineExtractor;
 use Symfony\Component\Form\FormTypeGuesserChain;
 use Symfony\Component\Form\PreloadedExtension;
@@ -42,11 +43,17 @@ abstract class TypeTestCase extends BaseTypeTestCase
 {
     use ValidatorExtensionTrait;
 
-    protected $locales = ['en', 'fr', 'de'];
-
-    protected $defaultLocale = 'en';
-
-    protected $requiredLocales = ['en', 'fr'];
+    protected string $defaultLocale = 'en';
+    protected array $enabledLocales = ['en', 'fr', 'de'];
+    protected array $requiredLocales = ['en', 'fr'];
+    protected array $globalExcludedChildren = [
+        'id',
+        'newTranslations',
+        'translatable',
+        'locale',
+        'currentLocale',
+        'defaultLocale',
+    ];
 
     private ?EntityManagerInterface $entityManager = null;
 
@@ -61,38 +68,75 @@ abstract class TypeTestCase extends BaseTypeTestCase
             );
         });
     }
+    /**
+     * @param array<array-key, FormInterface<mixed>> $formChildren
+     */
+    protected static function assertFormChildren(array $expectedForm, array $formChildren, string $parentPath = ''): void
+    {
+        self::assertSame(array_keys($expectedForm), array_keys($formChildren));
+
+        foreach ($formChildren as $childName => $child) {
+            /** @var string $childName */
+            $expectedChildOptions = $expectedForm[$childName];
+            $childPath = $parentPath.'.'.$childName;
+
+            if (null !== $expectedType = ($expectedChildOptions['expected_type'] ?? null)) {
+                self::assertSame($expectedType, $child->getConfig()->getType()->getInnerType()::class, \sprintf('Type of "%s"', $childPath));
+            }
+
+            if (null !== $expectedChildren = ($expectedChildOptions['expected_children'] ?? null)) {
+                // @phpstan-ignore argument.type
+                self::assertFormChildren($expectedChildren, $child->all(), $childPath);
+            }
+
+            unset($expectedChildOptions['expected_type'], $expectedChildOptions['expected_children']);
+            $actualOptions = $child->getConfig()->getOptions();
+
+            // @phpstan-ignore nullCoalesce.variable, staticMethod.alreadyNarrowedType
+            self::assertSame($expectedChildOptions, array_intersect_key($actualOptions, $expectedChildOptions ?? []), \sprintf('Options of "%s"', $childPath));
+        }
+    }
 
     #[\Override]
     protected function getExtensions(): array
     {
         $autoType = new AutoType(
             new AutoTypeBuilder($this->getPropertyInfoExtractor()),
-            ['id']
+            globalExcludedChildren: $this->globalExcludedChildren,
+            handleTranslationTypes: true,
         );
 
-        $localeProvider = new SimpleLocaleProvider($this->locales, $this->defaultLocale, $this->requiredLocales);
+        $managerRegistryStub = self::createStub(ManagerRegistry::class);
+        $managerRegistryStub
+            ->method('getManager')
+            ->willReturn($this->getEntityManager())
+        ;
+        $managerRegistryStub
+            ->method('getManagers')
+            ->willReturn(['default' => $this->getEntityManager()])
+        ;
+
+        $localeProvider = new SimpleLocaleProvider($this->defaultLocale, $this->enabledLocales, $this->requiredLocales);
         $localeExtension = new LocaleExtension($localeProvider);
-        $translationsType = new TranslationsType();
+        $translationsType = new TranslationsType(
+            globalExcludedChildren: $this->globalExcludedChildren,
+        );
         $translationsFormsType = new TranslationsFormsType();
 
         return [
             ...parent::getExtensions(),
-            new PreloadedExtension([$autoType, $translationsType, $translationsFormsType], [$localeExtension], $this->getFormTypeGuesserChain()),
+            new DoctrineOrmExtension($managerRegistryStub),
+            new PreloadedExtension(
+                [$autoType, $translationsType, $translationsFormsType],
+                [
+                    TranslationsType::class => [$localeExtension],
+                    TranslationsFormsType::class => [$localeExtension],
+                ],
+                new FormTypeGuesserChain([
+                    new TypeInfoTypeGuesser(TypeResolver::create()),
+                ]),
+            ),
         ];
-    }
-
-    private function getEntityManager(): EntityManagerInterface
-    {
-        if ($this->entityManager instanceof EntityManagerInterface) {
-            return $this->entityManager;
-        }
-
-        $configuration = ORMSetup::createAttributeMetadataConfig([__DIR__.'/../Fixtures/Entity'], true);
-        $configuration->enableNativeLazyObjects(true);
-
-        $connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true], $configuration);
-
-        return $this->entityManager = new EntityManager($connection, $configuration);
     }
 
     private function getPropertyInfoExtractor(): PropertyInfoExtractor
@@ -118,14 +162,17 @@ abstract class TypeTestCase extends BaseTypeTestCase
         );
     }
 
-    private function getFormTypeGuesserChain(): FormTypeGuesserChain
+    private function getEntityManager(): EntityManagerInterface
     {
-        $managerRegistry = $this->createMock(ManagerRegistry::class);
-        $managerRegistry->method('getManagerForClass')->willReturn($this->getEntityManager());
+        if (null !== $this->entityManager) {
+            return $this->entityManager;
+        }
 
-        return new FormTypeGuesserChain([
-            new DoctrineOrmTypeGuesser($managerRegistry),
-            new TypeInfoTypeGuesser(TypeResolver::create()),
-        ]);
+        $configuration = ORMSetup::createAttributeMetadataConfig([__DIR__.'/../Fixtures/Entity'], true);
+        $configuration->enableNativeLazyObjects(true);
+
+        $connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true], $configuration);
+
+        return $this->entityManager = new EntityManager($connection, $configuration);
     }
 }

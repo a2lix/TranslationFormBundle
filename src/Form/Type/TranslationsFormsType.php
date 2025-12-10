@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -22,8 +24,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @phpstan-type FormOptionsDefaults array{
  *    default_locale: string,
+ *    enabled_locales: list<string>,
  *    required_locales: list<string>,
- *    locales: list<string>,
  *    locale_labels: array<string, string>|null,
  *    theming_granularity: string,
  *    form_options: array<string, mixed>,
@@ -57,7 +59,7 @@ class TranslationsFormsType extends AbstractType
         /** @var FormOptionsDefaults $options */
         $options = $options;
 
-        foreach ($options['locales'] as $locale) {
+        foreach ($options['enabled_locales'] as $locale) {
             $builder->add($locale, $options['form_type'], [
                 ...$options['form_options'],
                 'setter' => static function (Collection $translationColl, ?OneLocaleInterface $translation, FormInterface $form) use ($locale): void {

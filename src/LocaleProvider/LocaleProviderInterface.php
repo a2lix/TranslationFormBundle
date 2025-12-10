@@ -16,7 +16,7 @@ interface LocaleProviderInterface
     /**
      * @return list<string>
      */
-    public function getLocales(): array;
+    public function getEnabledLocales(): array;
 
     public function getDefaultLocale(): string;
 

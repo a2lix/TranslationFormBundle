@@ -35,5 +35,8 @@
       }
     }
   },
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=/home/david/Works/a2lix/AutoFormBundle,target=/workspaces/AutoFormBundle,type=bind,consistency=cached",
+  ]
 }

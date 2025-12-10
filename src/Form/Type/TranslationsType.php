@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -23,8 +25,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @phpstan-type FormOptionsDefaults array{
  *    default_locale: string,
+ *    enabled_locales: list<string>,
  *    required_locales: list<string>,
- *    locales: list<string>,
  *    locale_labels: array<string, string>|null,
  *    theming_granularity: string,
  *    translatable_class: class-string,
@@ -69,13 +71,13 @@ class TranslationsType extends AbstractType
 
         $resolver->setRequired('translatable_class');
         $resolver->setAllowedTypes('translatable_class', 'string');
-        $resolver->setDefault('translation_class', static fn (Options $options): string => self::getTranslationClass($options['translatable_class'])); // @phpstan-ignore argument.type
-        $resolver->setDefault('gedmo', static fn (Options $options): bool => is_subclass_of(
+        $resolver->setDefault('translation_class', static fn(Options $options): string => self::getTranslationClass($options['translatable_class'])); // @phpstan-ignore argument.type
+        $resolver->setDefault('gedmo', static fn(Options $options): bool => is_subclass_of(
             $options['translation_class'], // @phpstan-ignore argument.type
             'Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation'
         ));
-        $resolver->setDefault('inherit_data', static fn (Options $options): bool => $options['gedmo']); // @phpstan-ignore return.type
-        $resolver->setDefault('empty_data', static fn (Options $options): ?ArrayCollection => $options['gedmo'] ? null : new ArrayCollection());
+        $resolver->setDefault('inherit_data', static fn(Options $options): bool => $options['gedmo']); // @phpstan-ignore return.type
+        $resolver->setDefault('empty_data', static fn(Options $options): ?ArrayCollection => $options['gedmo'] ? null : new ArrayCollection());
 
         // AutoType
         $resolver->setAllowedTypes('children_excluded', 'string[]|string|callable|null');
@@ -136,7 +138,7 @@ class TranslationsType extends AbstractType
             return $translatableClass::getTranslationClass(); // @phpstan-ignore return.type
         }
 
-        return $translatableClass.'Translation';
+        return $translatableClass . 'Translation';
     }
 
     /**
@@ -155,10 +157,10 @@ class TranslationsType extends AbstractType
             'builder' => $options['builder'],
         ])->all();
 
-        foreach ($options['locales'] as $locale) {
+        foreach ($options['enabled_locales'] as $locale) {
             $localeFormBuilder = $builder->create($locale, FormType::class, [
                 'data_class' => $options['translation_class'],
-                'setter' => static fn (...$args) => self::knpLocaleSetter($locale, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
+                'setter' => static fn(...$args) => self::knpLocaleSetter($locale, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
                 // LocaleExtension options process
                 'label' => $options['locale_labels'][$locale] ?? null,
                 'required' => \in_array($locale, $options['required_locales'], true),
@@ -192,15 +194,15 @@ class TranslationsType extends AbstractType
 
         $translationClass = $options['translation_class'];
 
-        foreach ($options['locales'] as $locale) {
+        foreach ($options['enabled_locales'] as $locale) {
             $localeFormBuilder = $builder->create($locale, FormType::class, [
                 ...(
                     $locale === $options['default_locale']
                     ? [
                         'inherit_data' => true,
                     ] : [
-                        'getter' => static fn (...$args) => self::gedmoLocaleGetter($locale, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
-                        'setter' => static fn (...$args) => self::gedmoLocaleSetter(...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
+                        'getter' => static fn(...$args) => self::gedmoLocaleGetter($locale, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
+                        'setter' => static fn(...$args) => self::gedmoLocaleSetter(...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
                     ]
                 ),
                 // LocaleExtension options process
@@ -221,7 +223,8 @@ class TranslationsType extends AbstractType
                 $localeFormBuilder->add($builtChild->getName(), $builtChild->getType()->getInnerType()::class, [
                     ...$builtChild->getFormConfig()->getOptions(),
                     'getter' => static fn (...$args) => self::gedmoFieldGetter($field, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
-                    'setter' => static fn (array &$translations, ?string $data) => self::gedmoFieldSetter($field, $locale, $translationClass, $translations, $data),  // @phpstan-ignore-line
+                    'setter' => static fn(array &$translations, ?string $data) => self::gedmoFieldSetter($field, $locale, $translationClass, $translations, $data),  // @phpstan-ignore-line
+                    // 'property_path' => sprintf('[%s?].content', $field),
                 ]);
             }
 

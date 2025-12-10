@@ -24,8 +24,8 @@ class LocaleSwitcher
     /**
      * @return list<string>
      */
-    public function getLocales(): array
+    public function getEnabledLocales(): array
     {
-        return $this->localeProvider->getLocales();
+        return $this->localeProvider->getEnabledLocales();
     }
 }

@@ -1,6 +1,6 @@
 {% if this.render == 'basic' %}
     <nav class="locale-switcher hstack gap-1">
-        {% for locale in this.locales %}
+        {% for locale in this.enabledLocales %}
             {% if locale == app.locale %}
             <div class="badge text-bg-light">
                 {{ locale_render(locale, 'locale_upper') }}
@@ -26,7 +26,7 @@
 
 
         <ul class="dropdown-menu">
-        {% for locale in this.locales|filter(l => l != app.locale) %}
+        {% for locale in this.enabledLocales|filter(l => l != app.locale) %}
             <li>
                 <a
                     href="{{ path(app.current_route, app.current_route_parameters|merge({ _locale: locale })) }}"

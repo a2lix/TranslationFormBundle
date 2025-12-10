@@ -22,8 +22,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @phpstan-type LocaleFormOptionsDefaults array{
  *    default_locale: string,
+ *    enabled_locales: list<string>,
  *    required_locales: list<string>,
- *    locales: list<string>,
  *    locale_labels: array<string, string>|null,
  *    theming_granularity: string,
  *    ...
@@ -47,8 +47,8 @@ class LocaleExtension extends AbstractTypeExtension
     {
         $resolver->setDefaults([
             'default_locale' => $this->localeProvider->getDefaultLocale(),
+            'enabled_locales' => $this->localeProvider->getEnabledLocales(),
             'required_locales' => $this->localeProvider->getRequiredLocales(),
-            'locales' => $this->localeProvider->getLocales(),
             'locale_labels' => null,
             'theming_granularity' => 'field',
         ]);

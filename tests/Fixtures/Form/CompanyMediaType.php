@@ -11,25 +11,24 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Form;
 
-use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\MediaLocalize;
+use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\CompanyMediaLocale;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MediaLocalizeType extends AbstractType
+class CompanyMediaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('url')
-            ->add('description')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => MediaLocalize::class,
+            'data_class' => CompanyMediaLocale::class,
         ]);
     }
 }
