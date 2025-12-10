@@ -1,0 +1,25 @@
+parameters:
+    level: 10
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/A2lixTranslationFormBundle.php
+        - src/Helper
+        - tests
+    scanFiles:
+        - stubs/GedmoTranslatable.stub
+        - stubs/GedmoTranslation.stub
+        - stubs/KnpTranslation.stub
+
+    # Stricter setup
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkUninitializedProperties: true
+    rememberPossiblyImpureFunctionValues: false
+    checkBenevolentUnionTypes: true
+    #reportPossiblyNonexistentGeneralArrayOffset: true
+    reportPossiblyNonexistentConstantArrayOffset: true
+    reportAlwaysTrueInLastCondition: true
+    reportAnyTypeWideningInVarTag: true
+    checkMissingOverrideMethodAttribute: true
+    checkMissingCallableSignature: true

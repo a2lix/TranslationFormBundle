@@ -1,179 +1,123 @@
-# A2lix Translation Form Bundle
-
-Translate your doctrine objects easily with some helps
+# A2lix TranslationForm Bundle
 
 [![Latest Stable Version](https://poser.pugx.org/a2lix/translation-form-bundle/v/stable)](https://packagist.org/packages/a2lix/translation-form-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/a2lix/translation-form-bundle/v/unstable)](https://packagist.org/packages/a2lix/translation-form-bundle)
-[![License](https://poser.pugx.org/a2lix/translation-form-bundle/license)](https://packagist.org/packages/a2lix/translation-form-bundle)
-
 [![Total Downloads](https://poser.pugx.org/a2lix/translation-form-bundle/downloads)](https://packagist.org/packages/a2lix/translation-form-bundle)
-[![Monthly Downloads](https://poser.pugx.org/a2lix/translation-form-bundle/d/monthly)](https://packagist.org/packages/a2lix/translation-form-bundle)
-[![Daily Downloads](https://poser.pugx.org/a2lix/translation-form-bundle/d/daily)](https://packagist.org/packages/a2lix/translation-form-bundle)
+[![License](https://poser.pugx.org/a2lix/translation-form-bundle/license)](https://packagist.org/packages/a2lix/translation-form-bundle)
+[![Build Status](https://github.com/a2lix/TranslationFormBundle/actions/workflows/ci.yml/badge.svg)](https://github.com/a2lix/TranslationFormBundle/actions/workflows/ci.yml)
 
-| Branch | Tools |
-| --- | --- |
-| 3.x (master) | [![Build Status][v3_ci_badge]][v3_ci_link] [![Coverage Status][v3_coverage_badge]][v3_coverage_link] |
+A small, flexible Symfony bundle that helps you build forms to manage translations for Doctrine entities. It integrates with common translation strategies (Gedmo Personal Translation and Knp DoctrineBehaviors) and provides form types, helpers and Twig components to make working with multilingual data easier.
 
-## Screenshot example
+Key features
+- Easy form handling for translatable entities (Knp & Gedmo strategies).
+- Support for one-record-per-locale patterns via `TranslationsFormsType`.
+- `TranslatedEntityType` for entity choice labels using translations.
+- Centralized locale configuration via `LocaleProvider`.
+- Twig helpers and a `LocaleSwitcher` component.
 
-![A2LiX Translation Form Screenshot](/a2lix_translationForm.jpg)
+> [!NOTE]
+> Use [A2lixAutoFormBundle](https://github.com/a2lix/AutoFormBundle) for automatic form generation and customization.
 
-## Support
-
-* `3.x` depends on [AutoFormBundle](https://github.com/a2lix/AutoFormBundle) and has higher requirements (PHP8.1+, Symfony5.4+/6.3+/7.0+). It is compatible with [KnpLabs](https://github.com/KnpLabs/DoctrineBehaviors#translatable), [A2lix](https://github.com/a2lix/I18nDoctrineBundle) and [Prezent](https://github.com/Prezent/doctrine-translatable-bundle)
+> [!TIP]
+> A complete demonstration is also available at [a2lix/demo](https://github.com/a2lix/Demo).
 
 ## Installation
 
-Use composer:
-
+- Install the bundle with Composer:
 ```bash
 composer require a2lix/translation-form-bundle
 ```
 
-After the successful installation, add/check the bundle registration:
+## Basic configuration
 
-```php
-// Symfony >= 4.0 in bundles.php
-// ...
-A2lix\AutoFormBundle\A2lixAutoFormBundle::class => ['all' => true],
-A2lix\TranslationFormBundle\A2lixTranslationFormBundle::class => ['all' => true],
-// ...
-
-// Symfony >= 3.4 in AppKernel::registerBundles()
-$bundles = array(
-// ...
-new A2lix\AutoFormBundle\A2lixAutoFormBundle(),
-new A2lix\TranslationFormBundle\A2lixTranslationFormBundle(),
-// ...
-```
-
-## Configuration
-
-There is no minimal configuration. Full list of optional parameters:
+Add a minimal configuration in `config/packages/a2lix.yaml`:
 
 ```yaml
-# Symfony >= 4.0. Create a dedicated a2lix.yaml in config/packages with:
-# Symfony >= 3.4. Add in your app/config/config.yml:
-
 a2lix_translation_form:
-    locale_provider: default       # [1]
-    locales: [en, fr, es, de]      # [1-a]
-    default_locale: en             # [1-b]
-    required_locales: [fr]         # [1-c]
-    templating: "@A2lixTranslationForm/bootstrap_4_layout.html.twig"      # [2]
+    enabled_locales: [en, fr, de]   # Optional. Default from framework.enabled_locales
+    default_locale: en   # Optional. Default from framework.default_locale
+    required_locales: [en]   # Optional. Default []
+    # templating: "@A2lixTranslationForm/bootstrap_5_layout.html.twig"
 ```
 
-1. Custom locale provider service id. Default one relies on [1-*] values:
-   - [1-a] List of translations locales to display
-   - [1-b] Default locale
-   - [1-c] List of required translations locales
-2. The default template is Twitter Bootstrap compatible. You can redefine your own here
+If you keep the default setup, the bundle will automatically prepend the chosen form theme (Bootstrap 5 layout by default) into Twig's `form_themes`.
 
-## Usage
+Compatibility: Gedmo & Knp
 
-### In a classic formType
+- [Gedmo PersonalTranslation](https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/translatable.md#personal-translations): Fully supported. When using Gedmo's personal translation mapping, the bundle renders translation fields as separate translation objects and manages creation and removal of `Gedmo` translation entities.
+- [KnpDoctrineBehaviors](https://github.com/KnpLabs/DoctrineBehaviors/blob/master/docs/translatable.md): Fully supported. For Knp-style translations (one translation object per locale), fields are bound directly to locale forms.
 
+## Usage examples
+
+#### TranslationsType (Knp or Gedmo)
 ```php
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
-...
-$builder->add('translations', TranslationsType::class);
-```
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 
-### Advanced examples
-
-```php
-use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
-...
 $builder->add('translations', TranslationsType::class, [
-    'locales' => ['en', 'fr', 'es', 'de'],   // [1]
-    'default_locale' => ['en'],              // [1]
-    'required_locales' => ['fr'],            // [1]
-    'fields' => [                               // [2]
-        'description' => [                         // [3.a]
-            'field_type' => 'textarea',                // [4]
-            'label' => 'descript.',                    // [4]
-            'locale_options' => [                  // [3.b]
-                'es' => ['label' => 'descripción'],    // [4]
-                'fr' => ['display' => false]           // [4]
-            ]
-        ]
-    ],
-    'excluded_fields' => ['details'],           // [2]
-    'locale_labels' => [                        // [5]
-        'fr' => 'Français',
-        'en' => 'English',
-    ],
+    'translatable_class' => App\Entity\Post::class,
+    // Optional:
+    // 'locale_labels' => ['en' => 'English', 'fr' => 'Français'],
+    // 'theming_granularity' => 'field', // or 'locale_field'
 ]);
 ```
 
-1. Optional. If set, override the default value from config.yml
-2. Optional. If set, override the default value from config.yml
-3. Optional. If set, override the auto configuration of fields
-   - [3.a] Optional. - For a field, applied to all locales
-   - [3.b] Optional. - For a specific locale of a field
-4. Optional. Common options of symfony forms (max_length, required, trim, read_only, constraints, ...), which was added 'field_type' and 'display'
-5. Optional. Set the labels for the translation tabs. Default to the name of the locale. Translation keys can be used here.
-
-## Additional
-
-### TranslationsFormsType
-
-A different approach for entities which don't share fields untranslated. No strategy used here, only a locale field in your entity.
-
+#### TranslationsFormsType (one-record-per-locale)
 ```php
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
-...
-$builder->add('translations', TranslationsFormsType::class, [
-    'locales' => ['en', 'fr', 'es', 'de'],   // [1]
-    'default_locale' => ['en']               // [1]
-    'required_locales' => ['fr'],            // [1]
-    'form_type' => ProductMediaType::class,     // [2 - Mandatory]
-    'form_options' => [                         // [2bis]
-         'context' => 'pdf'
-    ]
+
+$builder->add('medias', TranslationsFormsType::class, [
+    'form_type' => App\Form\CompanyMediaType::class,
+    'form_options' => [
+        'data_class' => App\Entity\CompanyMediaLocale::class,
+    ],
 ]);
 ```
 
-1. Optional. If set, override the default value from config.yml
-2. Mandatory. A real form type that you have to do
-   - [2bis] Optional. - An array of options that you can set to your form
-
-### TranslatedEntityType
-
-Modified version of the native 'entity' symfony form type to translate the label in the current locale by reading translations
-
+#### TranslatedEntityType (entity choices with translation labels)
 ```php
 use A2lix\TranslationFormBundle\Form\Type\TranslatedEntityType;
-...
-$builder->add('medias', TranslatedEntityType::class, [
-    'class' => 'A2lix\DemoTranslationBundle\Entity\Media',   // [1 - Mandatory]
-    'translation_property' => 'title',                           // [2 - Mandatory]
-    'multiple' => true,                                             // [3]
+
+$builder->add('category', TranslatedEntityType::class, [
+    'class' => App\Entity\Category::class,
+    'translation_property' => 'title',
 ]);
 ```
 
-1. Path of the translatable class
-2. Property/Method of the translatable class that will be display
-3. Common options of the 'entity' Symfony form type (multiple, ...)
+#### Locale selection widget
+```php
+use A2lix\TranslationFormBundle\Form\Type\TranslationsLocalesSelectorType;
 
-### Example
-
-See [Demo Bundle](https://github.com/a2lix/Demo) for more examples.
-
-
-## Contribution help
-
+$builder->add('locales', TranslationsLocalesSelectorType::class, [
+    // uses the bundle's LocaleProvider to populate choices
+]);
 ```
-docker run --rm --interactive --tty --volume $PWD:/app --user $(id -u):$(id -g) composer install --ignore-platform-reqs
-docker run --rm --interactive --tty --volume $PWD:/app --user $(id -u):$(id -g) composer run-script phpunit
-docker run --rm --interactive --tty --volume $PWD:/app --user $(id -u):$(id -g) composer run-script cs-fixer
+
+## Twig helpers & components
+
+Locale rendering function:
+```twig
+{{ locale_render('en') }}                     {# -> 'English' (localized) #}
+{{ locale_render('en', 'locale_upper') }}     {# -> 'EN' #}
+{{ locale_render('fr', 'locale_name_title') }}{# -> 'Français' #}
 ```
+
+LocaleSwitcher component:
+```twig
+{# Render basic badges #}
+<twig:A2lixTranslationForm:LocaleSwitcher render="basic" />
+
+{# Render dropdown #}
+<twig:A2lixTranslationForm:LocaleSwitcher render="dropdown" />
+```
+
+## LocaleProvider
+
+The bundle centralizes locale configuration through a `LocaleProviderInterface`. By default, `SimpleLocaleProvider` is registered and configured from bundle settings. You can replace it with your own service by changing `locale_provider` in the bundle configuration.
+
+## Integration with AutoFormBundle
+
+This bundle integrates cleanly with `a2lix/auto-form-bundle`. When using `AutoType` with translatable entities, `TranslationsType` and `TranslationsFormsType` can be automatically configured and rendered based on entity metadata and bundle options.
 
 ## License
-
-This package is available under the [MIT license](LICENSE).
-
-[v3_ci_badge]: https://github.com/a2lix/TranslationFormBundle/actions/workflows/ci.yml/badge.svg
-[v3_ci_link]: https://github.com/a2lix/TranslationFormBundle/actions/workflows/ci.yml
-[v3_coverage_badge]: https://codecov.io/gh/a2lix/TranslationFormBundle/branch/master/graph/badge.svg
-[v3_coverage_link]: https://codecov.io/gh/a2lix/TranslationFormBundle/branch/master
+This package is available under the MIT license — see the LICENSE file.

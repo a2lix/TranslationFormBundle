@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -14,42 +12,58 @@ declare(strict_types=1);
 namespace A2lix\TranslationFormBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\LocaleSwitcher;
 
+/**
+ * @phpstan-type FormOptionsDefaults array{
+ *    translation_path: string,
+ *    translation_property: string,
+ *    ...
+ * }
+ *
+ * @extends AbstractType<mixed>
+ */
 class TranslatedEntityType extends AbstractType
 {
     public function __construct(
-        private readonly RequestStack $requestStack,
+        private readonly LocaleSwitcher $localeSwitcher,
     ) {}
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'translation_path' => 'translations',
-            'query_builder' => static fn (EntityRepository $er) => $er->createQueryBuilder('e')
+            // EntityType
+            'query_builder' => static fn (EntityRepository $er): QueryBuilder => $er->createQueryBuilder('e')
                 ->select('e, t')
                 ->join('e.translations', 't'),
-            'choice_label' => function (Options $options) {
-                if (null === ($request = $this->requestStack->getCurrentRequest())) {
-                    throw new \RuntimeException('Error while getting request');
-                }
-
-                return $options['translation_path'].'['.$request->getLocale().'].'.$options['translation_property'];
-            },
+            'choice_label' => fn (Options $options): string => \sprintf(
+                '%s[%s].%s',
+                $options['translation_path'], // @phpstan-ignore argument.type
+                $this->localeSwitcher->getLocale(),
+                $options['translation_property'], // @phpstan-ignore argument.type
+            ),
+            // Adds
+            'translation_path' => 'translations',
         ]);
 
+        $resolver->setAllowedTypes('translation_path', 'string');
         $resolver->setRequired('translation_property');
+        $resolver->setAllowedTypes('translation_property', 'string');
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return EntityType::class;
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'a2lix_translatedEntity';

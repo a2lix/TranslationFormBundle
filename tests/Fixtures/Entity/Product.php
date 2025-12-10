@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -13,80 +11,48 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\Tests\Fixtures\Entity;
 
+use A2lix\AutoFormBundle\Form\Attribute\AutoTypeCustom;
+use A2lix\TranslationFormBundle\Tests\Fixtures\IdTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
+#[Gedmo\TranslationEntity(class: ProductTranslation::class)]
 class Product
 {
-    #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private ?int $id = null;
+    use IdTrait;
 
-    #[ORM\Column(nullable: true)]
-    private ?string $title = null;
+    #[ORM\Column]
+    #[AutoTypeCustom(options: ['priority' => 1])]
+    public string $code;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description = null;
+    #[ORM\Column]
+    #[Gedmo\Translatable]
+    public ?string $title = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?string $url = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Gedmo\Translatable]
+    public ?string $description = null;
 
-    #[ORM\OneToMany(targetEntity: MediaLocalize::class, mappedBy: 'product', indexBy: 'locale', cascade: ['all'], orphanRemoval: true)]
-    private ArrayCollection $medias;
+    #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['all'])]
+    public ?Category $category = null;
 
-    #[ORM\OneToMany(targetEntity: ProductTranslation::class, mappedBy: 'object', indexBy: 'locale', cascade: ['all'], orphanRemoval: true)]
-    private ArrayCollection $translations;
+    /** @var Collection<int, ProductTranslation> */
+    #[ORM\OneToMany(targetEntity: ProductTranslation::class, mappedBy: 'object', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[AutoTypeCustom(options: ['priority' => 1])]
+    public Collection $translations;
 
     public function __construct()
     {
-        $this->medias = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(?string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(?string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
+    /**
+     * @return Collection<int, ProductTranslation>
+     */
     public function getTranslations(): Collection
     {
         return $this->translations;
@@ -95,8 +61,7 @@ class Product
     public function addTranslation(ProductTranslation $translation): self
     {
         if (!$this->translations->contains($translation)) {
-            $translation->setTranslatable($this);
-            $this->translations->set($translation->getLocale(), $translation);
+            $this->translations[] = $translation->setObject($this);
         }
 
         return $this;
@@ -104,29 +69,7 @@ class Product
 
     public function removeTranslation(ProductTranslation $translation): self
     {
-        $this->translations->removeElement($translation);
-
-        return $this;
-    }
-
-    public function getMedias(): Collection
-    {
-        return $this->medias;
-    }
-
-    public function addMedia(MediaLocalize $media): self
-    {
-        if (!$this->medias->contains($media)) {
-            $media->setProduct($this);
-            $this->medias->set($media->getLocale(), $media);
-        }
-
-        return $this;
-    }
-
-    public function removeMedia(MediaLocalize $media): self
-    {
-        $this->medias->removeElement($media);
+        $this->translations->removeElement($translation->setObject(null));
 
         return $this;
     }

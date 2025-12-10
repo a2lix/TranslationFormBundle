@@ -1,0 +1,44 @@
+{% block a2lix_translations_widget %}
+    {{ form_errors(form) }}
+
+    <div class="a2lix_translations">
+        <ul class="a2lix_translationsLocales nav nav-tabs" role="tablist">
+        {% for translationsFields in form %}
+            {% set formLocale = translationsFields.vars.name %}
+            {% set isActiveLocale = app.locale == formLocale %}
+            {% set isDefaultLocale = formLocale == form.vars.default_locale %}
+
+            <li class="nav-item">
+                <div
+                    class="nav-link {{ isActiveLocale ? 'active' }}"
+                    data-bs-target="#{{ translationsFields.vars.id }}_a2lix_translations-fields"
+                    data-bs-toggle="tab" role="button"
+                >
+                    {{ translationsFields.vars.label ?? locale_render(formLocale) }}
+                    {{ isDefaultLocale ? '[Default]'|trans }}
+                    {{ translationsFields.vars.required ? '*' }}
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+
+        <div class="a2lix_translationsFields tab-content">
+        {% for translationsFields in form %}
+            {% set formLocale = translationsFields.vars.name %}
+            {% set isActiveLocale = app.locale == formLocale %}
+
+            <div
+                id="{{ translationsFields.vars.id }}_a2lix_translations-fields" role="tabpanel"
+                class="tab-pane {{ isActiveLocale ? 'show active' }} {{ not form.vars.valid ? 'sonata-ba-field-error' }}"
+            >
+                {{ form_errors(translationsFields) }}
+                {{ form_widget(translationsFields) }}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block a2lix_translationsForms_widget %}
+    {{ block('a2lix_translations_widget') }}
+{% endblock %}

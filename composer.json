@@ -11,6 +11,7 @@
         "translatable",
         "form",
         "knplabs",
+        "gedmo",
         "prezent"
     ],
     "homepage": "https://github.com/a2lix/TranslationFormBundle",
@@ -26,47 +27,59 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "a2lix/auto-form-bundle": "^0.4",
-        "symfony/config": "^5.4.30|^6.3|^7.0",
-        "symfony/dependency-injection": "^5.4.30|^6.3|^7.0",
-        "symfony/doctrine-bridge": "^5.4.30|^6.3|^7.0",
-        "symfony/event-dispatcher": "^5.4.30|^6.3|^7.0",
-        "symfony/form": "^5.4.30|^6.3|^7.0",
-        "symfony/http-foundation": "^5.4.30|^6.3|^7.0",
-        "symfony/http-kernel": "^5.4.30|^6.3|^7.0",
-        "symfony/options-resolver": "^5.4.30|^6.3|^7.0"
+        "php": "^8.4",
+        "a2lix/auto-form-bundle": "^1.0",
+        "symfony/config": "^7.4|^8.0",
+        "symfony/dependency-injection": "^7.4|^8.0",
+        "symfony/doctrine-bridge": "^7.4|^8.0",
+        "symfony/event-dispatcher": "^7.4|^8.0",
+        "symfony/form": "^7.4|^8.0",
+        "symfony/http-kernel": "^7.4|^8.0",
+        "symfony/intl": "^7.4|^8.0",
+        "symfony/options-resolver": "^7.4|^8.0",
+        "symfony/translation": "^7.4|^8.0",
+        "symfony/ux-twig-component": "^2.31"
     },
     "require-dev": {
-        "doctrine/orm": "^2.15",
-        "friendsofphp/php-cs-fixer": "^3.45",
-        "knplabs/doctrine-behaviors": "^2.3",
-        "kubawerlos/php-cs-fixer-custom-fixers": "^3.18",
-        "matthiasnoback/symfony-dependency-injection-test": "^5.0",
-        "phpstan/phpstan": "^1.10",
-        "rector/rector": "^0.18",
-        "symfony/cache": "^5.4.30|^6.3|^7.0",
-        "symfony/phpunit-bridge": "^5.4.30|^6.3|^7.0",
-        "symfony/validator": "^5.4.30|^6.3|^7.0",
-        "vimeo/psalm": "^5.18"
+        "doctrine/orm": "^3.5.8",
+        "friendsofphp/php-cs-fixer": "^3.91.3",
+        "knplabs/doctrine-behaviors": "^3.0.0",
+        "kubawerlos/php-cs-fixer-custom-fixers": "^3.35.1",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan": "^2.1.33",
+        "phpstan/phpstan-doctrine": "^2.0.12",
+        "phpstan/phpstan-phpunit": "^2.0.10",
+        "phpstan/phpstan-strict-rules": "^2.0.7",
+        "phpstan/phpstan-symfony": "^2.0.9",
+        "phpunit/phpunit": "^12.5.2",
+        "rector/rector": "^2.2.14",
+        "stof/doctrine-extensions-bundle": "^1.14",
+        "symfony/cache": "^7.4.1|^8.0.1",
+        "symfony/validator": "^7.4|^8.0.2",
+        "symfony/var-dumper": "^7.4"
     },
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",
+        "stof/doctrine-extensions-bundle": "For Gedmo strategy",
         "prezent/doctrine-translatable-bundle": "For Prezent strategy"
     },
     "scripts": {
         "cs-fixer": [
             "php-cs-fixer fix --verbose"
         ],
-        "psalm": [
-            "psalm"
+        "phpstan": [
+            "phpstan analyse --memory-limit=2G"
         ],
         "phpunit": [
-            "SYMFONY_DEPRECATIONS_HELPER=max[self]=0 simple-phpunit"
+            "phpunit"
         ]
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "phpstan/extension-installer": true
+        }
     },
     "autoload": {
         "psr-4": { "A2lix\\TranslationFormBundle\\": "src/" }
@@ -76,7 +89,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.x-dev"
+            "dev-main": "4.x-dev"
         }
     }
 }

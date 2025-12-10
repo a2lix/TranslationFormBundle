@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -13,28 +11,30 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use A2lix\TranslationFormBundle\LocaleProvider\LocaleProviderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<mixed>
+ */
 class TranslationsLocalesSelectorType extends AbstractType
 {
     public function __construct(
         private readonly LocaleProviderInterface $localeProvider,
     ) {}
 
-    public function buildView(FormView $view, FormInterface $form, array $options): void
-    {
-        $view->vars['default_locale'] = $this->localeProvider->getDefaultLocale();
-    }
-
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $enabledLocales = $this->localeProvider->getEnabledLocales();
+
         $resolver->setDefaults([
-            'choices' => array_combine($this->localeProvider->getLocales(), $this->localeProvider->getLocales()),
+            // ChoiceType
+            'choices' => array_combine($enabledLocales, $enabledLocales),
             'expanded' => true,
             'multiple' => true,
             'attr' => [
@@ -43,11 +43,19 @@ class TranslationsLocalesSelectorType extends AbstractType
         ]);
     }
 
+    #[\Override]
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['default_locale'] = $this->localeProvider->getDefaultLocale();
+    }
+
+    #[\Override]
     public function getParent(): string
     {
         return ChoiceType::class;
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'a2lix_translationsLocalesSelector';

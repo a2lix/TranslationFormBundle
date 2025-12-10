@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the TranslationFormBundle package.
@@ -13,58 +11,78 @@ declare(strict_types=1);
 
 namespace A2lix\TranslationFormBundle\Form\Type;
 
-use A2lix\AutoFormBundle\Form\Type\AutoFormType;
-use A2lix\TranslationFormBundle\Form\EventListener\TranslationsFormsListener;
-use A2lix\TranslationFormBundle\Locale\LocaleProviderInterface;
+use A2lix\TranslationFormBundle\Helper\OneLocaleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @phpstan-type FormOptionsDefaults array{
+ *    default_locale: string,
+ *    enabled_locales: list<string>,
+ *    required_locales: list<string>,
+ *    locale_labels: array<string, string>|null,
+ *    theming_granularity: string,
+ *    form_options: array<string, mixed>,
+ *    form_type: string,
+ *    ...
+ * }
+ *
+ * @extends AbstractType<mixed>
+ */
 class TranslationsFormsType extends AbstractType
 {
-    public function __construct(
-        private readonly TranslationsFormsListener $translationsFormsListener,
-        private readonly LocaleProviderInterface $localeProvider,
-    ) {}
-
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder->addEventSubscriber($this->translationsFormsListener);
-    }
-
-    public function buildView(FormView $view, FormInterface $form, array $options): void
-    {
-        $view->vars['default_locale'] = $options['default_locale'];
-        $view->vars['required_locales'] = $options['required_locales'];
-    }
-
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            // FormType
             'by_reference' => false,
-            'empty_data' => static fn (FormInterface $form) => new ArrayCollection(),
-            'locales' => $this->localeProvider->getLocales(),
-            'default_locale' => $this->localeProvider->getDefaultLocale(),
-            'required_locales' => $this->localeProvider->getRequiredLocales(),
+            'empty_data' => new ArrayCollection(),
+            // Adds
             'form_options' => [],
         ]);
 
+        $resolver->setAllowedTypes('form_options', 'array');
         $resolver->setRequired('form_type');
-
-        $resolver->setNormalizer('form_options', static function (Options $options, $value): array {
-            // Check mandatory data_class option when AutoFormType use
-            if (($options['form_type'] instanceof AutoFormType) && !isset($value['data_class'])) {
-                throw new \RuntimeException('Missing "data_class" option under "form_options" of TranslationsFormsType. Required when "form_type" use "AutoFormType".');
-            }
-
-            return $value;
-        });
+        $resolver->setAllowedTypes('form_type', 'string');
     }
 
+    #[\Override]
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        /** @var FormOptionsDefaults $options */
+        $options = $options;
+
+        foreach ($options['enabled_locales'] as $locale) {
+            $builder->add($locale, $options['form_type'], [
+                ...$options['form_options'],
+                'setter' => static function (Collection $translationColl, ?OneLocaleInterface $translation, FormInterface $form) use ($locale): void {
+                    if (null === $translation) {
+                        return;
+                    }
+
+                    if ($translation->isEmpty()) {
+                        $translationColl->removeElement($translation);
+
+                        return;
+                    }
+
+                    $translation->locale = $locale; // @phpstan-ignore property.notFound
+                    $translationColl->add($translation);
+                },
+                // LocaleExtension options process
+                'label' => $options['locale_labels'][$locale] ?? null,
+                'required' => \in_array($locale, $options['required_locales'], true),
+                'block_name' => ('field' === $options['theming_granularity']) ? 'locale' : null,
+            ]);
+        }
+    }
+
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'a2lix_translationsForms';

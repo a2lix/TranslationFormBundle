@@ -1,0 +1,28 @@
+{# ! With a2lix_translation.css. Currently working with Gecko browsers, others have CSS related bugs to fix #}
+{% block a2lix_translations_widget %}
+    {{ form_errors(form) }}
+
+    <div class="a2lix_translations">
+    {% for translationsFields in form %}
+        {% set formLocale = translationsFields.vars.name %}
+        {% set isActiveLocale = app.locale == formLocale %}
+        {% set isDefaultLocale = formLocale == form.vars.default_locale %}
+
+        <details name="{{ form.vars.id }}" {{ isActiveLocale ? 'open' }}>
+            <summary>
+                {{ translationsFields.vars.label ?? locale_render(formLocale) }}
+                {{ isDefaultLocale ? '[Default]'|trans }}
+                {{ translationsFields.vars.required ? '*' }}
+            </summary>
+            <div>
+                {{ form_errors(translationsFields) }}
+                {{ form_widget(translationsFields) }}
+            </div>
+        </details>
+    {% endfor %}
+    </div>
+{% endblock %}
+
+{% block a2lix_translationsForms_widget %}
+    {{ block('a2lix_translations_widget') }}
+{% endblock %}
