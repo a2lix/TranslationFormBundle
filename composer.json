@@ -58,12 +58,6 @@
         "symfony/validator": "^7.4|^8.0.2",
         "symfony/var-dumper": "^7.4"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "/workspaces/AutoFormBundle"
-        }
-    ],
     "suggest": {
         "knplabs/doctrine-behaviors": "For Knp strategy",
         "stof/doctrine-extensions-bundle": "For Gedmo strategy",
