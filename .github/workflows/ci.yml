@@ -82,9 +82,9 @@ jobs:
             composer_args: '--prefer-stable'
             stability: 'stable'
             coverage: true
-          - php: '8.5'
+          - php: '8.4'
             symfony: '7.4'
-            composer_args: '--prefer-lowest'
+            composer_args: '--prefer-stable'
             stability: 'stable'
 
           # Symfony 8.0 (stable)
