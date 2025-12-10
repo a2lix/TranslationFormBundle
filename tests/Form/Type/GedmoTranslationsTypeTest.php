@@ -18,13 +18,10 @@ use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\ProductTranslation;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\Depends;
+use Symfony\Component\Form\Extension\Core\Type as CoreType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\Extension\Core\Type as CoreType;
 
 /**
  * @internal
@@ -98,7 +95,7 @@ final class GedmoTranslationsTypeTest extends TypeTestCase
         self::assertSame('title frrrrrr', self::getGedmoTranslation($updProduct, 'fr', 'title')->getContent(), 'Should be updated');
         self::assertSame(self::getGedmoTranslation($product, 'fr', 'description'), self::getGedmoTranslation($updProduct, 'fr', 'description'), 'Should be unchanged');
         self::assertSame('title deeee', self::getGedmoTranslation($updProduct, 'de', 'title')?->getContent(), 'Should be created');
-        self::assertSame(null, self::getGedmoTranslation($updProduct, 'de', 'description')?->getContent(), 'Should be unchanged');
+        self::assertNull(self::getGedmoTranslation($updProduct, 'de', 'description')?->getContent(), 'Should be unchanged');
     }
 
     public function testModifyAuto(): void
@@ -118,7 +115,7 @@ final class GedmoTranslationsTypeTest extends TypeTestCase
         self::assertSame('title frrrrrr', self::getGedmoTranslation($updProduct, 'fr', 'title')->getContent(), 'Should be updated');
         self::assertSame(self::getGedmoTranslation($product, 'fr', 'description'), self::getGedmoTranslation($updProduct, 'fr', 'description'), 'Should be unchanged');
         self::assertSame('title deeee', self::getGedmoTranslation($updProduct, 'de', 'title')?->getContent(), 'Should be created');
-        self::assertSame(null, self::getGedmoTranslation($updProduct, 'de', 'description')?->getContent(), 'Should be unchanged');
+        self::assertNull(self::getGedmoTranslation($updProduct, 'de', 'description')?->getContent(), 'Should be unchanged');
     }
 
     private function assertCommonFormChildren(FormInterface $form): void

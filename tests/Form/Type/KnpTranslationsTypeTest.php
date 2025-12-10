@@ -18,11 +18,10 @@ use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\CompanyTranslation;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversNothing;
+use Symfony\Component\Form\Extension\Core\Type as CoreType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\Extension\Core\Type as CoreType;
 
 /**
  * @internal
@@ -96,7 +95,7 @@ final class KnpTranslationsTypeTest extends TypeTestCase
         self::assertSame('title frrrrrr', $updCompany->getTranslations()['fr']->title, 'Should be updated');
         self::assertSame($company->getTranslations()['fr']->description, $updCompany->getTranslations()['fr']->description, 'Should be unchanged');
         self::assertSame('title deeee', $updCompany->getTranslations()['de']?->title, 'Should be created');
-        self::assertSame(null, $updCompany->getTranslations()['de']?->description, 'Should be unchanged');
+        self::assertNull($updCompany->getTranslations()['de']?->description, 'Should be unchanged');
     }
 
     public function testModifyAuto(): void
@@ -116,7 +115,7 @@ final class KnpTranslationsTypeTest extends TypeTestCase
         self::assertSame('title frrrrrr', $updCompany->getTranslations()['fr']->title, 'Should be updated');
         self::assertSame($company->getTranslations()['fr']->description, $updCompany->getTranslations()['fr']->description, 'Should be unchanged');
         self::assertSame('title deeee', $updCompany->getTranslations()['de']?->title, 'Should be created');
-        self::assertSame(null, $updCompany->getTranslations()['de']?->description, 'Should be unchanged');
+        self::assertNull($updCompany->getTranslations()['de']?->description, 'Should be unchanged');
     }
 
     private function assertCommonFormChildren(FormInterface $form): void

@@ -85,7 +85,6 @@ class A2lixTranslationFormBundle extends AbstractBundle
             return;
         }
 
-
         // SimpleLocaleProvider
         $enabledLocales = $config['enabled_locales'] ?: $builder->getParameter('kernel.enabled_locales');
         foreach ($enabledLocales as $locale) {

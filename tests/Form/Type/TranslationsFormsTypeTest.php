@@ -14,17 +14,14 @@ namespace A2lix\TranslationFormBundle\Tests\Form\Type;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Company;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\CompanyMediaLocale;
-use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Product;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Form\CompanyMediaType;
-use A2lix\TranslationFormBundle\Tests\Fixtures\Form\MediaLocalizeType;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversNothing;
+use Symfony\Component\Form\Extension\Core\Type as CoreType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\Extension\Core\Type as CoreType;
 
 /**
  * @internal
@@ -140,7 +137,7 @@ final class TranslationsFormsTypeTest extends TypeTestCase
                     'url' => 'url frrrr',   // Upd
                 ],
                 'de' => [
-                    'url' => 'url deee',    // New  
+                    'url' => 'url deee',    // New
                 ],
             ],
         ];
