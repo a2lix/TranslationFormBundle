@@ -54,7 +54,7 @@ class A2lixTranslationFormBundle extends AbstractBundle
     #[\Override]
     public function prependExtension(ContainerConfigurator $configurator, ContainerBuilder $container): void
     {
-        $config = $container->getExtensionConfig($this->extensionAlias);
+        $config = $container->getExtensionConfig($this->extensionAlias)[0];
 
         if ($container->hasExtension('twig')) {
             $container->prependExtensionConfig('twig', [
