@@ -21,6 +21,10 @@ Key features
 > [!TIP]
 > A complete demonstration is also available at [a2lix/demo](https://github.com/a2lix/Demo).
 
+## Screenshot example
+
+![A2LiX Translation Form Screenshot](/a2lix_translationForm.jpg)
+
 ## Installation
 
 - Install the bundle with Composer:
