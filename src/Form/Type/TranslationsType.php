@@ -156,12 +156,14 @@ class TranslationsType extends AbstractType
         ])->all();
 
         foreach ($options['enabled_locales'] as $locale) {
+            $required = \in_array($locale, $options['required_locales'], true);
+
             $localeFormBuilder = $builder->create($locale, FormType::class, [
                 'data_class' => $options['translation_class'],
-                'setter' => static fn (...$args) => self::knpLocaleSetter($locale, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
+                'setter' => static fn (...$args) => self::knpLocaleSetter($locale, $required, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
                 // LocaleExtension options process
                 'label' => $options['locale_labels'][$locale] ?? null,
-                'required' => \in_array($locale, $options['required_locales'], true),
+                'required' => $required,
                 'block_name' => ('field' === $options['theming_granularity']) ? 'locale' : null,
             ]);
 
@@ -234,13 +236,13 @@ class TranslationsType extends AbstractType
      * @param Collection<int, \Stub\KnpTranslation> $translationColl
      * @param ?\Stub\KnpTranslation                 $translation
      */
-    private static function knpLocaleSetter(string $locale, Collection $translationColl, ?object $translation): void
+    private static function knpLocaleSetter(string $locale, bool $required, Collection $translationColl, ?object $translation): void
     {
         if (null === $translation) {
             return;
         }
 
-        if ($translation->isEmpty()) {
+        if ($translation->isEmpty() && !$required) {
             $translationColl->removeElement($translation);
 
             return;

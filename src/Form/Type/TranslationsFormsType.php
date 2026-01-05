@@ -27,7 +27,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *    locale_labels: array<string, string>|null,
  *    theming_granularity: string,
  *    form_options: array<string, mixed>,
- *    form_type: string,
+ *    form_type: class-string<\Symfony\Component\Form\FormTypeInterface<mixed>>,
  *    ...
  * }
  *
