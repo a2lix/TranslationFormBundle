@@ -12,7 +12,9 @@
 namespace A2lix\TranslationFormBundle\Tests\Form\Type;
 
 use A2lix\AutoFormBundle\Form\Type\AutoType;
+use A2lix\TranslationFormBundle\Form\Extension\LocaleExtension;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
+use A2lix\TranslationFormBundle\LocaleProvider\SimpleLocaleProvider;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Company;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\CompanyTranslation;
 use A2lix\TranslationFormBundle\Tests\Form\TypeTestCase;
@@ -27,6 +29,8 @@ use Symfony\Component\Form\FormInterface;
  * @internal
  */
 #[CoversClass(TranslationsType::class)]
+#[CoversClass(LocaleExtension::class)]
+#[CoversClass(SimpleLocaleProvider::class)]
 #[AllowMockObjectsWithoutExpectations] // https://github.com/symfony/symfony/issues/62669
 final class KnpTranslationsTypeTest extends TypeTestCase
 {

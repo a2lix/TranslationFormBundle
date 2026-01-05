@@ -11,7 +11,10 @@
 
 namespace A2lix\TranslationFormBundle\Tests\Form\Type;
 
+use A2lix\TranslationFormBundle\Form\Extension\LocaleExtension;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsFormsType;
+use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
+use A2lix\TranslationFormBundle\LocaleProvider\SimpleLocaleProvider;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\Company;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Entity\CompanyMediaLocale;
 use A2lix\TranslationFormBundle\Tests\Fixtures\Form\CompanyMediaType;
@@ -27,6 +30,9 @@ use Symfony\Component\Form\FormInterface;
  * @internal
  */
 #[CoversClass(TranslationsFormsType::class)]
+#[CoversClass(TranslationsType::class)]
+#[CoversClass(LocaleExtension::class)]
+#[CoversClass(SimpleLocaleProvider::class)]
 #[AllowMockObjectsWithoutExpectations] // https://github.com/symfony/symfony/issues/62669
 final class TranslationsFormsTypeTest extends TypeTestCase
 {
