@@ -5,6 +5,7 @@
 [![Total Downloads](https://poser.pugx.org/a2lix/translation-form-bundle/downloads)](https://packagist.org/packages/a2lix/translation-form-bundle)
 [![License](https://poser.pugx.org/a2lix/translation-form-bundle/license)](https://packagist.org/packages/a2lix/translation-form-bundle)
 [![Build Status](https://github.com/a2lix/TranslationFormBundle/actions/workflows/ci.yml/badge.svg)](https://github.com/a2lix/TranslationFormBundle/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/a2lix/TranslationFormBundle/branch/main/graph/badge.svg?token=hAPo1iSLab)](https://codecov.io/gh/a2lix/TranslationFormBundle)
 
 A small, flexible Symfony bundle that helps you build forms to manage translations for Doctrine entities. It integrates with common translation strategies (Gedmo Personal Translation and Knp DoctrineBehaviors) and provides form types, helpers and Twig components to make working with multilingual data easier.
 
