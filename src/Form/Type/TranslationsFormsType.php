@@ -74,6 +74,10 @@ class TranslationsFormsType extends AbstractType
                     $translation->locale = $locale; // @phpstan-ignore property.notFound
                     $translationColl->add($translation);
                 },
+                'getter' => static function (Collection $translationColl, FormInterface $form) use ($locale): ?OneLocaleInterface {
+                    /** @var Collection<int|string, OneLocaleInterface> $translationColl */
+                    return $translationColl->findFirst(static fn (int|string $_key, OneLocaleInterface $translation): bool => $translation->locale === $locale); // @phpstan-ignore property.notFound
+                },
                 // LocaleExtension options process
                 'label' => $options['locale_labels'][$locale] ?? null,
                 'required' => \in_array($locale, $options['required_locales'], true),
