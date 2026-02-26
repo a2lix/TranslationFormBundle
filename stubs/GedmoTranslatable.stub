@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 interface GedmoTranslatable
 {
     /**
-     * @return Collection<int, GedmoTranslation>
+     * @return Collection<array-key, GedmoTranslation>
      */
     public function getTranslations(): Collection;
     public function addTranslation(GedmoTranslation $translation): self;

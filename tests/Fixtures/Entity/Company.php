@@ -34,12 +34,12 @@ class Company implements TranslatableInterface
     #[AutoTypeCustom(options: ['priority' => 1])]
     protected $translations;
 
-    /** @var Collection<int, Category> */
+    /** @var Collection<array-key, Category> */
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'company', cascade: ['all'], orphanRemoval: true)]
     #[AutoTypeCustom(options: ['entry_options' => ['label' => false]], embedded: true)]
     public Collection $categories;
 
-    /** @var Collection<int, CompanyMediaLocale> */
+    /** @var Collection<array-key, CompanyMediaLocale> */
     #[ORM\OneToMany(targetEntity: CompanyMediaLocale::class, mappedBy: 'company', cascade: ['all'], orphanRemoval: true, indexBy: 'locale')]
     // #[AutoTypeCustom(embedded: true, options: ['entry_options' => ['label' => false, 'children_excluded' => ['id']]])]
     // #[AutoTypeCustom(options: ['form_type' => CompanyMediaType::class], type: TranslationsFormsType::class)]

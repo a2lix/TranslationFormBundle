@@ -160,7 +160,7 @@ class TranslationsType extends AbstractType
 
             $localeFormBuilder = $builder->create($locale, FormType::class, [
                 'data_class' => $options['translation_class'],
-                'setter' => static fn (...$args) => self::knpLocaleSetter($locale, $required, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
+                'setter' => static fn (...$args) => self::knpLocaleSetter($locale, $required, ...$args), // @phpstan-ignore argument.type
                 // LocaleExtension options process
                 'label' => $options['locale_labels'][$locale] ?? null,
                 'required' => $required,
@@ -201,8 +201,8 @@ class TranslationsType extends AbstractType
                     ? [
                         'inherit_data' => true,
                     ] : [
-                        'getter' => static fn (...$args) => self::gedmoLocaleGetter($locale, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
-                        'setter' => static fn (...$args) => self::gedmoLocaleSetter(...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
+                        'getter' => static fn (...$args) => self::gedmoLocaleGetter($locale, ...$args), // @phpstan-ignore argument.type
+                        'setter' => static fn (...$args) => self::gedmoLocaleSetter(...$args), // @phpstan-ignore argument.type
                     ]
                 ),
                 // LocaleExtension options process
@@ -222,7 +222,7 @@ class TranslationsType extends AbstractType
                 $field = $builtChild->getName();
                 $localeFormBuilder->add($builtChild->getName(), $builtChild->getType()->getInnerType()::class, [
                     ...$builtChild->getFormConfig()->getOptions(),
-                    'getter' => static fn (...$args) => self::gedmoFieldGetter($field, ...$args), // @phpstan-ignore argument.unpackNonIterable, argument.type
+                    'getter' => static fn (...$args) => self::gedmoFieldGetter($field, ...$args), // @phpstan-ignore argument.type
                     'setter' => static fn (array &$translations, ?string $data) => self::gedmoFieldSetter($field, $locale, $translationClass, $translations, $data),  // @phpstan-ignore-line
                     // 'property_path' => sprintf('[%s?].content', $field),
                 ]);
@@ -233,8 +233,8 @@ class TranslationsType extends AbstractType
     }
 
     /**
-     * @param Collection<int, \Stub\KnpTranslation> $translationColl
-     * @param ?\Stub\KnpTranslation                 $translation
+     * @param Collection<array-key, \Stub\KnpTranslation> $translationColl
+     * @param ?\Stub\KnpTranslation                       $translation
      */
     private static function knpLocaleSetter(string $locale, bool $required, Collection $translationColl, ?object $translation): void
     {
@@ -249,7 +249,7 @@ class TranslationsType extends AbstractType
         }
 
         $translation->setLocale($locale);
-        $translationColl->add($translation);
+        $translationColl->set($locale, $translation);
     }
 
     /**

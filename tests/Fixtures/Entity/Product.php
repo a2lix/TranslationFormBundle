@@ -40,7 +40,7 @@ class Product
     #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['all'])]
     public ?Category $category = null;
 
-    /** @var Collection<int, ProductTranslation> */
+    /** @var Collection<array-key, ProductTranslation> */
     #[ORM\OneToMany(targetEntity: ProductTranslation::class, mappedBy: 'object', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[AutoTypeCustom(options: ['priority' => 1])]
     public Collection $translations;
@@ -51,7 +51,7 @@ class Product
     }
 
     /**
-     * @return Collection<int, ProductTranslation>
+     * @return Collection<array-key, ProductTranslation>
      */
     public function getTranslations(): Collection
     {
