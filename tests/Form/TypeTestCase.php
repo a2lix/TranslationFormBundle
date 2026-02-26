@@ -69,7 +69,7 @@ abstract class TypeTestCase extends BaseTypeTestCase
     }
 
     /**
-     * @param array<array-key, FormInterface<mixed>> $formChildren
+     * @param array<array-key, \Symfony\Component\Form\FormInterface<mixed>> $formChildren
      */
     protected static function assertFormChildren(array $expectedForm, array $formChildren, string $parentPath = ''): void
     {

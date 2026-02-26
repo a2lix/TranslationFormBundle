@@ -72,7 +72,7 @@ class TranslationsFormsType extends AbstractType
                     }
 
                     $translation->locale = $locale; // @phpstan-ignore property.notFound
-                    $translationColl->add($translation);
+                    $translationColl->set($locale, $translation);
                 },
                 // LocaleExtension options process
                 'label' => $options['locale_labels'][$locale] ?? null,
