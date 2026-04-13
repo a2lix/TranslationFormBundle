@@ -38,7 +38,7 @@
         "symfony/intl": "^7.4|^8.0",
         "symfony/options-resolver": "^7.4|^8.0",
         "symfony/translation": "^7.4|^8.0",
-        "symfony/ux-twig-component": "^2.31"
+        "symfony/ux-twig-component": "^2.31|^3.0"
     },
     "require-dev": {
         "doctrine/orm": "^3.5.8",
