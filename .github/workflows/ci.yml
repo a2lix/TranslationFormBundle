@@ -12,7 +12,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -22,7 +22,7 @@ jobs:
           php-version: '8.5'
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/composer/files
           key: ${{ runner.os }}-php-8.5-composer-${{ hashFiles('**/composer.lock') }}
@@ -42,7 +42,7 @@ jobs:
     name: Static Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -52,7 +52,7 @@ jobs:
           php-version: '8.5'
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/composer/files
           key: ${{ runner.os }}-php-8.5-composer-${{ hashFiles('**/composer.lock') }}
@@ -86,13 +86,16 @@ jobs:
             symfony: '7.4'
             composer_args: '--prefer-stable'
             stability: 'stable'
-            coverage: true
           - php: '8.4'
             symfony: '7.4'
             composer_args: '--prefer-stable'
             stability: 'stable'
 
-          # Symfony 8.0 (stable)
+          # Symfony 8.x (stable)
+          - php: '8.6'
+            symfony: '8.1'
+            composer_args: '--prefer-stable'
+            stability: 'stable'
           - php: '8.6'
             symfony: '8.0'
             composer_args: '--prefer-stable'
@@ -103,7 +106,7 @@ jobs:
             stability: 'stable'
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -114,7 +117,7 @@ jobs:
           coverage: pcov
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/composer/files
           key: ${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-${{ matrix.composer_args }}-${{ hashFiles('**/composer.json') }}
@@ -146,6 +149,6 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: matrix.coverage
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
