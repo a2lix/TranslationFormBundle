@@ -77,6 +77,11 @@ jobs:
       matrix:
         include:
           # Symfony 7.4 (stable)
+          - php: '8.6'
+            symfony: '7.4'
+            composer_args: '--prefer-stable'
+            stability: 'stable'
+            coverage: true
           - php: '8.5'
             symfony: '7.4'
             composer_args: '--prefer-stable'
@@ -88,6 +93,10 @@ jobs:
             stability: 'stable'
 
           # Symfony 8.0 (stable)
+          - php: '8.6'
+            symfony: '8.0'
+            composer_args: '--prefer-stable'
+            stability: 'stable'
           - php: '8.5'
             symfony: '8.0'
             composer_args: '--prefer-stable'
