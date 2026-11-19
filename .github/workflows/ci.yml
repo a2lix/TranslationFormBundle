@@ -96,12 +96,8 @@ jobs:
             symfony: '8.1'
             composer_args: '--prefer-stable'
             stability: 'stable'
-          - php: '8.6'
-            symfony: '8.0'
-            composer_args: '--prefer-stable'
-            stability: 'stable'
           - php: '8.5'
-            symfony: '8.0'
+            symfony: '8.1'
             composer_args: '--prefer-stable'
             stability: 'stable'
 
@@ -136,7 +132,7 @@ jobs:
         run: composer config extra.symfony.require "${{ matrix.symfony }}.*"
 
       - name: Install dependencies
-        run: composer update ${{ matrix.composer_args }} --no-progress --no-scripts --no-plugins
+        run: composer update ${{ matrix.composer_args }} --no-progress --no-scripts
 
       - name: Run phpunit
         run: |
