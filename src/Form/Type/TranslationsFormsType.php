@@ -28,7 +28,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *    theming_granularity: string,
  *    form_options: array<string, mixed>,
  *    form_type: class-string<\Symfony\Component\Form\FormTypeInterface<mixed>>,
- *    ...
+ *    ...<string, mixed>
  * }
  *
  * @extends AbstractType<mixed>

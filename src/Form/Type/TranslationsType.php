@@ -35,7 +35,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *    children_embedded: list<string>|"*",
  *    children_groups: list<string>,
  *    builder: mixed|null,
- *    ...
+ *    ...<string, mixed>
  * }
  *
  * @extends AbstractType<mixed>
@@ -75,7 +75,7 @@ class TranslationsType extends AbstractType
             'Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation'
         ));
         $resolver->setDefault('inherit_data', static fn (Options $options): bool => $options['gedmo']); // @phpstan-ignore return.type
-        $resolver->setDefault('empty_data', static fn (Options $options): ?ArrayCollection => $options['gedmo'] ? null : new ArrayCollection());
+        $resolver->setDefault('empty_data', static fn (Options $options): ?ArrayCollection => true === $options['gedmo'] ? null : new ArrayCollection());
 
         // AutoType
         $resolver->setAllowedTypes('children_excluded', 'string[]|string|callable|null');
